@@ -1,18 +1,22 @@
-# 🚢 shipfast-mcp
+<p align="center"><img src="https://raw.githubusercontent.com/QuocTang/shipfast-mcp/main/assets/logo.svg" width="72" height="72" alt="shipfast" /></p>
+
+<h1 align="center">shipfast-mcp</h1>
 
 <!-- mcp-name: io.github.QuocTang/shipfast-mcp -->
 
-**Quy trình làm việc theo wave giữa PO và AI, đóng gói thành MCP server.** AI làm Orchestrator: điều phối, đề xuất, phản biện; việc chuyên môn giao cho các bộ phận lập theo dự án, mỗi bộ phận là một subagent. Người làm PO: chốt và nghiệm thu. Dùng được cho mọi stack.
+<p align="center"><b>Quy trình làm việc giữa PO và AI, đóng gói thành MCP server.</b><br />PO quyết định phạm vi và nghiệm thu. Orchestrator điều phối, đề xuất và phản biện. Việc chuyên môn do các bộ phận lập theo dự án đảm nhận, mỗi bộ phận là một subagent.</p>
 
-[![CI](https://github.com/QuocTang/shipfast-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/QuocTang/shipfast-mcp/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/shipfast-mcp.svg)](https://pypi.org/project/shipfast-mcp/)
-[![Python](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/)
-[![MCP](https://img.shields.io/badge/MCP-2026--07--28-8A2BE2.svg)](https://modelcontextprotocol.io/specification/2026-07-28)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<p align="center">
+  <a href="https://github.com/QuocTang/shipfast-mcp/actions/workflows/ci.yml"><img src="https://github.com/QuocTang/shipfast-mcp/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://pypi.org/project/shipfast-mcp/"><img src="https://img.shields.io/pypi/v/shipfast-mcp.svg" alt="PyPI" /></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.12%2B-blue.svg" alt="Python" /></a>
+  <a href="https://modelcontextprotocol.io/specification/2026-07-28"><img src="https://img.shields.io/badge/MCP-2026--07--28-8A2BE2.svg" alt="MCP" /></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
+</p>
 
-**Trang giới thiệu:** https://quoctang.github.io/shipfast-mcp/
+<p align="center"><a href="https://quoctang.github.io/shipfast-mcp/">Trang giới thiệu</a> · <a href="https://pypi.org/project/shipfast-mcp/">PyPI</a> · <a href="https://github.com/QuocTang/shipfast-mcp/blob/main/src/shipfast_mcp/knowledge/guide/start.md">Tài liệu</a> · <a href="https://github.com/QuocTang/shipfast-mcp/blob/main/src/shipfast_mcp/knowledge/guide/changelog.md">Ghi chú phát hành</a></p>
 
-> A Model Context Protocol server that ships a wave-based PO ↔ AI working process (propose, critique, decide, build, verify) to any stack, with three-way-merge upgrades so projects never diff against a template repo by hand.
+> A Model Context Protocol server that brings a wave-based working process between a product owner and AI agents to any stack: an orchestrator that coordinates and critiques, project-specific departments as subagents, a single decision log, verified quality gates, and three-way-merge upgrades.
 
 ## Table of Contents
 
@@ -29,21 +33,38 @@
 
 ## Quick Start
 
-Cần [uv](https://docs.astral.sh/uv/). Trong Claude Code:
+Cần [uv](https://docs.astral.sh/uv/).
+
+| # | Bước | Lệnh |
+|---|---|---|
+| 1 | Cài uv | `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
+| 2 | Thêm shipfast vào Claude Code | `/plugin install shipfast --marketplace QuocTang/shipfast-mcp` |
+| 3 | Gọi prompt init (repo mới) hoặc adopt (dự án đang có code) | `/mcp__shipfast__init` |
+| 4 | Trả lời theo mã vấn đề | `W01-02: A`; nói **"chốt"** khi đồng ý phạm vi |
+| 5 | Nâng cấp khi có bản mới | `/mcp__shipfast__upgrade` |
+
+Một phiên `init` trong Claude Code (rút gọn):
 
 ```text
-/plugin install shipfast --marketplace QuocTang/shipfast-mcp
+> /mcp__shipfast__init
+
+● shipfast - scaffold_project (MCP)(mode: "init", dry_run: true)
+  └ 34 file sẽ tạo, 0 file trùng
+
+● Đã mở wave W01. Sản phẩm làm gì, cho ai dùng?
+
+> App quản lý kho cho cửa hàng nhỏ, hai vai: chủ cửa hàng và nhân viên.
+
+● W01-01: nhập xuất kho, cảnh báo sắp hết, báo cáo tồn; in hoá đơn và đa chi
+  nhánh để sau (BL-005, BL-006). W01-02 stack: đề xuất A (Next.js + Postgres).
+  Phản biện: cần thêm runtime khi có job nền. W01-09: lập ba bộ phận PRODUCT,
+  PLATFORM, TRUST.
+
+> W01-02: A, còn lại theo đề xuất. Chốt.
+
+● shipfast - create_department (MCP)(code: "PLATFORM")
+  └ docs/departments/platform/, .claude/agents/dept-platform.md
 ```
-
-Mở repo cần làm, gọi điểm vào phù hợp:
-
-| Tình huống | Gọi | Kết quả |
-|---|---|---|
-| Repo mới, chưa có code | `/mcp__shipfast__init` | Wave W01: AI hỏi về sản phẩm, đề xuất và phản biện 2–3 phương án stack, PO chốt; scaffold tài liệu, khung code chạy được, acceptance |
-| Dự án đang chạy | `/mcp__shipfast__adopt` | AI khảo sát cái đang có, lập bảng đối chiếu; khung được thêm mà không phá tài liệu, quyết định sẵn có |
-| Đã dùng shipfast | Hỏi "đang tới đâu" | Skill trong dự án tự kích hoạt, AI gọi `status` và làm tiếp |
-
-Sau đó làm việc như với một trưởng nhóm: nêu yêu cầu, trả lời theo mã ("W02-03: A"), nói **"chốt"** khi đồng ý phạm vi.
 
 ## Installation
 
@@ -67,30 +88,38 @@ Ghim phiên bản: `uvx shipfast-mcp@0.2.0`.
 
 ## Features
 
-### Vấn đề và cách giải
-
-| Khi làm việc với AI không có quy trình | shipfast |
-|---|---|
-| AI viết code khi chưa hiểu đúng yêu cầu | 🛑 Không code trước khi PO lock scope |
-| AI chiều theo mọi yêu cầu | 🥊 Orchestrator phản biện cả đề xuất của mình; 7 vai phản biện debate độc lập rồi phản biện chéo |
-| Một phiên AI ôm mọi việc, ý kiến chuyên môn mỏng | 🏢 Bộ phận lập theo dự án từ W01 (PRODUCT, PLATFORM, TRUST…); việc thuộc lĩnh vực nào giao bộ phận đó, Orchestrator chỉ điều phối |
-| Quyết định rải rác trong chat và comment | 📒 Decision log một chỗ (`SP`, `KT`, `QT`), code chỉ trỏ mã |
-| Phiên mới quên bối cảnh | 💾 Trạng thái nằm trong file; tool `status` cho biết đang tới đâu |
-| Phạm vi phình dần | 📥 Việc mới vào backlog, đổi phạm vi qua CR |
-| "Xong" nhưng chưa chạy thật | ✅ Quality gate phải chạy thật; QA độc lập acceptance |
-| Chép template rồi lệch dần, cập nhật phải so tay với repo gốc | 🔀 Nâng cấp three-way merge tự động, không cần repo gốc |
-
 ### Vòng đời một wave
 
 ```text
-📥 Intake → 🗣️ Discussion → ✅ Scope lock → 🔨 Build → 🧹 Cleanup → 🧪 Acceptance → 🚀 Release, rút kinh nghiệm, đóng
+📥 Intake → 🗣️ Discussion → ✅ Scope lock → 🔨 Build → 🧹 Cleanup → 🧪 Acceptance → 🚀 Release
 ```
+
+| Bước | Việc |
+|---|---|
+| Intake | Gom việc, mỗi vấn đề kèm phương án |
+| Discussion | Orchestrator đề xuất và phản biện, lấy ý kiến bộ phận; PO chốt |
+| Scope lock | PO nói "chốt"; phạm vi đóng băng, đổi qua CR |
+| Build | Bộ phận phụ trách build theo hạng mục |
+| Cleanup | Dọn mã chết, tài liệu lệch |
+| Acceptance | QA độc lập với bộ phận đã build; quality gate chạy thật |
+| Release | Phát hành, rút kinh nghiệm, đóng wave |
 
 | Chế độ chốt | Khi nào |
 |---|---|
 | PO chốt | Mặc định |
 | Chốt thẳng | Wave nhỏ, yêu cầu đã rõ |
-| Delegation | Đã có từ hai bộ phận; Chủ toạ phán quyết theo tiêu chí PO đặt |
+| Delegation | PO giao quyền chốt cho debate giữa các bộ phận; Orchestrator làm Chủ toạ |
+
+### Sáu lỗi thường gặp khi làm việc với AI
+
+| Lỗi | Cách shipfast xử lý |
+|---|---|
+| Viết code trước khi yêu cầu được làm rõ | Không viết code trước khi PO lock scope; Discussion kết thúc khi mọi vấn đề đã có kết luận |
+| Một phiên AI đảm nhận mọi việc, ít phản biện | Orchestrator điều phối và phản biện; mỗi lĩnh vực có bộ phận riêng đưa ý kiến chuyên môn |
+| Quyết định nằm rải rác trong hội thoại | Decision log ở một chỗ (`SP`, `KT`, `QT`); code và tài liệu chỉ dẫn mã |
+| Phiên mới mất bối cảnh | Trạng thái lưu trong file của repo; tool `status` cho biết wave đang ở bước nào |
+| Báo hoàn thành khi chưa kiểm chứng | Quality gate phải chạy thật; acceptance do subagent độc lập với bộ phận đã build thực hiện |
+| Cập nhật khung phải đối chiếu tay với repo mẫu | `upgrade` dùng three-way merge: giữ phần dự án đã sửa, nhận thay đổi mới của khung |
 
 ### Thành phần MCP
 
@@ -122,6 +151,7 @@ Dự án giữ `.shipfast/manifest.json` và `.shipfast/base/` (bản khung lầ
 | Bài | File |
 |---|---|
 | Bắt đầu từ đâu | [`start.md`](src/shipfast_mcp/knowledge/guide/start.md) |
+| Ghi chú phát hành | [`changelog.md`](src/shipfast_mcp/knowledge/guide/changelog.md) |
 | Tổ chức ra sao | [`organization.md`](src/shipfast_mcp/knowledge/guide/organization.md) |
 | Ý nghĩa và mục đích | [`purpose.md`](src/shipfast_mcp/knowledge/guide/purpose.md) |
 | Phát triển tiếp và nâng cấp | [`evolve.md`](src/shipfast_mcp/knowledge/guide/evolve.md) |
@@ -142,7 +172,7 @@ uv run pytest
 uv run shipfast-mcp
 ```
 
-Kho tri thức nằm ở `src/shipfast_mcp/knowledge/`: `project/` (khung dựng vào dự án), `skills/`, `guide/`. Quyết định thiết kế: [`docs/decisions/README.md`](docs/decisions/README.md).
+Kho tri thức nằm ở `src/shipfast_mcp/knowledge/`: `project/` (khung dựng vào dự án), `department/` (hồ sơ và subagent bộ phận), `skills/`, `guide/`. Landing page ở `site/` (`site/README.md`). Quyết định thiết kế: [`docs/decisions/README.md`](docs/decisions/README.md).
 
 ## Community & Support
 
