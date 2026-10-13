@@ -1,6 +1,6 @@
 # Wxx — R2 phản biện của <MÃ VAI / BỘ PHẬN>
 
-> Tranh luận (`../README.md` §4.3), tham vấn hoặc uỷ quyền. Lưu thành `debate/r2-<mã>.md`.
+> Debate (`../README.md` §4.3), tham vấn hoặc delegation. Lưu thành `debate/r2-<mã>.md`.
 
 | Mục | Giá trị |
 |---|---|

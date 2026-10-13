@@ -1,7 +1,7 @@
 [project]
 name = "shipfast-mcp"
-version = "0.1.0"
-description = "MCP server phân phối quy trình làm việc theo đợt giữa PO và AI (Điều hành, agent con), dùng được cho mọi stack."
+version = "0.2.0"
+description = "MCP server phân phối quy trình làm việc theo wave giữa PO và AI (Orchestrator, subagent), dùng được cho mọi stack."
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]

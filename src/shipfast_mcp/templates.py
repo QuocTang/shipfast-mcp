@@ -29,7 +29,7 @@ SEED = {
     "docs/technical/README.md",
 }
 
-# Hồ sơ đợt khởi tạo; chỉ dựng ở chế độ init.
+# Hồ sơ wave khởi tạo; chỉ dựng ở chế độ init.
 INIT_ONLY_PREFIX = "docs/04_waves/W01/"
 
 CODE_LANGS = {"vi": "tiếng Việt", "en": "tiếng Anh"}
@@ -41,7 +41,7 @@ class TemplateFile:
 
     target: đường dẫn tương đối trong dự án.
     source: file nguồn trong kho tri thức.
-    kind: "managed" (nâng cấp bằng gộp ba phía) hoặc "seed" (chỉ tạo một lần).
+    kind: "managed" (nâng cấp bằng three-way merge) hoặc "seed" (chỉ tạo một lần).
     render: có thay biến {{...}} hay không.
     """
 

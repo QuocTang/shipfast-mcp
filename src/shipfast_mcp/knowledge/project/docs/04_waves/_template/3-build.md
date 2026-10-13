@@ -1,4 +1,4 @@
-# Wxx — Nhật ký thi công
+# Wxx — Nhật ký build
 
 ## 1. Trạng thái hạng mục
 
@@ -6,7 +6,7 @@
 |---|---|---|---|---|
 | Wxx-P01 | | | ⏳ Chưa bắt đầu / 🔨 Đang làm / ✔ Xong / ⛔ Vướng | |
 
-## 2. Quyết định trong thi công
+## 2. Quyết định trong build
 
 | Mã | Nội dung | Hạng mục |
 |---|---|---|

@@ -5,4 +5,4 @@
 | File / thư mục | Nội dung | Trạng thái |
 |---|---|---|
 
-Thêm quy chuẩn khi một luật lặp lại qua nhiều đợt hoặc rút ra từ review, dọn dẹp, góp ý giao diện của PO. Mỗi quy chuẩn nêu: luật, lý do ngắn, ví dụ đúng và sai, cách kiểm.
+Thêm quy chuẩn khi một luật lặp lại qua nhiều wave hoặc rút ra từ review, cleanup, góp ý giao diện của PO. Mỗi quy chuẩn nêu: luật, lý do ngắn, ví dụ đúng và sai, cách kiểm.

@@ -1,14 +1,14 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.QuocTang/shipfast-mcp",
-  "description": "Quy trình làm việc theo đợt giữa PO và AI: khung tài liệu, skill, tool dựng khung, nâng cấp gộp ba phía.",
+  "description": "Quy trình làm việc theo wave giữa PO và AI: khung tài liệu, skill, tool scaffold, nâng cấp three-way merge.",
   "repository": { "url": "https://github.com/QuocTang/shipfast-mcp", "source": "github" },
-  "version": "0.1.0",
+  "version": "0.2.0",
   "packages": [
     {
       "registryType": "pypi",
       "identifier": "shipfast-mcp",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "transport": { "type": "stdio" }
     }
   ]

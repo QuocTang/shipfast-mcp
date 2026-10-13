@@ -6,7 +6,7 @@
     {
       "name": "shipfast",
       "source": "./plugin",
-      "description": "Quy trình làm việc theo đợt giữa PO và AI, phân phối qua MCP"
+      "description": "Quy trình làm việc theo wave giữa PO và AI, phân phối qua MCP"
     }
   ]
 }

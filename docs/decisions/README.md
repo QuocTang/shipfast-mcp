@@ -6,8 +6,8 @@
 | D-002 | Kho tri thức đóng gói trong package, là nguồn duy nhất; độc lập với ts-project-template | Hiệu lực | 2026-10-13 |
 | D-003 | Tool ghi file trực tiếp vào dự án, có `dry_run`, không ghi đè | Hiệu lực | 2026-10-13 |
 | D-004 | Kho tri thức viết theo định dạng skill; MCP phục vụ qua `skill://` và chép vào `.claude/skills/` của dự án | Hiệu lực | 2026-10-13 |
-| D-005 | Nâng cấp bằng gộp ba phía dựa trên `.shipfast/base/` | Hiệu lực | 2026-10-13 |
-| D-006 | Phát hành: GitHub public (kiêm marketplace Claude Code) và PyPI; MCP Registry sau | Hiệu lực | 2026-10-13 |
+| D-005 | Nâng cấp bằng three-way merge dựa trên `.shipfast/base/` | Hiệu lực | 2026-10-13 |
+| D-006 | Release: GitHub public (kiêm marketplace Claude Code) và PyPI; MCP Registry sau | Hiệu lực | 2026-10-13 |
 | D-007 | Plugin Claude Code chỉ khai MCP server, không mang skill | Hiệu lực | 2026-10-13 |
 | D-008 | Không dùng Roots, Sampling, Logging của MCP | Hiệu lực | 2026-10-13 |
 | D-009 | License MIT | Hiệu lực | 2026-10-13 |
@@ -30,9 +30,9 @@ Skill tự kích hoạt theo mô tả nên giữ luật quy trình trong suốt 
 
 ## D-005 — Nâng cấp
 
-Dự án commit `.shipfast/manifest.json` (phiên bản, biến, loại file) và `.shipfast/base/` (bản khung lần trước của file `managed`). `upgrade` so ba bản bằng `git merge-file`. File `seed` (bảng đợt, backlog, sổ quyết định, thiết kế…) không bao giờ bị đụng. File dự án đã xoá không bị tạo lại.
+Dự án commit `.shipfast/manifest.json` (phiên bản, biến, loại file) và `.shipfast/base/` (bản khung lần trước của file `managed`). `upgrade` so ba bản bằng `git merge-file`. File `seed` (bảng wave, backlog, decision log, thiết kế…) không bao giờ bị đụng. File dự án đã xoá không bị tạo lại.
 
-## D-006 — Phát hành
+## D-006 — Release
 
 Repo GitHub public chứa mã và `.claude-plugin/marketplace.json`. Gói PyPI `shipfast-mcp`, đẩy bằng GitHub Actions trusted publishing khi gắn tag `vX.Y.Z`. MCP Registry (đang preview) đăng sau khi ổn định.
 

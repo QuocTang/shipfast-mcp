@@ -1,4 +1,4 @@
-"""Dựng khung vào dự án và nâng cấp khung bằng gộp ba phía.
+"""Scaffold vào dự án và nâng cấp khung bằng three-way merge.
 
 Mỗi dự án giữ `.shipfast/manifest.json` (phiên bản, biến, loại từng file) và
 `.shipfast/base/` (bản khung đã dựng lần gần nhất). Nhờ bản gốc này, nâng cấp
@@ -22,7 +22,7 @@ MANIFEST = f"{STATE_DIR}/manifest.json"
 BASE_DIR = f"{STATE_DIR}/base"
 PENDING_DIR = f"{STATE_DIR}/pending"
 WAVES_BOARD = "docs/04_waves/WAVES.md"
-W01_ROW = "| W01 | Điều hành | Khởi tạo dự án | 🗣️ Thảo luận | Khung quy trình, stack đã chốt, khung code chạy được | — | — | [W01/](W01/README.md) |"
+W01_ROW = "| W01 | Orchestrator | Khởi tạo dự án | 🗣️ Discussion | Khung quy trình, stack đã chốt, khung code chạy được | — | — | [W01/](W01/README.md) |"
 
 
 @dataclass
@@ -60,7 +60,7 @@ def resolve_project(project_dir: str) -> Path:
 
 
 def load_manifest(root: Path) -> dict | None:
-    """Đọc manifest của dự án; chưa dựng khung thì trả None."""
+    """Đọc manifest của dự án; chưa scaffold thì trả None."""
     path = root / MANIFEST
     if not path.exists():
         return None
@@ -81,7 +81,7 @@ def _save_state(root: Path, manifest: dict, bases: dict[str, str]) -> None:
 def _add_w01_row(text: str) -> str:
     lines = text.splitlines()
     for i, line in enumerate(lines):
-        if line.startswith("| Đợt"):
+        if line.startswith(("| Wave", "| Đợt")):
             lines.insert(i + 2, W01_ROW)
             break
     return "\n".join(lines) + "\n"
@@ -111,9 +111,9 @@ def scaffold(
     mode: str = "init",
     dry_run: bool = True,
 ) -> dict:
-    """Dựng khung tài liệu, quy trình và skill vào dự án. Không ghi đè file đã có.
+    """Scaffold tài liệu, quy trình và skill vào dự án. Không ghi đè file đã có.
 
-    mode: "init" cho repo mới (kèm hồ sơ đợt W01), "adopt" cho dự án đang chạy.
+    mode: "init" cho repo mới (kèm hồ sơ wave W01), "adopt" cho dự án đang chạy.
     Trả báo cáo: file sẽ tạo / đã tạo, file bỏ qua vì đã có.
     Ném ValueError khi tham số sai hoặc dự án đã có manifest (dùng upgrade).
     """
@@ -121,7 +121,7 @@ def scaffold(
     if mode not in ("init", "adopt"):
         raise ValueError('mode phải là "init" hoặc "adopt"')
     if load_manifest(root) is not None:
-        raise ValueError("Dự án đã dựng khung shipfast; dùng tool upgrade để cập nhật")
+        raise ValueError("Dự án đã scaffold shipfast; dùng tool upgrade để cập nhật")
     variables = make_vars(name, display_name, description, branch, code_lang)
     report = Report(dry_run=dry_run, project_dir=str(root))
     files_meta: dict[str, str] = {}
@@ -152,7 +152,7 @@ def scaffold(
 
 
 def _merge3(current: str, base: str, new: str) -> tuple[str, bool]:
-    """Gộp ba phía bằng `git merge-file`. Trả (nội dung, có xung đột hay không)."""
+    """Three-way merge bằng `git merge-file`. Trả (nội dung, có xung đột hay không)."""
     if shutil.which("git") is None:
         return new, True
     with tempfile.TemporaryDirectory() as tmp:
@@ -174,16 +174,16 @@ def _merge3(current: str, base: str, new: str) -> tuple[str, bool]:
 def upgrade(project_dir: str, dry_run: bool = True) -> dict:
     """Nâng khung của dự án lên phiên bản shipfast đang chạy.
 
-    File "managed": dự án chưa sửa thì thay bằng bản mới; dự án đã sửa thì gộp ba phía
+    File "managed": dự án chưa sửa thì thay bằng bản mới; dự án đã sửa thì three-way merge
     (bản gốc lần trước, bản dự án, bản mới). Gộp xung đột thì không đụng file của dự án,
     ghi bản có dấu xung đột vào `.shipfast/pending/<đường dẫn>` để người quyết.
     File "seed" không bao giờ bị thay. File khung mới thì tạo.
-    Ném ValueError khi dự án chưa dựng khung.
+    Ném ValueError khi dự án chưa scaffold.
     """
     root = resolve_project(project_dir)
     manifest = load_manifest(root)
     if manifest is None:
-        raise ValueError("Dự án chưa dựng khung shipfast; dùng tool scaffold trước")
+        raise ValueError("Dự án chưa scaffold shipfast; dùng tool scaffold trước")
     variables = dict(manifest["vars"])
     variables["PHIEN_BAN"] = __version__
     report = Report(dry_run=dry_run, project_dir=str(root), version_from=manifest.get("version"))

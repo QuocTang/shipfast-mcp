@@ -26,7 +26,7 @@ Ví dụ `.mcp.json` hoặc cấu hình tương đương:
 
 | Tình huống | Gọi | Kết quả |
 |---|---|---|
-| Repo mới, chưa có code | Prompt `init` | Đợt W01: AI hỏi về sản phẩm, đề xuất và phản biện stack, bạn chốt; dựng khung tài liệu, khung code, chạy được, nghiệm thu |
+| Repo mới, chưa có code | Prompt `init` | Wave W01: AI hỏi về sản phẩm, đề xuất và phản biện stack, bạn chốt; scaffold tài liệu, khung code, chạy được, acceptance |
 | Dự án đang chạy | Prompt `adopt` | AI khảo sát cái đang có, lập bảng đối chiếu, bạn duyệt; khung được thêm mà không phá tài liệu cũ |
 | Dự án đã dùng shipfast | Không cần gọi gì | Skill trong `.claude/skills/` tự kích hoạt; hỏi "đang tới đâu" để AI gọi `status` |
 
@@ -37,8 +37,8 @@ Trong Claude Code, prompt MCP hiện dưới dạng lệnh `/mcp__shipfast__init
 | Thứ tự | File | Vì sao |
 |---|---|---|
 | 1 | `CLAUDE.md` | Luật cho AI, cũng là tóm tắt cho người |
-| 2 | `docs/04_waves/README.md` | Vòng đời đợt, hệ mã, luật khi thảo luận và thi công |
-| 3 | `docs/04_waves/WAVES.md` | Đợt nào đang chạy |
+| 2 | `docs/04_waves/README.md` | Vòng đời wave, hệ mã, luật khi discussion và build |
+| 3 | `docs/04_waves/WAVES.md` | Wave nào đang chạy |
 | 4 | `docs/05_decisions/README.md` | Đã quyết những gì |
 | 5 | `docs/ORGANIZATION.md` | Ai làm gì, khi nào lập bộ phận, team, vai phản biện |
 
@@ -46,5 +46,5 @@ Trong Claude Code, prompt MCP hiện dưới dạng lệnh `/mcp__shipfast__init
 
 - Muốn làm gì thì nói với AI như với một trưởng nhóm: AI ghi thành vấn đề, đề xuất, phản biện, rồi hỏi bạn chốt.
 - Trả lời theo mã cho nhanh: "W02-03: A", "đồng ý trừ W02-05".
-- Nói **"chốt"** khi đồng ý phạm vi; từ đó AI thi công liên tục tới nghiệm thu.
+- Nói **"chốt"** khi đồng ý phạm vi; từ đó AI build liên tục tới acceptance.
 - Hỏi "đang tới đâu" bất cứ lúc nào; phiên mới vẫn làm tiếp được vì mọi trạng thái nằm trong file.

@@ -1,6 +1,6 @@
 # CLAUDE.md — shipfast-mcp
 
-MCP server (Python, FastMCP) phân phối quy trình làm việc theo đợt. Mô tả và cách dùng: `README.md`.
+MCP server (Python, FastMCP) phân phối quy trình làm việc theo wave. Mô tả và cách dùng: `README.md`.
 
 ## Nơi ghi quyết định
 
@@ -11,7 +11,7 @@ Quyết định thiết kế của repo này ghi ở `docs/decisions/README.md`,
 | Đường dẫn | Nội dung |
 |---|---|
 | `src/shipfast_mcp/server.py` | Khai báo tool, prompt, resource |
-| `src/shipfast_mcp/scaffold.py` | Dựng khung, nâng cấp gộp ba phía, `.shipfast/` |
+| `src/shipfast_mcp/scaffold.py` | Scaffold, nâng cấp three-way merge, `.shipfast/` |
 | `src/shipfast_mcp/project.py` | `status`, `next_code`, `open_wave`, `new_decision`, `check` |
 | `src/shipfast_mcp/templates.py` | Danh sách file khung, loại `managed` / `seed`, biến `{{...}}` |
 | `src/shipfast_mcp/knowledge/project/` | Khung dựng vào dự án đích (giữ đúng cây thư mục đích) |
@@ -25,5 +25,5 @@ Quyết định thiết kế của repo này ghi ở `docs/decisions/README.md`,
 - Kho tri thức không gắn stack, không chứa chi tiết nội bộ của dự án hay tổ chức nào (host, app key, cổng cố định, env).
 - Thêm file khung mới: đặt vào `knowledge/project/`; file dữ liệu của dự án (chỉ tạo một lần) thì thêm vào `SEED` trong `templates.py`.
 - Đổi phiên bản: sửa cùng lúc `pyproject.toml`, `plugin/.claude-plugin/plugin.json` (cả `version` và tham số `uvx`), `server.json`.
-- Sau khi sửa kho tri thức hoặc code: `uv run pytest`; build và chạy thử qua `uvx --from dist/*.whl shipfast-mcp` khi đổi đóng gói.
+- Sau khi sửa kho tri thức hoặc code: `uv run pytest`; build và dry run qua `uvx --from dist/*.whl shipfast-mcp` khi đổi đóng gói.
 - File tạm trong `tmp/`. Không commit, push khi người dùng chưa yêu cầu. Nhánh theo luật chung của người dùng.

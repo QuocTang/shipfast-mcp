@@ -2,7 +2,7 @@
 
 <!-- mcp-name: io.github.QuocTang/shipfast-mcp -->
 
-**Quy trình làm việc theo đợt giữa người và AI, cài bằng một dòng MCP.** AI làm Điều hành: đề xuất, phản biện, giữ hồ sơ, điều phối agent con. Người làm PO: chốt và nghiệm thu. Dùng được cho mọi stack.
+**Quy trình làm việc theo wave giữa người và AI, cài bằng một dòng MCP.** AI làm Orchestrator: đề xuất, phản biện, giữ hồ sơ, điều phối subagent. Người làm PO: chốt và acceptance. Dùng được cho mọi stack.
 
 [![CI](https://github.com/QuocTang/shipfast-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/QuocTang/shipfast-mcp/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/shipfast-mcp.svg)](https://pypi.org/project/shipfast-mcp/)
@@ -37,7 +37,7 @@ Mở repo cần làm, gọi điểm vào phù hợp:
 
 | Tình huống | Gọi | Kết quả |
 |---|---|---|
-| Repo mới, chưa có code | `/mcp__shipfast__init` | Đợt W01: AI hỏi về sản phẩm, đề xuất và phản biện 2–3 phương án stack, PO chốt; dựng khung tài liệu, khung code chạy được, nghiệm thu |
+| Repo mới, chưa có code | `/mcp__shipfast__init` | Wave W01: AI hỏi về sản phẩm, đề xuất và phản biện 2–3 phương án stack, PO chốt; scaffold tài liệu, khung code chạy được, acceptance |
 | Dự án đang chạy | `/mcp__shipfast__adopt` | AI khảo sát cái đang có, lập bảng đối chiếu; khung được thêm mà không phá tài liệu, quyết định sẵn có |
 | Đã dùng shipfast | Hỏi "đang tới đâu" | Skill trong dự án tự kích hoạt, AI gọi `status` và làm tiếp |
 
@@ -61,7 +61,7 @@ Cấu hình dạng JSON cho client đọc `mcpServers`:
 }
 ```
 
-Ghim phiên bản: `uvx shipfast-mcp@0.1.0`.
+Ghim phiên bản: `uvx shipfast-mcp@0.2.0`.
 
 ## Features
 
@@ -69,37 +69,37 @@ Ghim phiên bản: `uvx shipfast-mcp@0.1.0`.
 
 | Khi làm việc với AI không có quy trình | shipfast |
 |---|---|
-| AI viết code khi chưa hiểu đúng yêu cầu | 🛑 Không code trước khi PO chốt phạm vi |
-| AI chiều theo mọi yêu cầu | 🥊 Điều hành phản biện cả đề xuất của mình; 7 vai phản biện tranh luận độc lập rồi phản biện chéo |
-| Quyết định rải rác trong chat và comment | 📒 Sổ quyết định một chỗ (`SP`, `KT`, `QT`), code chỉ trỏ mã |
+| AI viết code khi chưa hiểu đúng yêu cầu | 🛑 Không code trước khi PO lock scope |
+| AI chiều theo mọi yêu cầu | 🥊 Orchestrator phản biện cả đề xuất của mình; 7 vai phản biện debate độc lập rồi phản biện chéo |
+| Quyết định rải rác trong chat và comment | 📒 Decision log một chỗ (`SP`, `KT`, `QT`), code chỉ trỏ mã |
 | Phiên mới quên bối cảnh | 💾 Trạng thái nằm trong file; tool `status` cho biết đang tới đâu |
 | Phạm vi phình dần | 📥 Việc mới vào backlog, đổi phạm vi qua CR |
-| "Xong" nhưng chưa chạy thật | ✅ Cổng kiểm chứng phải chạy thật; QA độc lập nghiệm thu |
-| Chép template rồi lệch dần, cập nhật phải so tay với repo gốc | 🔀 Nâng cấp gộp ba phía tự động, không cần repo gốc |
+| "Xong" nhưng chưa chạy thật | ✅ Quality gate phải chạy thật; QA độc lập acceptance |
+| Chép template rồi lệch dần, cập nhật phải so tay với repo gốc | 🔀 Nâng cấp three-way merge tự động, không cần repo gốc |
 
-### Vòng đời một đợt
+### Vòng đời một wave
 
 ```text
-📥 Gom việc → 🗣️ Thảo luận → ✅ Chốt → 🔨 Thi công → 🧹 Dọn dẹp → 🧪 Nghiệm thu → 🚀 Phát hành, rút kinh nghiệm, đóng
+📥 Intake → 🗣️ Discussion → ✅ Scope lock → 🔨 Build → 🧹 Cleanup → 🧪 Acceptance → 🚀 Release, rút kinh nghiệm, đóng
 ```
 
 | Chế độ chốt | Khi nào |
 |---|---|
 | PO chốt | Mặc định |
-| Chốt thẳng | Đợt nhỏ, yêu cầu đã rõ |
-| Uỷ quyền | Đã có từ hai bộ phận; Chủ toạ phán quyết theo tiêu chí PO đặt |
+| Chốt thẳng | Wave nhỏ, yêu cầu đã rõ |
+| Delegation | Đã có từ hai bộ phận; Chủ toạ phán quyết theo tiêu chí PO đặt |
 
 ### Thành phần MCP
 
 | Loại | Tên | Việc |
 |---|---|---|
-| 🔧 Tool | `scaffold_project` | Dựng `CLAUDE.md`, `docs/` (đợt, backlog, sổ quyết định, tổ chức) và skill `.claude/skills/shipfast-*`; chạy thử trước, không ghi đè |
-| 🔧 Tool | `upgrade` | Nâng khung lên phiên bản mới bằng gộp ba phía |
-| 🔧 Tool | `status`, `check` | Đợt nào đang chạy, chờ PO điều gì; hồ sơ có lệch không |
-| 🔧 Tool | `open_wave`, `new_decision`, `next_code` | Mở đợt, ghi quyết định, cấp mã không trùng |
+| 🔧 Tool | `scaffold_project` | Dựng `CLAUDE.md`, `docs/` (wave, backlog, decision log, tổ chức) và skill `.claude/skills/shipfast-*`; dry run trước, không ghi đè |
+| 🔧 Tool | `upgrade` | Nâng khung lên phiên bản mới bằng three-way merge |
+| 🔧 Tool | `status`, `check` | Wave nào đang chạy, chờ PO điều gì; hồ sơ có lệch không |
+| 🔧 Tool | `open_wave`, `new_decision`, `next_code` | Mở wave, ghi quyết định, cấp mã không trùng |
 | 🔧 Tool | `read_guide` | Tài liệu hướng dẫn cho người |
 | 💬 Prompt | `init`, `adopt`, `upgrade` | Điểm vào |
-| 📚 Resource | `skill://shipfast-*/SKILL.md` | 6 skill: luật nền, khởi tạo, áp dụng, chạy đợt, tranh luận, nâng cấp |
+| 📚 Resource | `skill://shipfast-*/SKILL.md` | 6 skill: luật nền, khởi tạo, áp dụng, chạy wave, debate, nâng cấp |
 | 📚 Resource | `shipfast://guide/*` | Bắt đầu, tổ chức, ý nghĩa, phát triển và nâng cấp |
 
 ### Nâng cấp không cần repo gốc
@@ -111,7 +111,7 @@ Dự án giữ `.shipfast/manifest.json` và `.shipfast/base/` (bản khung lầ
 | Dự án chưa sửa file | Thay bằng bản mới |
 | Hai bên sửa khác chỗ | Gộp tự động |
 | Hai bên sửa cùng chỗ | File thật giữ nguyên; bản gộp có dấu xung đột ở `.shipfast/pending/` để duyệt |
-| Bảng đợt, backlog, sổ quyết định | Không bao giờ bị đụng |
+| Bảng wave, backlog, decision log | Không bao giờ bị đụng |
 
 ### Hướng dẫn
 

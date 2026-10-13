@@ -12,7 +12,7 @@ from . import __version__, project, scaffold
 from .templates import GUIDES, SKILLS
 
 INSTRUCTIONS = """\
-shipfast: quy trình làm việc theo đợt giữa PO (người dùng), Điều hành (phiên AI chính) và agent con, \
+shipfast: quy trình làm việc theo wave giữa PO (người dùng), Orchestrator (phiên AI chính) và subagent, \
 dùng được cho mọi stack.
 
 - Repo mới: dùng prompt `init` (hoặc đọc skill://shipfast-init/SKILL.md). Dự án đang chạy: prompt `adopt`.
@@ -42,7 +42,7 @@ def scaffold_project(
     mode: Annotated[Literal["init", "adopt"], Field(description="init: repo mới, kèm hồ sơ W01. adopt: dự án đang chạy")] = "init",
     dry_run: Annotated[bool, Field(description="true: chỉ báo sẽ tạo gì, không ghi file")] = True,
 ) -> dict:
-    """Dựng khung quy trình shipfast vào dự án: CLAUDE.md, docs/ (đợt, backlog, sổ quyết định, tổ chức), skill trong .claude/skills/.
+    """Scaffold quy trình shipfast vào dự án: CLAUDE.md, docs/ (wave, backlog, decision log, tổ chức), skill trong .claude/skills/.
 
     Không ghi đè file đã có. Ghi .shipfast/ để sau này nâng cấp tự gộp. Luôn chạy dry_run trước và trình PO danh sách.
     """
@@ -56,15 +56,15 @@ def upgrade(
 ) -> dict:
     """Nâng khung quy trình của dự án lên phiên bản shipfast đang chạy, không cần repo gốc.
 
-    File dự án chưa sửa thì thay bằng bản mới; file dự án đã sửa thì gộp ba phía; xung đột thì để bản gộp ở
-    .shipfast/pending/ và giữ nguyên file thật. File dữ liệu của dự án (bảng đợt, backlog, sổ quyết định) không bị đụng.
+    File dự án chưa sửa thì thay bằng bản mới; file dự án đã sửa thì three-way merge; xung đột thì để bản gộp ở
+    .shipfast/pending/ và giữ nguyên file thật. File dữ liệu của dự án (bảng wave, backlog, decision log) không bị đụng.
     """
     return scaffold.upgrade(project_dir, dry_run)
 
 
 @mcp.tool(annotations={"readOnlyHint": True})
 def status(project_dir: ProjectDir) -> dict:
-    """Trạng thái quy trình: phiên bản khung, bảng đợt, đợt đang mở và vấn đề chờ PO, backlog, quyết định giả định."""
+    """Trạng thái quy trình: phiên bản khung, bảng wave, wave đang mở và vấn đề chờ PO, backlog, quyết định giả định."""
     return project.status(project_dir)
 
 
@@ -73,9 +73,9 @@ def next_code(
     project_dir: ProjectDir,
     kind: Annotated[
         Literal["BL", "FB", "SP", "KT", "QT", "OPS", "HOTFIX", "PO", "W", "ISSUE", "P", "CR", "Q", "CL", "QA"],
-        Field(description="Loại mã. ISSUE, P, CR, Q, CL, QA là mã trong đợt, cần wave"),
+        Field(description="Loại mã. ISSUE, P, CR, Q, CL, QA là mã trong wave, cần wave"),
     ],
-    wave: Annotated[str, Field(description="Mã đợt, ví dụ W03; chỉ cần cho mã trong đợt")] = "",
+    wave: Annotated[str, Field(description="Mã wave, ví dụ W03; chỉ cần cho mã trong wave")] = "",
 ) -> dict:
     """Cấp mã kế tiếp (BL-012, W03-04, CR-W03-02, KT-005…) bằng cách quét hồ sơ, tránh trùng số."""
     return project.next_code(project_dir, kind, wave)
@@ -84,15 +84,15 @@ def next_code(
 @mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False})
 def open_wave(
     project_dir: ProjectDir,
-    title: Annotated[str, Field(description="Tên đợt")],
-    goal: Annotated[str, Field(description="Một câu: sau đợt này người dùng hoặc PO có được gì")],
+    title: Annotated[str, Field(description="Tên wave")],
+    goal: Annotated[str, Field(description="Một câu: sau wave này người dùng hoặc PO có được gì")],
     mode: Annotated[
         Literal["po", "direct", "delegated"],
-        Field(description="po: PO chốt từng vấn đề. direct: chốt thẳng cho đợt nhỏ. delegated: uỷ quyền, cần QT-nnn"),
+        Field(description="po: PO chốt từng vấn đề. direct: chốt thẳng cho wave nhỏ. delegated: delegation, cần QT-nnn"),
     ] = "po",
-    lead: Annotated[str, Field(description="Chủ trì: Điều hành hoặc mã bộ phận")] = "Điều hành",
+    lead: Annotated[str, Field(description="Chủ trì: Orchestrator hoặc mã bộ phận")] = "Orchestrator",
 ) -> dict:
-    """Mở đợt mới: tạo docs/04_waves/Wxx/ từ mẫu của dự án, thêm dòng vào bảng đợt ở trạng thái Gom việc."""
+    """Mở wave mới: tạo docs/04_waves/Wxx/ từ mẫu của dự án, thêm dòng vào bảng wave ở trạng thái Intake."""
     return project.open_wave(project_dir, title, goal, mode, lead)
 
 
@@ -113,7 +113,7 @@ def new_decision(
 
 @mcp.tool(annotations={"readOnlyHint": True})
 def check(project_dir: ProjectDir) -> dict:
-    """Kiểm hồ sơ: biến khung sót, link gãy, đợt đóng thiếu rút kinh nghiệm hoặc còn vấn đề Chờ, bảng đợt lệch, sổ quyết định lệch."""
+    """Kiểm hồ sơ: biến khung sót, link gãy, wave đóng thiếu rút kinh nghiệm hoặc còn vấn đề Chờ, bảng wave lệch, decision log lệch."""
     return project.check(project_dir)
 
 
@@ -145,7 +145,7 @@ def _skill(name: str) -> str:
 
 @mcp.prompt
 def init(project_dir: str = "") -> str:
-    """Khởi tạo dự án mới theo quy trình shipfast: chạy đợt W01, AI đề xuất và phản biện stack, PO chốt."""
+    """Khởi tạo dự án mới theo quy trình shipfast: chạy wave W01, AI đề xuất và phản biện stack, PO chốt."""
     where = f"Thư mục dự án: {project_dir}\n\n" if project_dir else ""
     return f"{where}Làm theo skill dưới đây.\n\n{_skill('shipfast-init')}"
 

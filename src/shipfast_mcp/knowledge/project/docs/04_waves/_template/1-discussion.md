@@ -1,6 +1,6 @@
-# Wxx — Thảo luận
+# Wxx — Discussion
 
-> Trạng thái: 🗣️ Thảo luận. PO trả lời theo mã (ví dụ "Wxx-03: A"). Cột **PO chốt**: `Chờ` → `Làm (phương án …)` / `Không làm` / `Hoãn → BL-nnn`. Có tranh luận (`../README.md` §4.3): lập trường ở `debate/`; uỷ quyền thì Chủ toạ điền cột này với tiền tố `Uỷ quyền:`.
+> Trạng thái: 🗣️ Discussion. PO trả lời theo mã (ví dụ "Wxx-03: A"). Cột **PO chốt**: `Chờ` → `Làm (phương án …)` / `Không làm` / `Hoãn → BL-nnn`. Có debate (`../README.md` §4.3): lập trường ở `debate/`; delegation thì Chủ toạ điền cột này với tiền tố `Delegation:`.
 
 ## 1. Tổng hợp
 

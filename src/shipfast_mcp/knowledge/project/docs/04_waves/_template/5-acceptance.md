@@ -1,4 +1,4 @@
-# Wxx — Nghiệm thu và phát hành
+# Wxx — Acceptance và release
 
 ## 1. Theo tiêu chí
 
@@ -6,7 +6,7 @@
 |---|---|---|---|
 | Wxx-P01 | | | ✔ / ✘ / PO chấp nhận ngoại lệ |
 
-## 2. Cổng kiểm chứng
+## 2. Quality gate
 
 | Kiểm | Kết quả |
 |---|---|
@@ -22,7 +22,7 @@
 | Mã quyết định | Nội dung | PO duyệt |
 |---|---|---|
 
-## 5. Phát hành
+## 5. Release
 
 | Mục | Giá trị |
 |---|---|
@@ -31,16 +31,16 @@
 | Kiểm trước triển khai | |
 | Kiểm sau triển khai | |
 | Commit | |
-| Ghi chú phát hành | |
+| Ghi chú release | |
 
 ## 6. Rút kinh nghiệm
 
-Bắt buộc trước khi đóng đợt. Mục "Đổi cách làm" được PO đồng ý thì ghi `QT-nnn` hoặc sửa quy chuẩn tương ứng.
+Bắt buộc trước khi đóng wave. Mục "Đổi cách làm" được PO đồng ý thì ghi `QT-nnn` hoặc sửa quy chuẩn tương ứng.
 
 | Tốt | Chưa tốt | Đổi cách làm |
 |---|---|---|
 
-## 7. Chuyển sang đợt sau
+## 7. Chuyển sang wave sau
 
 | Việc | Vào backlog |
 |---|---|

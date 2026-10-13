@@ -1,4 +1,4 @@
-"""Thao tác trên hồ sơ quy trình của dự án: trạng thái, cấp mã, mở đợt, ghi quyết định, kiểm hồ sơ."""
+"""Thao tác trên hồ sơ quy trình của dự án: trạng thái, cấp mã, mở wave, ghi quyết định, kiểm hồ sơ."""
 
 from __future__ import annotations
 
@@ -20,7 +20,20 @@ WAVE_RE = re.compile(r"^W(\d{2,})$")
 DECISION_KINDS = {"SP": "Sản phẩm", "KT": "Kỹ thuật", "QT": "Quy trình"}
 GLOBAL_KINDS = {"BL", "FB", "SP", "KT", "QT", "OPS", "HOTFIX", "PO", "W"}
 WAVE_KINDS = {"ISSUE", "P", "CR", "Q", "CL", "QA"}
-MODES = {"po": "PO chốt", "direct": "Chốt thẳng", "delegated": "Uỷ quyền"}
+MODES = {"po": "PO chốt", "direct": "Chốt thẳng", "delegated": "Delegation"}
+# Tiêu đề bảng wave; "| Đợt" là nhãn của bản 0.1.x, dự án cũ vẫn giữ trong file dữ liệu.
+WAVES_HEADER = ("| Wave", "| Đợt")
+# Nhãn trạng thái hiện hành, kèm nhãn tương đương của bản 0.1.x.
+STATES = {
+    "Intake": ("Intake", "Gom việc"),
+    "Discussion": ("Discussion", "Thảo luận"),
+    "Scope lock": ("Scope lock", "Chốt phạm vi"),
+    "Build": ("Build", "Thi công"),
+    "Cleanup": ("Cleanup", "Dọn dẹp"),
+    "Acceptance": ("Acceptance", "Nghiệm thu"),
+    "On hold": ("On hold", "Tạm hoãn"),
+    "Closed": ("Closed", "Đã đóng"),
+}
 
 
 def _read(root: Path, rel: str) -> str:
@@ -40,7 +53,7 @@ def _wave_dirs(root: Path) -> list[str]:
     return sorted(p.name for p in base.iterdir() if p.is_dir() and WAVE_RE.match(p.name))
 
 
-def _table_rows(text: str, header_startswith: str) -> list[list[str]]:
+def _table_rows(text: str, header_startswith: str | tuple[str, ...]) -> list[list[str]]:
     """Lấy các dòng dữ liệu của bảng markdown đầu tiên có dòng tiêu đề bắt đầu bằng header_startswith."""
     lines = text.splitlines()
     rows: list[list[str]] = []
@@ -84,15 +97,15 @@ def _code_corpus(root: Path, kind: str) -> str:
 def next_code(project_dir: str, kind: str, wave: str = "") -> dict:
     """Cấp mã kế tiếp theo hệ mã của quy trình (docs/04_waves/README.md §3).
 
-    kind toàn dự án: BL, FB, SP, KT, QT, OPS, HOTFIX, PO (việc PO giao ngoài đợt), W (đợt mới).
-    kind trong đợt (cần wave): ISSUE (Wxx-nn), P (Wxx-Pnn), CR, Q, CL, QA.
+    kind toàn dự án: BL, FB, SP, KT, QT, OPS, HOTFIX, PO (việc PO giao ngoài wave), W (wave mới).
+    kind trong wave (cần wave): ISSUE (Wxx-nn), P (Wxx-Pnn), CR, Q, CL, QA.
     Trả {"code": ...}. Ném ValueError khi kind không hỗ trợ hoặc thiếu wave.
     """
     root = resolve_project(project_dir)
     kind = kind.strip().upper()
     if kind == "W":
         nums = [int(WAVE_RE.match(d).group(1)) for d in _wave_dirs(root)]
-        nums += [int(r[0][1:]) for r in _table_rows(_read(root, WAVES_FILE), "| Đợt") if r and WAVE_RE.match(r[0])]
+        nums += [int(r[0][1:]) for r in _table_rows(_read(root, WAVES_FILE), WAVES_HEADER) if r and WAVE_RE.match(r[0])]
         return {"code": f"W{max(nums, default=0) + 1:02d}"}
     if kind in GLOBAL_KINDS:
         width = 2 if kind in ("OPS", "HOTFIX", "PO") else 3
@@ -125,7 +138,7 @@ def next_code(project_dir: str, kind: str, wave: str = "") -> dict:
 def status(project_dir: str) -> dict:
     """Tóm tắt trạng thái quy trình của dự án để phiên mới làm tiếp được.
 
-    Trả: phiên bản khung, bảng đợt, đợt chưa đóng kèm số vấn đề còn "Chờ",
+    Trả: phiên bản khung, bảng wave, wave chưa đóng kèm số vấn đề còn "Chờ",
     số việc backlog đang mở, quyết định còn "Giả định", xung đột nâng cấp chưa xử lý.
     """
     root = resolve_project(project_dir)
@@ -135,12 +148,12 @@ def status(project_dir: str) -> dict:
         "shipfast_available": __version__,
     }
     if manifest is None:
-        result["hint"] = "Dự án chưa dựng khung shipfast. Repo mới: prompt init. Dự án đang chạy: prompt adopt."
+        result["hint"] = "Dự án chưa scaffold shipfast. Repo mới: prompt init. Dự án đang chạy: prompt adopt."
         return result
     if manifest.get("version") != __version__:
         result["hint"] = "Có phiên bản khung mới; chạy tool upgrade (dry_run) để xem thay đổi."
     waves = []
-    for row in _table_rows(_read(root, WAVES_FILE), "| Đợt"):
+    for row in _table_rows(_read(root, WAVES_FILE), WAVES_HEADER):
         if len(row) >= 4 and row[0]:
             waves.append({"wave": row[0], "lead": row[1], "name": row[2], "state": row[3]})
     result["waves"] = waves
@@ -149,7 +162,7 @@ def status(project_dir: str) -> dict:
         readme = _read(root, f"{WAVES_DIR}/{w}/README.md")
         m = re.search(r"^\| Trạng thái \| (.+?) \|", readme, re.M)
         state = m.group(1) if m else "?"
-        if "Đã đóng" in state:
+        if _state_key(state) == "Closed":
             continue
         discussion = _read(root, f"{WAVES_DIR}/{w}/1-discussion.md")
         waiting = [r[0] for r in _table_rows(discussion, "| Mã") if r and r[-1].startswith("Chờ") and r[0].startswith(w)]
@@ -165,18 +178,18 @@ def status(project_dir: str) -> dict:
     return result
 
 
-def open_wave(project_dir: str, title: str, goal: str, mode: str = "po", lead: str = "Điều hành") -> dict:
-    """Mở đợt mới từ `docs/04_waves/_template/` của chính dự án và thêm dòng vào bảng đợt.
+def open_wave(project_dir: str, title: str, goal: str, mode: str = "po", lead: str = "Orchestrator") -> dict:
+    """Mở wave mới từ `docs/04_waves/_template/` của chính dự án và thêm dòng vào bảng wave.
 
-    mode: "po" (PO chốt từng vấn đề), "direct" (chốt thẳng, đợt nhỏ), "delegated" (uỷ quyền, cần QT-nnn).
-    Trả mã đợt và danh sách file đã tạo. Ném ValueError khi thiếu mẫu hoặc mode sai.
+    mode: "po" (PO chốt từng vấn đề), "direct" (chốt thẳng, wave nhỏ), "delegated" (delegation, cần QT-nnn).
+    Trả mã wave và danh sách file đã tạo. Ném ValueError khi thiếu mẫu hoặc mode sai.
     """
     root = resolve_project(project_dir)
     if mode not in MODES:
         raise ValueError(f"mode phải thuộc {sorted(MODES)}")
     template = root / WAVE_TEMPLATE_DIR
     if not template.exists():
-        raise ValueError(f"Không có {WAVE_TEMPLATE_DIR}; dựng khung bằng tool scaffold trước")
+        raise ValueError(f"Không có {WAVE_TEMPLATE_DIR}; scaffold bằng tool scaffold trước")
     code = next_code(str(root), "W")["code"]
     target = root / WAVES_DIR / code
     target.mkdir(parents=True)
@@ -187,10 +200,10 @@ def open_wave(project_dir: str, title: str, goal: str, mode: str = "po", lead: s
             continue
         text = src.read_text(encoding="utf-8").replace("Wxx", code).replace("YYYY-MM-DD", today)
         if src.name == "README.md":
-            text = text.replace("<tên đợt>", title).replace(
-                "<một câu: sau đợt này người dùng hoặc PO có được gì>", goal
-            ).replace("Điều hành / <mã bộ phận>", lead).replace(
-                "PO chốt / Chốt thẳng (lý do) / Uỷ quyền (`QT-nnn`)", MODES[mode]
+            text = text.replace("<tên wave>", title).replace(
+                "<một câu: sau wave này người dùng hoặc PO có được gì>", goal
+            ).replace("Orchestrator / <mã bộ phận>", lead).replace(
+                "PO chốt / Chốt thẳng (lý do) / Delegation (`QT-nnn`)", MODES[mode]
             )
         name = src.name
         if name.startswith("debate-"):
@@ -202,8 +215,8 @@ def open_wave(project_dir: str, title: str, goal: str, mode: str = "po", lead: s
     waves = root / WAVES_FILE
     if waves.exists():
         lines = waves.read_text(encoding="utf-8").splitlines()
-        row = f"| {code} | {lead} | {title} | 📥 Gom việc | {goal} | — | — | [{code}/]({code}/README.md) |"
-        insert_at = _table_end(lines, "| Đợt")
+        row = f"| {code} | {lead} | {title} | 📥 Intake | {goal} | — | — | [{code}/]({code}/README.md) |"
+        insert_at = _table_end(lines, WAVES_HEADER)
         if insert_at is not None:
             lines.insert(insert_at, row)
             waves.write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -215,7 +228,7 @@ def open_wave(project_dir: str, title: str, goal: str, mode: str = "po", lead: s
     }
 
 
-def _table_end(lines: list[str], header_startswith: str) -> int | None:
+def _table_end(lines: list[str], header_startswith: str | tuple[str, ...]) -> int | None:
     for i, line in enumerate(lines):
         if line.startswith(header_startswith):
             j = i + 2
@@ -244,7 +257,7 @@ def new_decision(
     """Ghi một quyết định mới vào `docs/05_decisions/` theo mẫu của dự án và cập nhật mục lục.
 
     kind: SP, KT hoặc QT. short_name: tên ngắn tiếng Anh cho tên file.
-    status: "Giả định" (Điều hành đặt tạm) hoặc "Hiệu lực" (PO đã chốt).
+    status: "Giả định" (Orchestrator đặt tạm) hoặc "Hiệu lực" (PO đã chốt).
     Trả mã và đường dẫn file. Ném ValueError khi kind hoặc status sai.
     """
     root = resolve_project(project_dir)
@@ -258,14 +271,14 @@ def new_decision(
     template = root / DECISIONS_DIR / "_template.md"
     text = template.read_text(encoding="utf-8") if template.exists() else "# <MÃ> — <tên quyết định>\n"
     today = date.today().isoformat()
-    by = decided_by or ("PO" if status == "Hiệu lực" else "Điều hành (giả định)")
+    by = decided_by or ("PO" if status == "Hiệu lực" else "Orchestrator (giả định)")
     text = (
         text.replace("<MÃ>", code)
         .replace("<tên quyết định>", title)
         .replace("Sản phẩm / Kỹ thuật / Quy trình", DECISION_KINDS[kind])
         .replace("Giả định / Hiệu lực / Bị thay thế bởi <mã> / Huỷ", status)
         .replace("YYYY-MM-DD", today)
-        .replace("PO / Điều hành (giả định)", by)
+        .replace("PO / Orchestrator (giả định)", by)
         .replace("Wxx-nn / —", wave)
         .replace("<mã> / —", "—")
     )
@@ -292,8 +305,8 @@ LINK_RE = re.compile(r"\]\(([^)#\s]+)(?:#[^)]*)?\)")
 def check(project_dir: str) -> dict:
     """Kiểm hồ sơ quy trình, trả danh sách vấn đề theo nhóm.
 
-    Nhóm: biến khung còn sót, link nội bộ gãy, đợt đã đóng thiếu rút kinh nghiệm,
-    đợt đã đóng còn vấn đề "Chờ", trạng thái đợt lệch giữa bảng đợt và README đợt,
+    Nhóm: biến khung còn sót, link nội bộ gãy, wave đã đóng thiếu rút kinh nghiệm,
+    wave đã đóng còn vấn đề "Chờ", trạng thái wave lệch giữa bảng wave và README wave,
     mục lục quyết định lệch file, xung đột nâng cấp chưa xử lý.
     """
     root = resolve_project(project_dir)
@@ -316,25 +329,25 @@ def check(project_dir: str) -> dict:
             if not (f.parent / link).exists():
                 add("link_gay", f"{rel} → {link}")
 
-    waves_table = {r[0]: r[3] for r in _table_rows(_read(root, WAVES_FILE), "| Đợt") if len(r) >= 4}
+    waves_table = {r[0]: r[3] for r in _table_rows(_read(root, WAVES_FILE), WAVES_HEADER) if len(r) >= 4}
     for w in _wave_dirs(root):
         readme = _read(root, f"{WAVES_DIR}/{w}/README.md")
         m = re.search(r"^\| Trạng thái \| (.+?) \|", readme, re.M)
         state = m.group(1).strip() if m else ""
         table_state = waves_table.get(w)
         if table_state is None:
-            add("dot_thieu_trong_bang", w)
+            add("wave_thieu_trong_bang", w)
         elif state and _state_key(state) != _state_key(table_state):
             add("trang_thai_lech", f"{w}: README «{state}» / WAVES.md «{table_state}»")
-        if "Đã đóng" in state:
+        if _state_key(state) == "Closed":
             acceptance = _read(root, f"{WAVES_DIR}/{w}/5-acceptance.md")
             retro = _table_rows(acceptance, "| Tốt")
             if not any(any(c for c in r) for r in retro):
-                add("dong_dot_thieu_rut_kinh_nghiem", w)
+                add("dong_wave_thieu_rut_kinh_nghiem", w)
             discussion = _read(root, f"{WAVES_DIR}/{w}/1-discussion.md")
             waiting = [r[0] for r in _table_rows(discussion, "| Mã") if r and r[-1].startswith("Chờ") and r[0].startswith(w)]
             if waiting:
-                add("dong_dot_con_cho", f"{w}: {', '.join(waiting)}")
+                add("dong_wave_con_cho", f"{w}: {', '.join(waiting)}")
 
     index_codes = {re.sub(r"\[([^\]]+)\].*", r"\1", r[0]) for r in _table_rows(_read(root, DECISIONS_INDEX), "| Mã") if r}
     dec_dir = root / DECISIONS_DIR
@@ -354,7 +367,8 @@ def check(project_dir: str) -> dict:
 
 
 def _state_key(state: str) -> str:
-    for key in ("Gom việc", "Thảo luận", "Chốt phạm vi", "Thi công", "Dọn dẹp", "Nghiệm thu", "Tạm hoãn", "Đã đóng"):
-        if key in state:
+    """Quy nhãn trạng thái (mới hoặc của bản 0.1.x) về khoá hiện hành; không khớp thì trả nguyên."""
+    for key, labels in STATES.items():
+        if any(label in state for label in labels):
             return key
     return state

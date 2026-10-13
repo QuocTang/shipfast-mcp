@@ -1,6 +1,6 @@
 # Wxx — R1 lập trường của <MÃ VAI / BỘ PHẬN>
 
-> Tranh luận (`../README.md` §4.3), tham vấn hoặc uỷ quyền. Lưu thành `debate/r1-<mã>.md`.
+> Debate (`../README.md` §4.3), tham vấn hoặc delegation. Lưu thành `debate/r1-<mã>.md`.
 
 | Mục | Giá trị |
 |---|---|
@@ -29,5 +29,5 @@
 
 ## 3. Vấn đề mới đề xuất
 
-| Vấn đề | Vì sao cần chốt trong đợt này |
+| Vấn đề | Vì sao cần chốt trong wave này |
 |---|---|

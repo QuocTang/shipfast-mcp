@@ -54,9 +54,24 @@ def test_check_detects_problems(project):
     (project / "docs/01_design/README.md").write_text("[gãy](khong-co.md) {{SLUG}}\n")
     (project / "docs/05_decisions/SP-009-orphan.md").write_text("# SP-009\n")
     readme = project / "docs/04_waves/W01/README.md"
-    readme.write_text(readme.read_text().replace("🗣️ Thảo luận", "🚀 Đã đóng"))
+    readme.write_text(readme.read_text().replace("🗣️ Discussion", "🚀 Closed"))
     issues = proj.check(str(project))["issues"]
     assert issues["link_gay"] and issues["bien_khung_con_sot"]
     assert issues["quyet_dinh_thieu_muc_luc"] == ["SP-009"]
-    assert "W01" in issues["dong_dot_thieu_rut_kinh_nghiem"]
-    assert issues["dong_dot_con_cho"]
+    assert "W01" in issues["dong_wave_thieu_rut_kinh_nghiem"]
+    assert issues["dong_wave_con_cho"]
+
+
+def test_reads_labels_from_0_1(project):
+    """Dự án dựng bằng 0.1.x giữ nhãn tiếng Việt trong file dữ liệu; status và check vẫn đọc đúng."""
+    waves = project / "docs/04_waves/WAVES.md"
+    waves.write_text(waves.read_text().replace("| Wave |", "| Đợt |").replace("🗣️ Discussion", "🗣️ Thảo luận"))
+    readme = project / "docs/04_waves/W01/README.md"
+    readme.write_text(readme.read_text().replace("🗣️ Discussion", "🗣️ Thảo luận"))
+    s = proj.status(str(project))
+    assert s["waves"][0]["wave"] == "W01"
+    assert proj.check(str(project))["ok"]
+    assert proj.open_wave(str(project), "Tiếp", "Mục tiêu")["wave"] == "W02"
+    assert "| W02 |" in waves.read_text()
+    readme.write_text(readme.read_text().replace("🗣️ Thảo luận", "🚀 Đã đóng"))
+    assert "W01" in proj.check(str(project))["issues"]["dong_wave_thieu_rut_kinh_nghiem"]
