@@ -8,13 +8,13 @@ Mỗi wave đi qua 7 bước theo thứ tự. **Không viết code trước bư�
 
 | Bước | Trạng thái | Ai làm | Việc | Đầu ra | Cổng để sang bước sau |
 |---|---|---|---|---|---|
-| 0 | 📥 Intake | Orchestrator | Lấy việc từ yêu cầu PO, `BACKLOG.md`, phản hồi người dùng, giới hạn đã biết. Mỗi vấn đề kèm bối cảnh, phương án, đề xuất. Dữ kiện cần kiểm thì cho agent khảo sát chỉ đọc, ghi vào `Wxx/research/`. Chọn chế độ chốt (§4.2) | `Wxx/README.md`, `Wxx/1-discussion.md` bản đầu | PO đã nhận chương trình |
-| 1 | 🗣️ Discussion | PO ↔ Orchestrator; hoặc các bộ phận debate (§4.3) | Trao đổi từng vấn đề, nhiều lượt nếu cần. Orchestrator phản biện cả đề xuất của mình lẫn lựa chọn của PO | Cột **PO chốt** của mọi vấn đề là Làm, Không làm hoặc Hoãn. Hoãn thì trả về backlog | Không còn vấn đề "Chờ" |
+| 0 | 📥 Intake | Orchestrator | Lấy việc từ yêu cầu PO, `BACKLOG.md`, phản hồi người dùng, giới hạn đã biết. Mỗi vấn đề kèm bối cảnh, phương án, đề xuất. Dữ kiện cần kiểm thì giao bộ phận liên quan khảo sát chỉ đọc, ghi vào `Wxx/research/`. Chọn chế độ chốt (§4.2) | `Wxx/README.md`, `Wxx/1-discussion.md` bản đầu | PO đã nhận chương trình |
+| 1 | 🗣️ Discussion | PO ↔ Orchestrator, lấy ý kiến bộ phận liên quan; hoặc các bộ phận debate (§4.3) | Trao đổi từng vấn đề, nhiều lượt nếu cần. Orchestrator phản biện cả đề xuất của mình lẫn lựa chọn của PO | Cột **PO chốt** của mọi vấn đề là Làm, Không làm hoặc Hoãn. Hoãn thì trả về backlog | Không còn vấn đề "Chờ" |
 | 2 | ✅ Scope lock | Orchestrator viết, PO duyệt | Viết `2-scope.md`: hạng mục `Wxx-Pnn`, tiêu chí acceptance đo được, vùng sở hữu, quality gate, rủi ro. Ghi quyết định mới vào `../05_decisions/`, contract vào `../02_build/CONTRACTS.md` | Phạm vi được duyệt | PO nói **"chốt"** (delegation: Chủ toạ chốt và báo PO). Ghi ngày chốt vào README wave và `WAVES.md` |
-| 3 | 🔨 Build | Agent hoặc team (`../ORGANIZATION.md` §4.1) | Chạy liên tục tới khi xong, song song theo vùng sở hữu khi được. Orchestrator kiểm tra agent định kỳ, ghi `3-build.md`. Việc ngoài phạm vi vào backlog; đổi phạm vi qua CR (§4) | Mọi hạng mục xong | Quality gate của wave xanh, đã **chạy thật** ít nhất một lần |
-| 4 | 🧹 Cleanup | Agent cleanup + chủ vùng | Quét chỉ đọc theo danh sách kiểm của `4-cleanup.md`; chủ vùng xoá mục trong vùng mình. Chỉ xoá mã không được gọi, tài liệu lệch, file tạm; việc đổi hành vi chạy ghi backlog. Ranh giới: `../ORGANIZATION.md` §8 | `4-cleanup.md` | Mọi mục đã xử lý hoặc có lý do và mã backlog; quality gate xanh |
-| 5 | 🧪 Acceptance | Agent QA độc lập + Orchestrator | Chạy lại toàn bộ quality gate trên mã đã dọn, kịch bản đầu cuối, so với từng tiêu chí; lỗi `QAxx-n` được sửa rồi kiểm lại; trình các quyết định "Giả định" | `5-acceptance.md` §1–§4 | Mọi tiêu chí đạt, hoặc PO chấp nhận ngoại lệ |
-| 6 | 🚀 Release và đóng | Orchestrator (+ bộ phận triển khai khi đã lập) | Release theo `../03_release/README.md`, commit, **rút kinh nghiệm** (`5-acceptance.md` §6, bắt buộc), trả việc dở về backlog, cập nhật mọi trạng thái | README wave **Closed**; `WAVES.md` cập nhật | Tool `check` không báo lỗi cho wave này |
+| 3 | 🔨 Build | Bộ phận phụ trách từng hạng mục, chia team khi chạy song song (`../ORGANIZATION.md` §4.1) | Chạy liên tục tới khi xong, song song theo vùng sở hữu khi được. Orchestrator kiểm tra agent định kỳ, ghi `3-build.md`. Việc ngoài phạm vi vào backlog; đổi phạm vi qua CR (§4) | Mọi hạng mục xong | Quality gate của wave xanh, đã **chạy thật** ít nhất một lần |
+| 4 | 🧹 Cleanup | Bộ phận cleanup (hoặc subagent được giao) + bộ phận chủ vùng | Quét chỉ đọc theo danh sách kiểm của `4-cleanup.md`; chủ vùng xoá mục trong vùng mình. Chỉ xoá mã không được gọi, tài liệu lệch, file tạm; việc đổi hành vi chạy ghi backlog. Ranh giới: `../ORGANIZATION.md` §8 | `4-cleanup.md` | Mọi mục đã xử lý hoặc có lý do và mã backlog; quality gate xanh |
+| 5 | 🧪 Acceptance | QA độc lập với bộ phận đã build + Orchestrator | Chạy lại toàn bộ quality gate trên mã đã dọn, kịch bản đầu cuối, so với từng tiêu chí; lỗi `QAxx-n` được sửa rồi kiểm lại; trình các quyết định "Giả định" | `5-acceptance.md` §1–§4 | Mọi tiêu chí đạt, hoặc PO chấp nhận ngoại lệ |
+| 6 | 🚀 Release và đóng | Bộ phận triển khai (nếu có) + Orchestrator | Release theo `../03_release/README.md`, commit, **rút kinh nghiệm** (`5-acceptance.md` §6, bắt buộc), trả việc dở về backlog, cập nhật mọi trạng thái | README wave **Closed**; `WAVES.md` cập nhật | Tool `check` không báo lỗi cho wave này |
 
 Mỗi wave có một **người chủ trì**: Orchestrator, hoặc một bộ phận khi đã lập. Mỗi bộ phận chủ trì tối đa **một** wave ở bước 3–6 cùng lúc; hai wave song song không sửa cùng vùng thư mục. Được mở discussion cho wave kế (bước 0–2) khi wave trước đang build.
 
@@ -68,7 +68,7 @@ Mỗi thông tin chỉ sống ở **một** chỗ; nơi khác chỉ dẫn mã ho
 | PO trả lời | Theo mã: "W02-03: A", "đồng ý đề xuất trừ W02-05", "W02-07 hoãn". Orchestrator ghi nhật ký và điền cột PO chốt |
 | PO chọn khác đề xuất hoặc yêu cầu mơ hồ | Orchestrator nêu rủi ro, hệ quả, câu hỏi làm rõ cụ thể; chỉ ghi chốt khi PO xác nhận |
 | Câu hỏi gửi PO | Gọi đối tượng bằng tên, kèm trạng thái hiện tại; mã chỉ kèm sau trong ngoặc |
-| Vấn đề cần số liệu mới quyết được | Agent khảo sát chỉ đọc, ghi `Wxx/research/`, mang kết quả về discussion tiếp |
+| Vấn đề cần số liệu mới quyết được | Bộ phận liên quan khảo sát chỉ đọc, ghi `Wxx/research/`, mang kết quả về discussion tiếp |
 | PO lật lại một kết luận | Ghi nhật ký `1-discussion.md`; đang build thì mở CR |
 | Đang build mà phát hiện việc mới | Ghi backlog (`BL-nnn`), không tự làm |
 | Đang build mà cần đổi phạm vi hoặc tiêu chí | Mở `CR-Wxx-nn`: lý do, ảnh hưởng, đề xuất. Duyệt mới làm |

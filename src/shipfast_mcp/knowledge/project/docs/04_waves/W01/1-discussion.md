@@ -13,7 +13,8 @@
 | W01-05 | Lệnh chuẩn và quality gate | mới | Lint, typecheck, test, build, quét secret | Chờ |
 | W01-06 | Bí mật và cấu hình môi trường | mới | File mẫu commit, file thật gitignore | Chờ |
 | W01-07 | Git | mới | Nhánh chính theo repo, chưa push | Chờ |
-| W01-08 | Chế độ chốt từ W02 | mới | PO chốt, tham vấn vai phản biện khi cần | Chờ |
+| W01-08 | Chế độ chốt từ W02 | mới | PO chốt, lấy ý kiến bộ phận và vai phản biện khi cần | Chờ |
+| W01-09 | Tổ chức bộ phận | mới | Orchestrator đề xuất 3–5 bộ phận theo sản phẩm | Chờ |
 
 ## 2. Chi tiết từng vấn đề
 
@@ -88,8 +89,19 @@
 | Mục | Nội dung |
 |---|---|
 | Phương án A | PO chốt từng vấn đề; Orchestrator gọi vai phản biện tham vấn khi vấn đề có nhiều góc nhìn; wave nhỏ chốt thẳng |
-| Phương án B | Delegation: ghi `QT-002` (phạm vi, việc PO giữ lại, tiêu chí Chủ toạ); cần lập ít nhất hai bộ phận |
-| Đề xuất | A; chuyển B khi đã có bộ phận và PO muốn giảm số lần chốt |
+| Phương án B | Delegation: ghi `QT-nnn` (phạm vi, việc PO giữ lại, tiêu chí Chủ toạ); các bộ phận lập ở W01-09 debate, Chủ toạ chốt |
+| Đề xuất | A; chuyển B khi PO muốn giảm số lần chốt |
+| PO chốt | Chờ |
+
+### W01-09 — Tổ chức bộ phận
+
+| Mục | Nội dung |
+|---|---|
+| Bối cảnh | Orchestrator chỉ điều phối; việc chuyên môn giao cho bộ phận (`../../ORGANIZATION.md` §2, §5). Bộ phận lập ngay ở W01 để W01 và các wave sau có người nhận việc |
+| Cách trình | Sau W01-01 và W01-02: bảng 3–5 bộ phận chọn từ danh mục gợi ý (`../../ORGANIZATION.md` §2.1) hoặc đặt riêng, mỗi dòng: mã, lĩnh vực, vùng sở hữu (thư mục), vì sao cần với sản phẩm này |
+| Đề xuất | (Orchestrator điền theo sản phẩm và stack đã chốt) |
+| Phản biện đề xuất | Quá nhiều bộ phận thì tốn lượt điều phối; quá ít thì một bộ phận ôm nhiều lĩnh vực, ý kiến chuyên môn mỏng |
+| Đầu ra khi chốt | `QT-nnn` lập bộ phận; tool `create_department` cho từng bộ phận |
 | PO chốt | Chờ |
 
 ## 3. Nhật ký trao đổi

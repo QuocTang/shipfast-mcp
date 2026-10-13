@@ -111,6 +111,22 @@ def new_decision(
     return project.new_decision(project_dir, kind, title, short_name, context, decision, status, wave)
 
 
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False})
+def create_department(
+    project_dir: ProjectDir,
+    code: Annotated[str, Field(description="Mã viết hoa, ví dụ PLATFORM, TRUST")],
+    name: Annotated[str, Field(description="Tên bộ phận, ví dụ Nền tảng")],
+    domain: Annotated[str, Field(description="Lĩnh vực phụ trách, một câu")],
+    owns: Annotated[str, Field(description="Vùng thư mục sở hữu, ví dụ `src/`, `tests/`")],
+    decision: Annotated[str, Field(description="Mã QT lập bộ phận nếu đã ghi")] = "",
+) -> dict:
+    """Lập bộ phận theo dự án: hồ sơ docs/departments/<mã>/, subagent .claude/agents/dept-<mã>.md, thêm vào ORGANIZATION.md.
+
+    Sau khi lập, mọi việc thuộc lĩnh vực của bộ phận được giao cho subagent này; Orchestrator chỉ điều phối.
+    """
+    return project.create_department(project_dir, code, name, domain, owns, decision)
+
+
 @mcp.tool(annotations={"readOnlyHint": True})
 def check(project_dir: ProjectDir) -> dict:
     """Kiểm hồ sơ: biến khung sót, link gãy, wave đóng thiếu rút kinh nghiệm hoặc còn vấn đề Chờ, bảng wave lệch, decision log lệch."""

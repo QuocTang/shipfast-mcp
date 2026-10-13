@@ -17,11 +17,18 @@ Thuật ngữ chuyên ngành giữ tiếng Anh, câu văn vẫn tiếng Việt.
 | cổng kiểm chứng · hợp đồng | quality gate · contract |
 | tranh luận · uỷ quyền | debate · delegation |
 
+Tổ chức:
+
+- Bộ phận lập theo dự án ngay từ W01 (vấn đề W01-09) và thêm khi có lĩnh vực mới; việc thuộc lĩnh vực nào giao bộ phận đó.
+- Orchestrator chỉ điều phối, không tự thi công việc tốn công (`docs/ORGANIZATION.md` §5).
+- Tool mới `create_department`: hồ sơ `docs/departments/<mã>/`, subagent `.claude/agents/dept-<mã>.md`.
+
 Nâng cấp từ 0.1.x:
 
 - `upgrade` cập nhật khung, skill, `CLAUDE.md`; file dữ liệu của dự án (`WAVES.md`, `BACKLOG.md`, hồ sơ wave, decision log) giữ nguyên nhãn cũ.
 - Tool `status`, `check`, `open_wave` đọc được cả nhãn cũ lẫn nhãn mới. Đổi nhãn trong file dữ liệu là tuỳ chọn, theo bảng trên, khi PO đồng ý.
 - Khoá kết quả của tool `check` đổi tên: `dot_*` → `wave_*`.
+- Dự án chưa có bộ phận: Orchestrator đề xuất bộ bộ phận theo `docs/ORGANIZATION.md` §2.1, PO duyệt, lập bằng `create_department`.
 
 ## 0.1.0
 

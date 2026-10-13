@@ -8,6 +8,7 @@ from pathlib import Path
 
 from . import __version__
 from .scaffold import PENDING_DIR, load_manifest, resolve_project
+from .templates import DEPARTMENT, render
 
 WAVES_DIR = "docs/04_waves"
 WAVES_FILE = f"{WAVES_DIR}/WAVES.md"
@@ -15,6 +16,10 @@ BACKLOG_FILE = f"{WAVES_DIR}/BACKLOG.md"
 WAVE_TEMPLATE_DIR = f"{WAVES_DIR}/_template"
 DECISIONS_DIR = "docs/05_decisions"
 DECISIONS_INDEX = f"{DECISIONS_DIR}/README.md"
+ORGANIZATION = "docs/ORGANIZATION.md"
+DEPARTMENTS_DIR = "docs/departments"
+AGENTS_DIR = ".claude/agents"
+DEPT_CODE_RE = re.compile(r"^[A-Z][A-Z0-9]{1,11}$")
 
 WAVE_RE = re.compile(r"^W(\d{2,})$")
 DECISION_KINDS = {"SP": "Sản phẩm", "KT": "Kỹ thuật", "QT": "Quy trình"}
@@ -372,3 +377,70 @@ def _state_key(state: str) -> str:
         if any(label in state for label in labels):
             return key
     return state
+
+
+def create_department(
+    project_dir: str,
+    code: str,
+    name: str,
+    domain: str,
+    owns: str,
+    decision: str = "",
+) -> dict:
+    """Lập một bộ phận: hồ sơ `docs/departments/<mã>/`, subagent `.claude/agents/dept-<mã>.md`,
+    thêm dòng vào `docs/ORGANIZATION.md` §2 và §3. Không ghi đè file đã có.
+
+    code: mã viết hoa (ví dụ PLATFORM). owns: vùng thư mục sở hữu, ví dụ "`src/`, `tests/`".
+    decision: mã quyết định QT lập bộ phận nếu đã ghi.
+    Trả danh sách file đã tạo. Ném ValueError khi mã sai định dạng hoặc bộ phận đã tồn tại.
+    """
+    root = resolve_project(project_dir)
+    code = code.strip().upper()
+    if not DEPT_CODE_RE.match(code):
+        raise ValueError("code phải viết hoa, 2–12 ký tự chữ hoặc số, bắt đầu bằng chữ, ví dụ PLATFORM")
+    lower = code.lower()
+    dept_dir = root / DEPARTMENTS_DIR / lower
+    agent_file = root / AGENTS_DIR / f"dept-{lower}.md"
+    if dept_dir.exists() or agent_file.exists():
+        raise ValueError(f"Bộ phận {code} đã có hồ sơ hoặc subagent")
+    variables = {
+        "MA": code,
+        "MA_THUONG": lower,
+        "TEN": name.strip(),
+        "LINH_VUC": domain.strip(),
+        "VUNG": owns.strip(),
+        "NGAY": date.today().isoformat(),
+        "QUYET_DINH": f" theo `{decision}`" if decision else "",
+        "QUYET_DINH_MA": decision or "—",
+    }
+    created = []
+    for src in sorted((DEPARTMENT / "docs").rglob("*.md")):
+        target = dept_dir / src.relative_to(DEPARTMENT / "docs")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(render(src.read_text(encoding="utf-8"), variables), encoding="utf-8")
+        created.append(target.relative_to(root).as_posix())
+    agent_file.parent.mkdir(parents=True, exist_ok=True)
+    agent_file.write_text(render((DEPARTMENT / "agent.md").read_text(encoding="utf-8"), variables), encoding="utf-8")
+    created.append(agent_file.relative_to(root).as_posix())
+
+    org = root / ORGANIZATION
+    if org.exists():
+        lines = org.read_text(encoding="utf-8").splitlines()
+        dossier = f"`departments/{lower}/`"
+        at = _table_end(lines, "| Bộ phận | Mã")
+        if at is not None:
+            header = next(line for line in lines if line.startswith("| Bộ phận | Mã"))
+            cells = [name, code, f"Hoạt động từ {variables['NGAY']}", domain, dossier]
+            if header.count("|") - 1 >= 6:
+                cells.append(f"`{AGENTS_DIR}/dept-{lower}.md`")
+            lines.insert(at, "| " + " | ".join(cells) + " |")
+        at = _table_end(lines, "| Bộ phận | Đầu mối của")
+        if at is not None:
+            lines.insert(at, f"| {name} ({code}) | {owns} |")
+        org.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        created.append(f"{ORGANIZATION} (thêm {code} vào §2, §3)")
+    return {
+        "department": code,
+        "created": created,
+        "next": "Giao bộ phận viết 01_quy-che/01-dieu-le.md; ghi QT lập bộ phận nếu chưa có (new_decision).",
+    }

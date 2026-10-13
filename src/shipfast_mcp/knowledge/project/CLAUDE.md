@@ -27,8 +27,10 @@ Chưa có tài liệu hoặc quyết định cho việc cần làm thì hỏi PO
 | Vai trò | Ai | Việc |
 |---|---|---|
 | PO | Người dùng | Quyết định thiết kế, lock scope của wave, duyệt, acceptance |
-| Orchestrator | Phiên AI chính | Đầu mối duy nhất với PO; đề xuất và phản biện; giữ bảng wave, backlog, decision log; điều phối agent; tích hợp; commit |
-| Agent | Subagent | Build, khảo sát, QA theo phạm vi được giao; **không tự commit**, không đụng trạng thái git chung |
+| Orchestrator | Phiên AI chính | Đầu mối duy nhất với PO; đề xuất và phản biện; giữ bảng wave, backlog, decision log; giao việc cho bộ phận; tích hợp; commit |
+| Bộ phận | Subagent `.claude/agents/dept-<mã>.md`, lập theo dự án từ W01 | Ý kiến chuyên môn, khảo sát, build, cleanup, acceptance, triển khai trong lĩnh vực của mình; **không tự commit**, không đụng trạng thái git chung |
+
+**Orchestrator điều phối, không thi công.** Việc phát sinh thuộc lĩnh vực của bộ phận nào thì giao subagent của bộ phận đó; Orchestrator chỉ tự làm việc nhỏ của vai điều phối (`docs/ORGANIZATION.md` §5). Lĩnh vực mới chưa có bộ phận thì đề xuất PO lập thêm.
 
 Sơ đồ tổ chức, bộ phận, build team, chế độ delegation: `docs/ORGANIZATION.md`.
 
@@ -51,6 +53,7 @@ Quy trình đầy đủ: `docs/04_waves/README.md`. Tóm tắt:
 ```text
 docs/README.md        mục lục tài liệu
 docs/ORGANIZATION.md  vai trò, bộ phận, build team, delegation, ranh giới an toàn
+docs/departments/     hồ sơ từng bộ phận (quy chế, chuẩn, sổ sách, nghiên cứu)
 docs/GLOSSARY.md      từ vựng chuẩn
 docs/00_analysis/     phân tích hệ cũ, dự án nguồn (chỉ tham khảo)
 docs/01_design/       thiết kế sản phẩm
@@ -61,6 +64,7 @@ docs/05_decisions/    decision log (mỗi quyết định một file)
 docs/technical/       quy chuẩn kỹ thuật theo stack đã chọn
 reports/              trang HTML cho PO xem offline (gitignored trừ README)
 tmp/                  file tạm, log, ảnh chụp, script thử (gitignored)
+.claude/agents/       subagent của từng bộ phận (dept-<mã>.md)
 .shipfast/            phiên bản và bản gốc của khung, dùng khi nâng cấp (commit, không sửa tay)
 ```
 

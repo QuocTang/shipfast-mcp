@@ -5,7 +5,7 @@ description: Luật nền của quy trình shipfast (PO, Orchestrator, subagent;
 
 # shipfast-process
 
-Bạn là **Orchestrator**: đầu mối duy nhất với PO (người dùng), đề xuất và phản biện, giữ hồ sơ, điều phối subagent, tích hợp, commit khi PO cho phép. Luật đầy đủ nằm trong repo; skill này là bản nhắc.
+Bạn là **Orchestrator**: đầu mối duy nhất với PO (người dùng), đề xuất và phản biện, giữ hồ sơ, **giao việc cho các bộ phận**, tích hợp, commit khi PO cho phép. Bạn điều phối, không thi công: việc tốn công giao cho subagent của bộ phận phụ trách (`docs/ORGANIZATION.md` §2, §5). Luật đầy đủ nằm trong repo; skill này là bản nhắc.
 
 ## Đầu phiên
 
@@ -24,6 +24,7 @@ Bạn là **Orchestrator**: đầu mối duy nhất với PO (người dùng), �
 | Mỗi thông tin một chỗ; nơi khác trỏ mã. Quyết định ghi `docs/05_decisions/` (tool `new_decision`) | §3 |
 | Giao diện mới chỉ code khi PO đã duyệt khung | §4.1 |
 | Subagent không commit, không `git stash/checkout/reset/rebase/clean`, chỉ sửa vùng được giao | `docs/ORGANIZATION.md` §4.1 |
+| Việc thuộc lĩnh vực của bộ phận nào thì giao subagent `dept-<mã>` của bộ phận đó; chỉ tự làm việc nhỏ của vai điều phối. Lĩnh vực chưa có bộ phận thì đề xuất PO lập thêm (tool `create_department`) | `docs/ORGANIZATION.md` §2, §5 |
 | Đóng wave phải có rút kinh nghiệm và `check` sạch | `docs/04_waves/README.md` §1 bước 6 |
 | Migration, dữ liệu dùng chung, dependency mới, cấu hình deploy: chờ PO duyệt | `CLAUDE.md` mục Code |
 
@@ -31,9 +32,11 @@ Bạn là **Orchestrator**: đầu mối duy nhất với PO (người dùng), �
 
 | Người dùng nói | Làm |
 |---|---|
-| Yêu cầu một tính năng, sửa đổi | Có wave đang intake thì thêm vấn đề; không thì ghi `BL-nnn` và đề xuất mở wave (skill `shipfast-wave`) |
+| Yêu cầu một tính năng, sửa đổi | Có wave đang ở bước Intake thì thêm vấn đề; không thì ghi `BL-nnn` và đề xuất mở wave (skill `shipfast-wave`) |
 | "chốt" | Đóng băng `2-scope.md`, ghi ngày, chuyển 🔨 Build |
-| Câu hỏi có nhiều góc nhìn, lựa chọn khó | Debate tham vấn (skill `shipfast-debate`) |
+| Câu hỏi có nhiều góc nhìn, lựa chọn khó | Lấy lập trường của các bộ phận liên quan; debate tham vấn (skill `shipfast-debate`) |
+| Việc cần khảo sát, viết code, viết tài liệu chuyên môn, kiểm thử | Giao bộ phận phụ trách kèm mã việc, tiêu chí, vùng được sửa; tổng hợp kết quả, cập nhật hồ sơ |
+| Dự án chưa có bộ phận nào (dựng bằng bản cũ) | Đề xuất PO bộ bộ phận theo `docs/ORGANIZATION.md` §2.1 rồi lập bằng `create_department` |
 | Lỗi làm người dùng không dùng được | Hotfix theo `docs/04_waves/README.md` §5 |
 | "nâng cấp quy trình", có bản shipfast mới | Skill `shipfast-upgrade` |
 

@@ -12,21 +12,36 @@
    đề xuất · phản biện · bảng wave · backlog · decision log · điều phối · tích hợp · commit
                               │
         ┌─────────────────────┼──────────────────────┐
-   Bộ phận (lập khi có việc,   Build team (lập theo     Vai phản biện (gọi khi
+   Bộ phận (lập theo dự án,    Build team (lập theo     Vai phản biện (gọi khi
    sở hữu lĩnh vực, §2 §6)     wave, sở hữu vùng code, §4.1) debate tham vấn, §7.4)
 ```
 
 ## 2. Các bộ phận
 
-| Bộ phận | Mã | Trạng thái | Phụ trách | Hồ sơ |
-|---|---|---|---|---|
-| Orchestrator | — | Hoạt động từ {{NGAY}} | Toàn bộ việc khi chưa có bộ phận đầu mối | `04_waves/`, `05_decisions/` |
+| Bộ phận | Mã | Trạng thái | Phụ trách | Hồ sơ | Subagent |
+|---|---|---|---|---|---|
+| Orchestrator | — | Hoạt động từ {{NGAY}} | Điều phối, hồ sơ quy trình, tích hợp | `04_waves/`, `05_decisions/` | Phiên AI chính |
 
-**Thành lập khi có việc.** Một bộ phận chỉ được lập khi có wave đầu tiên do nó chủ trì. Trước đó Orchestrator gánh việc của lĩnh vực đó và ghi "Orchestrator (thay <mã>)" trong hồ sơ wave. Dấu hiệu nên lập: một lĩnh vực có dòng việc riêng liên tục qua nhiều wave, có chuẩn và sổ sách riêng, hoặc cần chạy song song với lĩnh vực khác.
+**Lập theo dự án, ngay từ W01.** Ở W01 Orchestrator đề xuất bộ bộ phận hợp với sản phẩm (vấn đề W01-09), PO duyệt, rồi lập bằng tool `create_department`. Khi dự án phát sinh một lĩnh vực mới mà không bộ phận nào phụ trách, Orchestrator đề xuất lập thêm (ghi `QT-nnn`), không tự gánh lĩnh vực đó lâu dài.
 
-Việc cleanup (bước 🧹) và triển khai (bước 🚀) do Orchestrator gánh tới khi lập bộ phận riêng; khi lập thì bộ phận cleanup giữ danh sách kiểm và báo cáo `Wxx/4-cleanup.md`, bộ phận triển khai giữ danh sách kiểm trước và sau triển khai, release notes.
+**Việc thuộc lĩnh vực nào thì giao bộ phận đó.** Mỗi việc phát sinh (vấn đề cần ý kiến chuyên môn, khảo sát, hạng mục build, cleanup, acceptance, triển khai) được giao cho subagent của bộ phận phụ trách lĩnh vực đó; việc chạm nhiều lĩnh vực thì mỗi bộ phận nhận phần của mình. Không có bộ phận phù hợp thì giao bộ phận gần nhất và đề xuất lập bộ phận mới.
 
-**QA** không phải bộ phận: là vai trò kiểm định do Orchestrator gọi ở bước acceptance, độc lập với agent đã build.
+### 2.1. Danh mục gợi ý
+
+Chọn theo sản phẩm, thường 3–5 bộ phận; đổi tên, gộp, tách cho hợp dự án.
+
+| Mã | Lĩnh vực | Nên lập khi |
+|---|---|---|
+| PRODUCT | Nghiệp vụ, yêu cầu, phạm vi, từ vựng | Luôn có khi sản phẩm có nghiệp vụ riêng |
+| UX | Giao diện, luồng, nguyên tắc thiết kế | Có giao diện người dùng |
+| PLATFORM | Code chính, kiến trúc, dữ liệu, contract | Luôn có khi có code |
+| DATA | Mô hình dữ liệu, báo cáo, pipeline | Dữ liệu là trọng tâm (báo cáo, phân tích, đồng bộ) |
+| TRUST | Bảo mật, quyền, riêng tư, bí mật | Có dữ liệu người dùng, phân quyền, tích hợp ngoài |
+| QA | Kịch bản kiểm thử, quality gate, acceptance độc lập | Sản phẩm có nhiều luồng cần kiểm lại mỗi wave |
+| OPS | Triển khai, vận hành, quan sát, backup | Có môi trường thật cần giữ |
+| CLEAN | Cleanup, nợ kỹ thuật, tài liệu lệch | Dự án đã qua vài wave, rác tích tụ |
+
+**QA** luôn độc lập với bộ phận đã build hạng mục đó, kể cả khi chưa lập bộ phận QA: Orchestrator gọi một subagent khác làm acceptance.
 
 ## 3. Bộ phận sở hữu gì
 
@@ -44,7 +59,7 @@ Bộ phận sở hữu **lĩnh vực**: quyết định chuyên môn (trình PO 
 | Backlog chung (`04_waves/BACKLOG.md`) | Mỗi việc có cột Phụ trách. Bộ phận tự xếp ưu tiên việc của mình, Orchestrator gom thành wave để thảo luận với PO |
 | Yêu cầu giữa bộ phận | Bộ phận A cần bộ phận B làm gì thì ghi một dòng backlog cho B (Nguồn: "yêu cầu từ A"), không tự sửa vùng của B. Việc nhỏ trong cùng wave ghi thành hạng mục của wave, một người sửa |
 | Contract và nguồn sự thật | Quyết định: `05_decisions/`. Từ vựng: `GLOSSARY.md`. Đổi contract dùng chung thì bộ phận đầu mối ghi quyết định và báo các bộ phận dùng nó |
-| Đóng wave chung | Orchestrator gộp kết quả các wave đã acceptance, chạy quality gate toàn repo, commit |
+| Đóng wave chung | Orchestrator gộp kết quả các wave đã qua Acceptance, chạy quality gate toàn repo, commit |
 
 ### 4.1. Build team
 
@@ -62,14 +77,24 @@ Bộ phận sở hữu **lĩnh vực** và quyết định; build team sở hữ
 
 ## 5. Vai trò của Orchestrator
 
+Orchestrator **điều phối, không thi công**. Việc tốn công giao cho bộ phận; Orchestrator chỉ tự làm việc nhỏ của chính vai điều phối.
+
+| Orchestrator tự làm | Giao bộ phận |
+|---|---|
+| Làm việc với PO: mở wave, trình vấn đề, nhận quyết định, báo kết quả | Ý kiến chuyên môn cho từng vấn đề (lập trường R1, R2) |
+| Cập nhật hồ sơ quy trình: README wave, `WAVES.md`, `BACKLOG.md`, mục lục decision log | Khảo sát, đọc nhiều file, tra tài liệu ngoài |
+| Tổng hợp kết quả các bộ phận, phán quyết khi delegation | Viết code, test, tài liệu chuyên môn, quy chuẩn |
+| Sửa nhỏ một chỗ để nối kết quả hai bộ phận (dưới khoảng 20 dòng, không phải code nghiệp vụ) | Cleanup, acceptance, triển khai |
+| Chạy quality gate cuối, quét secret, commit | Mọi việc khác thuộc vùng sở hữu của một bộ phận |
+
 | Việc | Chi tiết |
 |---|---|
-| Làm việc với PO | Đầu mối duy nhất: mở wave, discussion, nhận quyết định, báo kết quả |
 | Chủ toạ (chế độ delegation) | Mở vấn đề, chạy các vòng debate, phán quyết theo §7.2, ghi quyết định vào `05_decisions/` |
-| Điều phối | Giữ bảng wave và backlog; xếp wave song song không chồng vùng; kiểm tra agent đang chạy định kỳ |
-| Đề xuất và phản biện | Mỗi vấn đề trình PO có phương án, đề xuất, rủi ro của đề xuất; gọi vai phản biện (§7.4) khi vấn đề có nhiều góc nhìn |
-| Chạy việc | Mỗi bước build hoặc vòng duyệt là một lượt gồm agent của các team, bộ phận liên quan. **Trạng thái nằm trong file**, không nằm trong agent |
-| Chất lượng và release | Tích hợp, chạy quality gate, quét secret, commit; giữ bí mật và chạy lệnh triển khai |
+| Điều phối | Giao việc theo §2, giữ bảng wave và backlog; xếp wave song song không chồng vùng; kiểm tra subagent định kỳ |
+| Đề xuất và phản biện | Mỗi vấn đề trình PO có phương án, đề xuất, rủi ro của đề xuất; lấy lập trường của bộ phận liên quan, gọi thêm vai phản biện (§7.4) khi cần |
+| Chạy việc | Mỗi bước build hoặc vòng duyệt là một lượt gồm subagent của các bộ phận, team liên quan. **Trạng thái nằm trong file**, không nằm trong agent |
+
+Không còn bộ phận nào làm được và việc gấp thì Orchestrator làm, ghi "Orchestrator (thay <mã>)" trong hồ sơ wave, và đề xuất lập bộ phận ở lần trình PO kế tiếp.
 
 ## 6. Khi lập một bộ phận mới
 
@@ -91,15 +116,14 @@ Luật chung: không trích luật trực tiếp từ nghiên cứu. PO chốt �
 
 | Bước | Việc |
 |---|---|
-| 1 | Ghi quyết định `QT-nnn` lập bộ phận: mã, lĩnh vực, vùng sở hữu |
-| 2 | Tạo thư mục hồ sơ của bộ phận trong `docs/` theo khung §6.1, viết `README.md` và `01_quy-che/01-dieu-le.md` |
-| 3 | Kiểm kê lĩnh vực: đang có gì, chất lượng, việc tồn đọng (thành nghiên cứu `NC01`); chuyển việc tồn đọng trong backlog sang bộ phận mới |
-| 4 | Cập nhật §2, §3 của file này, `docs/README.md`, phần cấu trúc thư mục trong `CLAUDE.md` |
-| 5 | Mở wave đầu tiên do bộ phận chủ trì |
+| 1 | PO duyệt (W01-09 hoặc một vấn đề trong wave); ghi `QT-nnn` lập bộ phận: mã, lĩnh vực, vùng sở hữu |
+| 2 | Tool `create_department`: tạo hồ sơ `docs/departments/<mã>/` theo khung §6.1, subagent `.claude/agents/dept-<mã>.md`, thêm dòng vào §2, §3 |
+| 3 | Bộ phận viết `01_quy-che/01-dieu-le.md` và kiểm kê lĩnh vực (nghiên cứu `NC01`); chuyển việc tồn đọng trong backlog sang bộ phận |
+| 4 | Cập nhật `docs/README.md` nếu cần |
 
 ## 7. Debate và chế độ delegation
 
-Mặc định PO chốt từng vấn đề; Orchestrator có thể gọi vai phản biện (§7.4) để tham vấn trước khi trình PO. PO có thể delegation chốt cho debate giữa các bộ phận, Orchestrator làm Chủ toạ. Delegation cần ít nhất hai bộ phận đã lập.
+Mặc định PO chốt từng vấn đề; Orchestrator lấy lập trường của các bộ phận liên quan, gọi thêm vai phản biện (§7.4) khi cần, rồi trình PO. Ở chế độ delegation, PO giao quyền chốt cho debate giữa các bộ phận, Orchestrator làm Chủ toạ.
 
 | Bước bật | Việc |
 |---|---|
@@ -179,7 +203,7 @@ Không xoá, không ghi đè, không đổi tên, không di chuyển, không m�
 |---|---|---|
 | File env thật, khoá riêng (`*.key`, `*.pem`) | Bí mật | Mất thì không khôi phục được từ git |
 | Migration đã áp lên DB dùng chung | Lịch sử DB | Xoá làm lệch lịch sử migration của DB thật |
-| (dự án bổ sung: bản sao lưu, bản lưu cấu hình thật, bản release đang chạy và bản liền trước) | | |
+| (dự án bổ sung: bản sao lưu, bản lưu cấu hình thật, bản phát hành đang chạy và bản liền trước) | | |
 
 ### 8.3. Danh sách cho phép trong `tmp/`
 

@@ -22,6 +22,6 @@ Mục tiêu: dự án đang chạy có khung quy trình shipfast, giữ nguyên 
 | Lệnh build/test | Điền `docs/02_build/CONTRACTS.md` §2 từ lệnh thật đang dùng |
 
 4. PO duyệt thì gọi `scaffold_project` với `dry_run=false`, rồi gộp thủ công các file trùng theo bảng đã duyệt.
-5. Ghi `QT-001` (đã có sẵn từ khung) và các `QT` mô tả khác biệt. Điền `CONTRACTS.md`.
+5. Đề xuất bộ bộ phận theo dự án (`docs/ORGANIZATION.md` §2.1), vùng sở hữu bám cấu trúc thư mục thật; PO duyệt thì lập bằng `create_department`. Ghi `QT-001` (đã có sẵn từ khung), `QT` lập bộ phận và các `QT` mô tả khác biệt. Bộ phận nền tảng điền `CONTRACTS.md`.
 6. Mở wave kế từ việc đang làm dở (tool `open_wave`, chế độ phù hợp).
 7. Gọi tool `check`, sửa tới khi sạch. Không commit khi PO chưa yêu cầu.

@@ -18,7 +18,7 @@ def test_next_code_global_and_wave(project):
     assert proj.next_code(str(project), "QT")["code"] == "QT-002"
     assert proj.next_code(str(project), "BL")["code"] == "BL-001"
     assert proj.next_code(str(project), "W")["code"] == "W02"
-    assert proj.next_code(str(project), "ISSUE", "W01")["code"] == "W01-09"
+    assert proj.next_code(str(project), "ISSUE", "W01")["code"] == "W01-10"
     assert proj.next_code(str(project), "CR", "1")["code"] == "CR-W01-01"
     assert proj.next_code(str(project), "QA", "W01")["code"] == "QA01-1"
     with pytest.raises(ValueError):
@@ -75,3 +75,19 @@ def test_reads_labels_from_0_1(project):
     assert "| W02 |" in waves.read_text()
     readme.write_text(readme.read_text().replace("🗣️ Thảo luận", "🚀 Đã đóng"))
     assert "W01" in proj.check(str(project))["issues"]["dong_wave_thieu_rut_kinh_nghiem"]
+
+
+def test_create_department(project):
+    r = proj.create_department(str(project), "platform", "Nền tảng", "Code, dữ liệu, triển khai", "`src/`, `tests/`", "QT-002")
+    assert r["department"] == "PLATFORM"
+    agent = (project / ".claude/agents/dept-platform.md").read_text()
+    assert agent.startswith("---\nname: dept-platform\n") and "`src/`, `tests/`" in agent and "{{" not in agent
+    readme = (project / "docs/departments/platform/README.md").read_text()
+    assert "theo `QT-002`" in readme
+    org = (project / "docs/ORGANIZATION.md").read_text()
+    assert "| Nền tảng | PLATFORM |" in org and "| Nền tảng (PLATFORM) | `src/`, `tests/` |" in org
+    assert proj.check(str(project))["ok"]
+    with pytest.raises(ValueError, match="đã có"):
+        proj.create_department(str(project), "PLATFORM", "x", "y", "z")
+    with pytest.raises(ValueError):
+        proj.create_department(str(project), "x", "x", "y", "z")

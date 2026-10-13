@@ -19,7 +19,7 @@
 2. **Trạng thái nằm trong file.** Không phụ thuộc trí nhớ của phiên hay của agent.
 3. **Mỗi thông tin một chỗ.** Chép lại là bắt đầu lệch.
 4. **Cổng phải chạy thật.** Tiêu chí đo được, bằng chứng ghi lại.
-5. **Lập tổ chức khi có việc.** Bộ phận, team, delegation chỉ dùng khi dự án thật sự cần.
+5. **Tổ chức theo dự án, Orchestrator chỉ điều phối.** Bộ phận lập từ W01 theo đặc thù sản phẩm, thêm khi có lĩnh vực mới; việc thuộc lĩnh vực nào giao bộ phận đó.
 6. **Không giới hạn stack.** Quy trình không gắn công nghệ; stack là một quyết định của từng dự án.
 
 ## Nguồn gốc

@@ -2,7 +2,7 @@
 
 <!-- mcp-name: io.github.QuocTang/shipfast-mcp -->
 
-**Quy trình làm việc theo wave giữa người và AI, cài bằng một dòng MCP.** AI làm Orchestrator: đề xuất, phản biện, giữ hồ sơ, điều phối subagent. Người làm PO: chốt và acceptance. Dùng được cho mọi stack.
+**Quy trình làm việc theo wave giữa người và AI, cài bằng một dòng MCP.** AI làm Orchestrator: điều phối, đề xuất, phản biện; việc chuyên môn giao cho các bộ phận lập theo dự án, mỗi bộ phận là một subagent. Người làm PO: chốt và nghiệm thu. Dùng được cho mọi stack.
 
 [![CI](https://github.com/QuocTang/shipfast-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/QuocTang/shipfast-mcp/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/shipfast-mcp.svg)](https://pypi.org/project/shipfast-mcp/)
@@ -71,6 +71,7 @@ Ghim phiên bản: `uvx shipfast-mcp@0.2.0`.
 |---|---|
 | AI viết code khi chưa hiểu đúng yêu cầu | 🛑 Không code trước khi PO lock scope |
 | AI chiều theo mọi yêu cầu | 🥊 Orchestrator phản biện cả đề xuất của mình; 7 vai phản biện debate độc lập rồi phản biện chéo |
+| Một phiên AI ôm mọi việc, ý kiến chuyên môn mỏng | 🏢 Bộ phận lập theo dự án từ W01 (PRODUCT, PLATFORM, TRUST…); việc thuộc lĩnh vực nào giao bộ phận đó, Orchestrator chỉ điều phối |
 | Quyết định rải rác trong chat và comment | 📒 Decision log một chỗ (`SP`, `KT`, `QT`), code chỉ trỏ mã |
 | Phiên mới quên bối cảnh | 💾 Trạng thái nằm trong file; tool `status` cho biết đang tới đâu |
 | Phạm vi phình dần | 📥 Việc mới vào backlog, đổi phạm vi qua CR |
@@ -96,6 +97,7 @@ Ghim phiên bản: `uvx shipfast-mcp@0.2.0`.
 | 🔧 Tool | `scaffold_project` | Dựng `CLAUDE.md`, `docs/` (wave, backlog, decision log, tổ chức) và skill `.claude/skills/shipfast-*`; dry run trước, không ghi đè |
 | 🔧 Tool | `upgrade` | Nâng khung lên phiên bản mới bằng three-way merge |
 | 🔧 Tool | `status`, `check` | Wave nào đang chạy, chờ PO điều gì; hồ sơ có lệch không |
+| 🔧 Tool | `create_department` | Lập bộ phận theo dự án: hồ sơ `docs/departments/<mã>/`, subagent `.claude/agents/dept-<mã>.md` |
 | 🔧 Tool | `open_wave`, `new_decision`, `next_code` | Mở wave, ghi quyết định, cấp mã không trùng |
 | 🔧 Tool | `read_guide` | Tài liệu hướng dẫn cho người |
 | 💬 Prompt | `init`, `adopt`, `upgrade` | Điểm vào |

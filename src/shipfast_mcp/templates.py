@@ -12,6 +12,7 @@ KNOWLEDGE = Path(__file__).parent / "knowledge"
 PROJECT_TEMPLATE = KNOWLEDGE / "project"
 SKILLS = KNOWLEDGE / "skills"
 GUIDES = KNOWLEDGE / "guide"
+DEPARTMENT = KNOWLEDGE / "department"
 
 GITIGNORE_SOURCE = "gitignore.append"
 

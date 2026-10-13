@@ -23,6 +23,7 @@ Quyết định thiết kế của repo này ghi ở `docs/decisions/README.md`,
 ## Luật
 
 - Kho tri thức không gắn stack, không chứa chi tiết nội bộ của dự án hay tổ chức nào (host, app key, cổng cố định, env).
+- Không đổi chữ trong dòng giữ chỗ của khung (`(chưa điền…)`, `(dự án bổ sung…)`): dự án nào cũng sửa các dòng này, đổi chữ ở đó là gây xung đột khi `upgrade`.
 - Thêm file khung mới: đặt vào `knowledge/project/`; file dữ liệu của dự án (chỉ tạo một lần) thì thêm vào `SEED` trong `templates.py`.
 - Đổi phiên bản: sửa cùng lúc `pyproject.toml`, `plugin/.claude-plugin/plugin.json` (cả `version` và tham số `uvx`), `server.json`.
 - Sau khi sửa kho tri thức hoặc code: `uv run pytest`; build và dry run qua `uvx --from dist/*.whl shipfast-mcp` khi đổi đóng gói.

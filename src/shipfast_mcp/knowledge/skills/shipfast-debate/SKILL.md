@@ -16,7 +16,7 @@ Cơ chế gốc: `docs/04_waves/README.md` §4.3 và `docs/ORGANIZATION.md` §7.
 
 ## Chọn vai
 
-Lấy 2–4 vai trong `ORGANIZATION.md` §7.4 (hoặc bộ phận đã lập) liên quan tới vấn đề. Luôn có ít nhất một vai có lợi ích ngược nhau (ví dụ PROD với ARCH, USER với TRUST). Vấn đề chạm dữ liệu, bí mật, quyền thì bắt buộc có TRUST.
+Bộ phận đã lập có liên quan tới vấn đề luôn tham gia (dùng subagent `dept-<mã>` của bộ phận). Thêm vai trong `ORGANIZATION.md` §7.4 cho góc nhìn chưa bộ phận nào giữ, tổng cộng 2–4 bên. Luôn có ít nhất một vai có lợi ích ngược nhau (ví dụ PROD với ARCH, USER với TRUST). Vấn đề chạm dữ liệu, bí mật, quyền thì bắt buộc có TRUST.
 
 ## Chạy
 

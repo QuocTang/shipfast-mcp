@@ -11,6 +11,8 @@
 | D-007 | Plugin Claude Code chỉ khai MCP server, không mang skill | Hiệu lực | 2026-10-13 |
 | D-008 | Không dùng Roots, Sampling, Logging của MCP | Hiệu lực | 2026-10-13 |
 | D-009 | License MIT | Hiệu lực | 2026-10-13 |
+| D-010 | Thuật ngữ chuyên ngành giữ tiếng Anh; vai chính gọi là Orchestrator | Hiệu lực | 2026-10-13 |
+| D-011 | Bộ phận lập theo dự án từ W01, nhận việc theo lĩnh vực; Orchestrator chỉ điều phối | Hiệu lực | 2026-10-13 |
 
 ## D-001 — Runtime
 
@@ -47,3 +49,11 @@ Roots, Sampling, Logging đã bị đặc tả `2026-07-28` khai tử. Thư mụ
 ## D-009 — License
 
 MIT cho mã và tài liệu.
+
+## D-010 — Thuật ngữ
+
+Thuật ngữ chuyên ngành giữ tiếng Anh, câu văn tiếng Việt. Bảng đối chiếu: `src/shipfast_mcp/knowledge/guide/changelog.md` mục 0.2.0. Tool đọc được cả nhãn của bản 0.1.x trong file dữ liệu dự án.
+
+## D-011 — Bộ phận và Orchestrator
+
+Ở W01, Orchestrator đề xuất bộ phận theo sản phẩm (W01-09), PO duyệt, tool `create_department` tạo hồ sơ `docs/departments/<mã>/` và subagent `.claude/agents/dept-<mã>.md`. Việc thuộc lĩnh vực nào giao bộ phận đó; Orchestrator chỉ tự làm việc nhỏ của vai điều phối (`knowledge/project/docs/ORGANIZATION.md` §5). Lĩnh vực mới thì đề xuất lập thêm. Subagent viết theo định dạng của Claude Code; client khác dùng hồ sơ trong `docs/departments/`.

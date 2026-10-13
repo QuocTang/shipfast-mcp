@@ -6,9 +6,9 @@
 |---|---|
 | Đổi cách làm việc của dự án | Ghi `QT-nnn` (tool `new_decision`), sửa tài liệu tương ứng; PO chốt |
 | Thêm quy chuẩn kỹ thuật | Thêm file vào `docs/technical/`, ghi vào mục lục của thư mục |
-| Lập bộ phận | Theo `docs/ORGANIZATION.md` §6 khi một lĩnh vực có dòng việc riêng qua nhiều wave |
+| Thêm bộ phận | Lĩnh vực mới không bộ phận nào phụ trách: PO duyệt, tool `create_department` (`docs/ORGANIZATION.md` §6) |
 | Chạy song song nhiều agent | Chia team theo vùng thư mục (`docs/ORGANIZATION.md` §4.1) trong `2-scope.md` |
-| Giảm số lần phải chốt | Delegation (`docs/ORGANIZATION.md` §7) khi đã có từ hai bộ phận |
+| Giảm số lần phải chốt | Delegation (`docs/ORGANIZATION.md` §7) |
 | Thêm vai phản biện riêng | Thêm dòng vào `docs/ORGANIZATION.md` §7.4 |
 
 Sửa thoải mái các file khung trong dự án; khi nâng cấp, phần đã sửa được giữ và gộp với thay đổi mới.

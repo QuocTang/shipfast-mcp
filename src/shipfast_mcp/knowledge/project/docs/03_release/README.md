@@ -13,7 +13,7 @@
 | # | Việc |
 |---|---|
 | 1 | Orchestrator commit bản đã qua acceptance (chỉ file của wave) |
-| 2 | Kiểm trước triển khai: (chưa điền danh sách kiểm; ví dụ quality gate xanh trên commit sẽ triển khai, không còn thay đổi chưa commit, phiên bản đã tăng, migration mới chỉ thêm) |
+| 2 | Kiểm trước triển khai: (chưa điền danh sách kiểm; ví dụ cổng kiểm chứng xanh trên commit sẽ triển khai, không còn thay đổi chưa commit, phiên bản đã tăng, migration mới chỉ thêm) |
 | 3 | Backup dữ liệu, giữ bản đang chạy để quay lại |
 | 4 | Build và triển khai: (chưa điền lệnh) |
 | 5 | Kiểm sau triển khai: (chưa điền lệnh hoặc danh sách kiểm; ví dụ health trả 200, phiên bản đúng, màn chính mở được); xem log vài phút |
