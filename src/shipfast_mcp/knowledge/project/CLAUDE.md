@@ -28,7 +28,7 @@ Chưa có tài liệu hoặc quyết định cho việc cần làm thì hỏi PO
 |---|---|---|
 | PO | Người dùng | Quyết định thiết kế, lock scope của wave, duyệt, acceptance |
 | Orchestrator | Phiên AI chính | Đầu mối duy nhất với PO; đề xuất và phản biện; giữ bảng wave, backlog, decision log; giao việc cho bộ phận; tích hợp; commit |
-| Bộ phận | Subagent `.claude/agents/dept-<mã>.md`, lập theo dự án từ W01 | Ý kiến chuyên môn, khảo sát, build, cleanup, acceptance, triển khai trong lĩnh vực của mình; **không tự commit**, không đụng trạng thái git chung |
+| Bộ phận | Subagent `.claude/agents/dept-<mã>.md`, lập theo dự án từ W01 | Ý kiến chuyên môn, khảo sát, build, cleanup, acceptance, triển khai trong lĩnh vực của mình; **không tự commit**, không thay đổi trạng thái git dùng chung |
 
 **Orchestrator điều phối, không thi công.** Việc phát sinh thuộc lĩnh vực của bộ phận nào thì giao subagent của bộ phận đó; Orchestrator chỉ tự làm việc nhỏ của vai điều phối (`docs/ORGANIZATION.md` §5). Lĩnh vực mới chưa có bộ phận thì đề xuất PO lập thêm.
 
@@ -45,7 +45,7 @@ Quy trình đầy đủ: `docs/04_waves/README.md`. Tóm tắt:
 - Hạng mục có giao diện chỉ vào build khi PO đã duyệt khung (`docs/04_waves/README.md` §4.1).
 - Đang build mà gặp việc mới: ghi `BL-nnn`, không tự làm. Muốn đổi phạm vi: mở `CR-Wxx-nn`, chờ duyệt.
 - PO giao việc trực tiếp ngoài wave: ghi dòng `PO-nn` ở `WAVES.md` §2 trước khi làm.
-- **Trạng thái nằm trong file**, không nằm trong agent hay cuộc hội thoại. Phiên mới đọc file (hoặc gọi tool `status`) là làm tiếp được.
+- **Trạng thái nằm trong file**, không nằm trong agent hay cuộc hội thoại. Phiên mới đọc file (hoặc gọi tool `status`) để tiếp tục công việc.
 - Mỗi thông tin chỉ sống ở một chỗ (`docs/04_waves/README.md` §3); nơi khác dẫn mã hoặc đường dẫn.
 
 ## Cấu trúc thư mục
@@ -86,7 +86,7 @@ tmp/                  file tạm, log, ảnh chụp, script thử (gitignored)
 
 **Quyết định**
 - Quyết định mới ghi vào `docs/05_decisions/` theo `_template.md`, cập nhật mục lục. Code và tài liệu chỉ trỏ mã (`SP-nnn`, `KT-nnn`, `QT-nnn`), không chép lại nội dung.
-- Quyết định Orchestrator tự đặt tạm để chạy tiếp ghi trạng thái **Giả định**, trình PO duyệt khi acceptance.
+- Quyết định Orchestrator tự đặt tạm để tiếp tục công việc ghi trạng thái **Giả định**, trình PO duyệt khi acceptance.
 - Quyết định bị thay: đổi trạng thái thành "Bị thay thế bởi <mã>" ngay trong file cũ, không xoá.
 
 ## Code

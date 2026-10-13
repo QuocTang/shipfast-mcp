@@ -33,7 +33,7 @@ Skill tự kích hoạt theo mô tả nên giữ luật quy trình trong suốt 
 
 ## D-005 — Nâng cấp
 
-Dự án commit `.shipfast/manifest.json` (phiên bản, biến, loại file) và `.shipfast/base/` (bản khung lần trước của file `managed`). `upgrade` so ba bản bằng `git merge-file`. File `seed` (bảng wave, backlog, decision log, thiết kế…) không bao giờ bị đụng. File dự án đã xoá không bị tạo lại.
+Dự án commit `.shipfast/manifest.json` (phiên bản, biến, loại file) và `.shipfast/base/` (bản khung lần trước của file `managed`). `upgrade` so ba bản bằng `git merge-file`. File `seed` (bảng wave, backlog, decision log, thiết kế…) không bị thay đổi. File dự án đã xoá không bị tạo lại.
 
 ## D-006 — Release
 

@@ -22,7 +22,7 @@
 |---|---|---|---|---|---|
 | Orchestrator | — | Hoạt động từ {{NGAY}} | Điều phối, hồ sơ quy trình, tích hợp | `04_waves/`, `05_decisions/` | Phiên AI chính |
 
-**Lập theo dự án, ngay từ W01.** Ở W01 Orchestrator đề xuất bộ bộ phận hợp với sản phẩm (vấn đề W01-09), PO duyệt, rồi lập bằng tool `create_department`. Khi dự án phát sinh một lĩnh vực mới mà không bộ phận nào phụ trách, Orchestrator đề xuất lập thêm (ghi `QT-nnn`), không tự gánh lĩnh vực đó lâu dài.
+**Lập theo dự án, ngay từ W01.** Ở W01 Orchestrator đề xuất bộ bộ phận hợp với sản phẩm (vấn đề W01-09), PO duyệt, rồi lập bằng tool `create_department`. Khi dự án phát sinh một lĩnh vực mới mà không bộ phận nào phụ trách, Orchestrator đề xuất lập thêm (ghi `QT-nnn`), không tự đảm nhận lĩnh vực đó lâu dài.
 
 **Việc thuộc lĩnh vực nào thì giao bộ phận đó.** Mỗi việc phát sinh (vấn đề cần ý kiến chuyên môn, khảo sát, hạng mục build, cleanup, acceptance, triển khai) được giao cho subagent của bộ phận phụ trách lĩnh vực đó; việc chạm nhiều lĩnh vực thì mỗi bộ phận nhận phần của mình. Không có bộ phận phù hợp thì giao bộ phận gần nhất và đề xuất lập bộ phận mới.
 
@@ -39,7 +39,7 @@ Chọn theo sản phẩm, thường 3–5 bộ phận; đổi tên, gộp, tách
 | TRUST | Bảo mật, quyền, riêng tư, bí mật | Có dữ liệu người dùng, phân quyền, tích hợp ngoài |
 | QA | Kịch bản kiểm thử, quality gate, acceptance độc lập | Sản phẩm có nhiều luồng cần kiểm lại mỗi wave |
 | OPS | Triển khai, vận hành, quan sát, backup | Có môi trường thật cần giữ |
-| CLEAN | Cleanup, nợ kỹ thuật, tài liệu lệch | Dự án đã qua vài wave, rác tích tụ |
+| CLEAN | Cleanup, nợ kỹ thuật, tài liệu lệch | Dự án đã qua vài wave, mã chết và tài liệu lệch tích tụ |
 
 **QA** luôn độc lập với bộ phận đã build hạng mục đó, kể cả khi chưa lập bộ phận QA: Orchestrator gọi một subagent khác làm acceptance.
 
@@ -72,7 +72,7 @@ Bộ phận sở hữu **lĩnh vực** và quyết định; build team sở hữ
 | Luật | Nội dung |
 |---|---|
 | Vùng không chồng nhau | Hai team không cùng sửa một thư mục; file dùng chung (contract, cấu hình gốc) giao một team, team khác ghi yêu cầu |
-| Không đụng trạng thái chung | Không `git stash`, `checkout`, `reset`, `rebase`, `clean`; không cài thêm phụ thuộc khi đang có team khác chạy |
+| Không thay đổi trạng thái git dùng chung | Không `git stash`, `checkout`, `reset`, `rebase`, `clean`; không cài thêm phụ thuộc khi đang có team khác chạy |
 | Báo cáo | Mỗi team ghi kết quả vào `3-build.md` §1 theo mã hạng mục; không tự commit |
 
 ## 5. Vai trò của Orchestrator

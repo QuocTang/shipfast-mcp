@@ -8,9 +8,9 @@
 | AI chiều theo mọi yêu cầu, không ai chỉ ra rủi ro | Orchestrator bắt buộc phản biện cả đề xuất của mình; vai phản biện cho nhiều góc nhìn |
 | Quyết định nằm rải rác trong chat, comment, tin nhắn | Decision log một chỗ, code chỉ trỏ mã |
 | Phiên mới quên hết bối cảnh | Trạng thái nằm trong file; `status` cho biết đang tới đâu |
-| Phạm vi phình dần trong lúc làm | Việc mới vào backlog, đổi phạm vi qua CR |
+| Phạm vi tăng dần trong lúc làm | Việc mới vào backlog, đổi phạm vi qua CR |
 | "Xong" nhưng chưa chạy thật | Quality gate phải chạy thật; QA độc lập acceptance |
-| Rác tích tụ sau mỗi wave | Bước cleanup có ranh giới an toàn |
+| Mã chết, file tạm, tài liệu lệch tích tụ sau mỗi wave | Bước cleanup có ranh giới an toàn |
 | Mỗi dự án chép mẫu rồi lệch dần, cập nhật phải so tay với repo gốc | Khung phân phối qua MCP, nâng cấp three-way merge tự động |
 
 ## Nguyên lý

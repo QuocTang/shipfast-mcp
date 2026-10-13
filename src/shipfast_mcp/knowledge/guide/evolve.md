@@ -19,9 +19,9 @@ Sửa thoải mái các file khung trong dự án; khi nâng cấp, phần đã 
 2. Tool `status` báo có bản mới. Gọi prompt `upgrade` hoặc nói "nâng cấp quy trình".
 3. Tool `upgrade` dry run trước, phân loại từng file:
    - dự án chưa sửa → thay bằng bản mới;
-   - cả hai cùng sửa, không đụng nhau → gộp tự động;
+   - cả hai cùng sửa nhưng khác chỗ → gộp tự động;
    - sửa cùng chỗ → bản gộp có đánh dấu xung đột ở `.shipfast/pending/`, file thật giữ nguyên, AI đề xuất cách hợp nhất để bạn duyệt;
-   - file dữ liệu của dự án (bảng wave, backlog, decision log, thiết kế) không bao giờ bị đụng.
+   - file dữ liệu của dự án (bảng wave, backlog, decision log, thiết kế) không bị thay đổi.
 4. Commit cả `.shipfast/` để người khác trong nhóm nâng cấp từ cùng một bản gốc.
 
 ## Góp lại cho shipfast

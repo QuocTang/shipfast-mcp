@@ -47,4 +47,4 @@ Trong Claude Code, prompt MCP hiện dưới dạng lệnh `/mcp__shipfast__init
 - Muốn làm gì thì nói với AI như với một trưởng nhóm: AI ghi thành vấn đề, đề xuất, phản biện, rồi hỏi bạn chốt.
 - Trả lời theo mã cho nhanh: "W02-03: A", "đồng ý trừ W02-05".
 - Nói **"chốt"** khi đồng ý phạm vi; từ đó AI build liên tục tới acceptance.
-- Hỏi "đang tới đâu" bất cứ lúc nào; phiên mới vẫn làm tiếp được vì mọi trạng thái nằm trong file.
+- Hỏi "đang tới đâu" bất cứ lúc nào; phiên mới vẫn tiếp tục được vì mọi trạng thái nằm trong file.

@@ -23,9 +23,9 @@
 | Mục | Nội dung |
 |---|---|
 | Bối cảnh | Cần mô tả một hai câu cho `CLAUDE.md` mục "Dự án là gì" và danh sách tính năng bản đầu để xếp backlog |
-| Câu hỏi | Sản phẩm giải quyết việc gì? Ai dùng, mấy vai? Bản đầu cần làm được gì, cái gì chưa cần? Có hệ cũ hay dự án nguồn cần phân tích (`docs/00_analysis/`)? Ràng buộc về hạn, chi phí, nơi chạy? |
+| Câu hỏi | Sản phẩm giải quyết việc gì? Ai dùng, bao nhiêu vai? Bản đầu cần làm được gì, cái gì chưa cần? Có hệ cũ hay dự án nguồn cần phân tích (`docs/00_analysis/`)? Ràng buộc về hạn, chi phí, nơi chạy? |
 | Đề xuất | Orchestrator tóm thành mô tả + danh sách `BL-nnn`, nêu những điểm còn mơ hồ, PO duyệt |
-| Phản biện đề xuất | Bản đầu hay bị phình; Orchestrator chủ động đề xuất cắt những gì chưa cần để kiểm giả thuyết chính |
+| Phản biện đề xuất | Phạm vi bản đầu thường mở rộng quá mức; Orchestrator chủ động đề xuất cắt những gì chưa cần để kiểm giả thuyết chính |
 | Công ước lượng | S |
 | PO chốt | Chờ |
 
@@ -100,7 +100,7 @@
 | Bối cảnh | Orchestrator chỉ điều phối; việc chuyên môn giao cho bộ phận (`../../ORGANIZATION.md` §2, §5). Bộ phận lập ngay ở W01 để W01 và các wave sau có người nhận việc |
 | Cách trình | Sau W01-01 và W01-02: bảng 3–5 bộ phận chọn từ danh mục gợi ý (`../../ORGANIZATION.md` §2.1) hoặc đặt riêng, mỗi dòng: mã, lĩnh vực, vùng sở hữu (thư mục), vì sao cần với sản phẩm này |
 | Đề xuất | (Orchestrator điền theo sản phẩm và stack đã chốt) |
-| Phản biện đề xuất | Quá nhiều bộ phận thì tốn lượt điều phối; quá ít thì một bộ phận ôm nhiều lĩnh vực, ý kiến chuyên môn mỏng |
+| Phản biện đề xuất | Quá nhiều bộ phận thì tốn lượt điều phối; quá ít thì một bộ phận phụ trách quá nhiều lĩnh vực, ý kiến chuyên môn mỏng |
 | Đầu ra khi chốt | `QT-nnn` lập bộ phận; tool `create_department` cho từng bộ phận |
 | PO chốt | Chờ |
 
