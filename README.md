@@ -110,17 +110,6 @@ Ghim phiên bản: `uvx shipfast-mcp@0.2.0`.
 | Chốt thẳng | Wave nhỏ, yêu cầu đã rõ |
 | Delegation | PO giao quyền chốt cho debate giữa các bộ phận; Orchestrator làm Chủ toạ |
 
-### Sáu lỗi thường gặp khi làm việc với AI
-
-| Lỗi | Cách shipfast xử lý |
-|---|---|
-| Viết code trước khi yêu cầu được làm rõ | Không viết code trước khi PO lock scope; Discussion kết thúc khi mọi vấn đề đã có kết luận |
-| Một phiên AI đảm nhận mọi việc, ít phản biện | Orchestrator điều phối và phản biện; mỗi lĩnh vực có bộ phận riêng đưa ý kiến chuyên môn |
-| Quyết định nằm rải rác trong hội thoại | Decision log ở một chỗ (`SP`, `KT`, `QT`); code và tài liệu chỉ dẫn mã |
-| Phiên mới mất bối cảnh | Trạng thái lưu trong file của repo; tool `status` cho biết wave đang ở bước nào |
-| Báo hoàn thành khi chưa kiểm chứng | Quality gate phải chạy thật; acceptance do subagent độc lập với bộ phận đã build thực hiện |
-| Cập nhật khung phải đối chiếu tay với repo mẫu | `upgrade` dùng three-way merge: giữ phần dự án đã sửa, nhận thay đổi mới của khung |
-
 ### Thành phần MCP
 
 | Loại | Tên | Việc |
@@ -135,7 +124,7 @@ Ghim phiên bản: `uvx shipfast-mcp@0.2.0`.
 | 📚 Resource | `skill://shipfast-*/SKILL.md` | 6 skill: luật nền, khởi tạo, áp dụng, chạy wave, debate, nâng cấp |
 | 📚 Resource | `shipfast://guide/*` | Bắt đầu, tổ chức, ý nghĩa, phát triển và nâng cấp |
 
-### Nâng cấp không cần repo gốc
+### Nâng cấp khung
 
 Dự án giữ `.shipfast/manifest.json` và `.shipfast/base/` (bản khung lần trước). `upgrade` so ba bản: bản gốc, bản dự án, bản mới.
 
@@ -144,21 +133,21 @@ Dự án giữ `.shipfast/manifest.json` và `.shipfast/base/` (bản khung lầ
 | Dự án chưa sửa file | Thay bằng bản mới |
 | Hai bên sửa khác chỗ | Gộp tự động |
 | Hai bên sửa cùng chỗ | File thật giữ nguyên; bản gộp có dấu xung đột ở `.shipfast/pending/` để duyệt |
-| Bảng wave, backlog, decision log | Không bao giờ bị đụng |
+| Bảng wave, backlog, decision log | Giữ nguyên |
 
 ### Hướng dẫn
 
 | Bài | File |
 |---|---|
 | Bắt đầu từ đâu | [`start.md`](src/shipfast_mcp/knowledge/guide/start.md) |
-| Ghi chú phát hành | [`changelog.md`](src/shipfast_mcp/knowledge/guide/changelog.md) |
 | Tổ chức ra sao | [`organization.md`](src/shipfast_mcp/knowledge/guide/organization.md) |
 | Ý nghĩa và mục đích | [`purpose.md`](src/shipfast_mcp/knowledge/guide/purpose.md) |
 | Phát triển tiếp và nâng cấp | [`evolve.md`](src/shipfast_mcp/knowledge/guide/evolve.md) |
+| Ghi chú phát hành | [`changelog.md`](src/shipfast_mcp/knowledge/guide/changelog.md) |
 
 ## How to Contribute
 
-Đóng góp được hoan nghênh, nhất là cách làm đã chạy thật ở dự án của bạn và dùng được cho mọi stack.
+Đóng góp nên là cách làm đã chạy ở dự án thật và dùng được cho mọi stack.
 
 1. **Fork** repository.
 2. **Tạo nhánh mới** cho thay đổi.
@@ -177,7 +166,7 @@ Kho tri thức nằm ở `src/shipfast_mcp/knowledge/`: `project/` (khung dựng
 ## Community & Support
 
 - Báo lỗi, đề xuất: [GitHub Issues](https://github.com/QuocTang/shipfast-mcp/issues).
-- Nếu repository giúp bạn tiết kiệm thời gian, hãy để lại một ⭐.
+- Gắn sao (⭐) repository để theo dõi các bản phát hành mới.
 
 ## Repo Contributors
 
