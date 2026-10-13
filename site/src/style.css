@@ -299,6 +299,8 @@ body {
 @layer base {
   html { scroll-behavior: smooth; }
   body { background: var(--background); color: var(--foreground); font-family: var(--app-font); }
+  /* Không vẽ vòng focus ở link (I13). */
+  a { outline: 2px solid transparent; outline-offset: 2px; }
 }
 
 /* Chuyển động: chỉ opacity và translate; tắt hết khi người dùng chọn giảm chuyển động. */
