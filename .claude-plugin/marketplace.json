@@ -1,0 +1,12 @@
+{
+  "name": "shipfast",
+  "description": "Marketplace của shipfast-mcp",
+  "owner": { "name": "QuocTang" },
+  "plugins": [
+    {
+      "name": "shipfast",
+      "source": "./plugin",
+      "description": "Quy trình làm việc theo đợt giữa PO và AI, phân phối qua MCP"
+    }
+  ]
+}

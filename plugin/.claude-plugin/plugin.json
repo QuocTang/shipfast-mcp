@@ -1,0 +1,13 @@
+{
+  "name": "shipfast",
+  "displayName": "shipfast",
+  "version": "0.1.0",
+  "description": "Quy trình làm việc theo đợt giữa PO và AI: đề xuất, phản biện, chốt, thi công, nghiệm thu. Dùng được cho mọi stack.",
+  "author": { "name": "QuocTang" },
+  "repository": "https://github.com/QuocTang/shipfast-mcp",
+  "license": "MIT",
+  "keywords": ["workflow", "process", "waves", "decisions"],
+  "mcpServers": {
+    "shipfast": { "command": "uvx", "args": ["shipfast-mcp@0.1.0"] }
+  }
+}

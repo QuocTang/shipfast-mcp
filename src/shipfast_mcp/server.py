@@ -1,0 +1,173 @@
+"""MCP server: đưa kho tri thức shipfast ra ngoài thành skill, tài liệu, prompt và tool."""
+
+from __future__ import annotations
+
+from typing import Annotated, Literal
+
+from fastmcp import FastMCP
+from fastmcp.server.providers.skills import SkillsDirectoryProvider
+from pydantic import Field
+
+from . import __version__, project, scaffold
+from .templates import GUIDES, SKILLS
+
+INSTRUCTIONS = """\
+shipfast: quy trình làm việc theo đợt giữa PO (người dùng), Điều hành (phiên AI chính) và agent con, \
+dùng được cho mọi stack.
+
+- Repo mới: dùng prompt `init` (hoặc đọc skill://shipfast-init/SKILL.md). Dự án đang chạy: prompt `adopt`.
+- Dự án đã có `.shipfast/manifest.json`: đọc `CLAUDE.md` và `docs/04_waves/README.md` của dự án, gọi tool `status` \
+trước khi làm việc. Luật quy trình nằm trong skill://shipfast-process/SKILL.md.
+- Nâng khung lên phiên bản mới: tool `upgrade` (chạy dry_run trước). Không cần repo gốc để so sánh.
+- Tài liệu cho người: tool `read_guide`.
+Mọi tool ghi file nhận `project_dir` là đường dẫn tuyệt đối tới gốc repo dự án.
+"""
+
+ProjectDir = Annotated[str, Field(description="Đường dẫn tuyệt đối tới gốc repo dự án")]
+
+mcp = FastMCP("shipfast", instructions=INSTRUCTIONS, version=__version__)
+mcp.add_provider(SkillsDirectoryProvider(roots=SKILLS))
+
+GUIDE_TOPICS = {p.stem: p for p in sorted(GUIDES.glob("*.md"))}
+
+
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": False})
+def scaffold_project(
+    project_dir: ProjectDir,
+    name: Annotated[str, Field(description="Slug dự án: chữ thường không dấu, số, gạch ngang")],
+    display_name: Annotated[str, Field(description="Tên hiển thị của dự án")],
+    description: Annotated[str, Field(description="Mô tả sản phẩm một hai câu; để trống nếu chưa chốt")] = "",
+    branch: Annotated[str, Field(description="Nhánh chính của repo")] = "main",
+    code_lang: Annotated[Literal["vi", "en"], Field(description="Ngôn ngữ comment và commit message")] = "vi",
+    mode: Annotated[Literal["init", "adopt"], Field(description="init: repo mới, kèm hồ sơ W01. adopt: dự án đang chạy")] = "init",
+    dry_run: Annotated[bool, Field(description="true: chỉ báo sẽ tạo gì, không ghi file")] = True,
+) -> dict:
+    """Dựng khung quy trình shipfast vào dự án: CLAUDE.md, docs/ (đợt, backlog, sổ quyết định, tổ chức), skill trong .claude/skills/.
+
+    Không ghi đè file đã có. Ghi .shipfast/ để sau này nâng cấp tự gộp. Luôn chạy dry_run trước và trình PO danh sách.
+    """
+    return scaffold.scaffold(project_dir, name, display_name, description, branch, code_lang, mode, dry_run)
+
+
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True})
+def upgrade(
+    project_dir: ProjectDir,
+    dry_run: Annotated[bool, Field(description="true: chỉ báo thay đổi, không ghi file")] = True,
+) -> dict:
+    """Nâng khung quy trình của dự án lên phiên bản shipfast đang chạy, không cần repo gốc.
+
+    File dự án chưa sửa thì thay bằng bản mới; file dự án đã sửa thì gộp ba phía; xung đột thì để bản gộp ở
+    .shipfast/pending/ và giữ nguyên file thật. File dữ liệu của dự án (bảng đợt, backlog, sổ quyết định) không bị đụng.
+    """
+    return scaffold.upgrade(project_dir, dry_run)
+
+
+@mcp.tool(annotations={"readOnlyHint": True})
+def status(project_dir: ProjectDir) -> dict:
+    """Trạng thái quy trình: phiên bản khung, bảng đợt, đợt đang mở và vấn đề chờ PO, backlog, quyết định giả định."""
+    return project.status(project_dir)
+
+
+@mcp.tool(annotations={"readOnlyHint": True})
+def next_code(
+    project_dir: ProjectDir,
+    kind: Annotated[
+        Literal["BL", "FB", "SP", "KT", "QT", "OPS", "HOTFIX", "PO", "W", "ISSUE", "P", "CR", "Q", "CL", "QA"],
+        Field(description="Loại mã. ISSUE, P, CR, Q, CL, QA là mã trong đợt, cần wave"),
+    ],
+    wave: Annotated[str, Field(description="Mã đợt, ví dụ W03; chỉ cần cho mã trong đợt")] = "",
+) -> dict:
+    """Cấp mã kế tiếp (BL-012, W03-04, CR-W03-02, KT-005…) bằng cách quét hồ sơ, tránh trùng số."""
+    return project.next_code(project_dir, kind, wave)
+
+
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False})
+def open_wave(
+    project_dir: ProjectDir,
+    title: Annotated[str, Field(description="Tên đợt")],
+    goal: Annotated[str, Field(description="Một câu: sau đợt này người dùng hoặc PO có được gì")],
+    mode: Annotated[
+        Literal["po", "direct", "delegated"],
+        Field(description="po: PO chốt từng vấn đề. direct: chốt thẳng cho đợt nhỏ. delegated: uỷ quyền, cần QT-nnn"),
+    ] = "po",
+    lead: Annotated[str, Field(description="Chủ trì: Điều hành hoặc mã bộ phận")] = "Điều hành",
+) -> dict:
+    """Mở đợt mới: tạo docs/04_waves/Wxx/ từ mẫu của dự án, thêm dòng vào bảng đợt ở trạng thái Gom việc."""
+    return project.open_wave(project_dir, title, goal, mode, lead)
+
+
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False})
+def new_decision(
+    project_dir: ProjectDir,
+    kind: Annotated[Literal["SP", "KT", "QT"], Field(description="SP sản phẩm, KT kỹ thuật, QT quy trình")],
+    title: Annotated[str, Field(description="Tên quyết định, tiếng Việt")],
+    short_name: Annotated[str, Field(description="Tên ngắn tiếng Anh cho tên file, ví dụ cookie-session-auth")],
+    context: Annotated[str, Field(description="Bối cảnh")] = "",
+    decision: Annotated[str, Field(description="Phát biểu quyết định, ngắn, kiểm được")] = "",
+    status: Annotated[Literal["Giả định", "Hiệu lực"], Field(description="Hiệu lực chỉ khi PO đã chốt")] = "Giả định",
+    wave: Annotated[str, Field(description="Mã vấn đề nguồn, ví dụ W03-02")] = "—",
+) -> dict:
+    """Ghi quyết định mới vào docs/05_decisions/ theo mẫu của dự án, cấp mã và cập nhật mục lục."""
+    return project.new_decision(project_dir, kind, title, short_name, context, decision, status, wave)
+
+
+@mcp.tool(annotations={"readOnlyHint": True})
+def check(project_dir: ProjectDir) -> dict:
+    """Kiểm hồ sơ: biến khung sót, link gãy, đợt đóng thiếu rút kinh nghiệm hoặc còn vấn đề Chờ, bảng đợt lệch, sổ quyết định lệch."""
+    return project.check(project_dir)
+
+
+@mcp.tool(annotations={"readOnlyHint": True})
+def read_guide(
+    topic: Annotated[str, Field(description="Tên bài; để trống để xem danh sách")] = "",
+) -> str:
+    """Đọc tài liệu hướng dẫn shipfast cho người: bắt đầu từ đâu, tổ chức, ý nghĩa, phát triển và nâng cấp."""
+    if not topic:
+        lines = ["Các bài hướng dẫn:"]
+        for name, path in GUIDE_TOPICS.items():
+            first = path.read_text(encoding="utf-8").splitlines()[0].lstrip("# ")
+            lines.append(f"- {name}: {first}")
+        return "\n".join(lines)
+    if topic not in GUIDE_TOPICS:
+        raise ValueError(f"Không có bài {topic}. Có: {', '.join(GUIDE_TOPICS)}")
+    return GUIDE_TOPICS[topic].read_text(encoding="utf-8")
+
+
+for _name, _path in GUIDE_TOPICS.items():
+    mcp.resource(f"shipfast://guide/{_name}", name=f"guide-{_name}", mime_type="text/markdown")(
+        (lambda p: lambda: p.read_text(encoding="utf-8"))(_path)
+    )
+
+
+def _skill(name: str) -> str:
+    return (SKILLS / name / "SKILL.md").read_text(encoding="utf-8")
+
+
+@mcp.prompt
+def init(project_dir: str = "") -> str:
+    """Khởi tạo dự án mới theo quy trình shipfast: chạy đợt W01, AI đề xuất và phản biện stack, PO chốt."""
+    where = f"Thư mục dự án: {project_dir}\n\n" if project_dir else ""
+    return f"{where}Làm theo skill dưới đây.\n\n{_skill('shipfast-init')}"
+
+
+@mcp.prompt
+def adopt(project_dir: str = "") -> str:
+    """Áp quy trình shipfast vào dự án đang chạy, giữ tài liệu và quyết định sẵn có."""
+    where = f"Thư mục dự án: {project_dir}\n\n" if project_dir else ""
+    return f"{where}Làm theo skill dưới đây.\n\n{_skill('shipfast-adopt')}"
+
+
+@mcp.prompt(name="upgrade")
+def upgrade_prompt(project_dir: str = "") -> str:
+    """Nâng khung quy trình của dự án lên phiên bản shipfast mới, gộp với phần dự án đã sửa."""
+    where = f"Thư mục dự án: {project_dir}\n\n" if project_dir else ""
+    return f"{where}Làm theo skill dưới đây.\n\n{_skill('shipfast-upgrade')}"
+
+
+def main() -> None:
+    """Điểm vào của lệnh `shipfast-mcp`: chạy server qua stdio."""
+    mcp.run(show_banner=False)
+
+
+if __name__ == "__main__":
+    main()

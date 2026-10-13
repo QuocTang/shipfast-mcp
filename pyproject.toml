@@ -1,0 +1,37 @@
+[project]
+name = "shipfast-mcp"
+version = "0.1.0"
+description = "MCP server phân phối quy trình làm việc theo đợt giữa PO và AI (Điều hành, agent con), dùng được cho mọi stack."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "QuocTang" }]
+requires-python = ">=3.12"
+keywords = ["mcp", "model-context-protocol", "ai-agent", "workflow", "claude-code", "skills"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development",
+]
+dependencies = [
+    "fastmcp>=4.1,<5",
+]
+
+[project.urls]
+Repository = "https://github.com/QuocTang/shipfast-mcp"
+Issues = "https://github.com/QuocTang/shipfast-mcp/issues"
+
+[project.scripts]
+shipfast-mcp = "shipfast_mcp.server:main"
+
+[build-system]
+requires = ["uv_build>=0.11.21,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

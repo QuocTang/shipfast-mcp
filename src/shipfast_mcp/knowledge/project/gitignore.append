@@ -1,0 +1,3 @@
+tmp/
+reports/*
+!reports/README.md
