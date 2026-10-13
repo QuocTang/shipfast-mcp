@@ -2,13 +2,15 @@
 
 <!-- mcp-name: io.github.QuocTang/shipfast-mcp -->
 
-**Quy trình làm việc theo wave giữa người và AI, cài bằng một dòng MCP.** AI làm Orchestrator: điều phối, đề xuất, phản biện; việc chuyên môn giao cho các bộ phận lập theo dự án, mỗi bộ phận là một subagent. Người làm PO: chốt và nghiệm thu. Dùng được cho mọi stack.
+**Quy trình làm việc theo wave giữa PO và AI, đóng gói thành MCP server.** AI làm Orchestrator: điều phối, đề xuất, phản biện; việc chuyên môn giao cho các bộ phận lập theo dự án, mỗi bộ phận là một subagent. Người làm PO: chốt và nghiệm thu. Dùng được cho mọi stack.
 
 [![CI](https://github.com/QuocTang/shipfast-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/QuocTang/shipfast-mcp/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/shipfast-mcp.svg)](https://pypi.org/project/shipfast-mcp/)
 [![Python](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/)
 [![MCP](https://img.shields.io/badge/MCP-2026--07--28-8A2BE2.svg)](https://modelcontextprotocol.io/specification/2026-07-28)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**Trang giới thiệu:** https://quoctang.github.io/shipfast-mcp/
 
 > A Model Context Protocol server that ships a wave-based PO ↔ AI working process (propose, critique, decide, build, verify) to any stack, with three-way-merge upgrades so projects never diff against a template repo by hand.
 

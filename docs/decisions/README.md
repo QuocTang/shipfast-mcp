@@ -12,6 +12,7 @@
 | D-008 | Không dùng Roots, Sampling, Logging của MCP | Hiệu lực | 2026-10-13 |
 | D-009 | License MIT | Hiệu lực | 2026-10-13 |
 | D-010 | Thuật ngữ chuyên ngành giữ tiếng Anh; vai chính gọi là Orchestrator | Hiệu lực | 2026-10-13 |
+| D-012 | Landing page HTML tĩnh trong `site/`, Tailwind biên dịch trước, đăng qua GitHub Pages | Hiệu lực | 2026-10-13 |
 | D-011 | Bộ phận lập theo dự án từ W01, nhận việc theo lĩnh vực; Orchestrator chỉ điều phối | Hiệu lực | 2026-10-13 |
 
 ## D-001 — Runtime
@@ -57,3 +58,7 @@ Thuật ngữ chuyên ngành giữ tiếng Anh, câu văn tiếng Việt. Bảng
 ## D-011 — Bộ phận và Orchestrator
 
 Ở W01, Orchestrator đề xuất bộ phận theo sản phẩm (W01-09), PO duyệt, tool `create_department` tạo hồ sơ `docs/departments/<mã>/` và subagent `.claude/agents/dept-<mã>.md`. Việc thuộc lĩnh vực nào giao bộ phận đó; Orchestrator chỉ tự làm việc nhỏ của vai điều phối (`knowledge/project/docs/ORGANIZATION.md` §5). Lĩnh vực mới thì đề xuất lập thêm. Subagent viết theo định dạng của Claude Code; client khác dùng hồ sơ trong `docs/departments/`.
+
+## D-012 — Landing page
+
+`site/src/index.html` là HTML tĩnh viết sẵn (không render phía trình duyệt), CSS biên dịch bằng Tailwind CLI, font Inter tự host, chuyển động chỉ bằng CSS và `IntersectionObserver` (không thư viện), tắt khi giảm chuyển động hoặc khi trình duyệt tự động (`navigator.webdriver`). Workflow `pages.yml` build và đăng khi `site/` đổi trên `main`. Nội dung landing viết riêng cho người xem lần đầu; tài liệu chi tiết vẫn ở `knowledge/guide/`.

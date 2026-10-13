@@ -18,6 +18,7 @@ dependencies = [
 ]
 
 [project.urls]
+Homepage = "https://quoctang.github.io/shipfast-mcp/"
 Repository = "https://github.com/QuocTang/shipfast-mcp"
 Issues = "https://github.com/QuocTang/shipfast-mcp/issues"
 
