@@ -6,7 +6,7 @@ Mỗi quy trình là một dict với các khoá cố định; build.py dựng t
 SITE = {
     "title": "shipfast",
     "headline": "Mô hình làm việc theo wave",
-    "lead": "Giao phần lớn việc thi công cho AI trong khi người giữ quyền quyết định phạm vi và nghiệm thu. Mỗi thay đổi được chốt trước khi làm, kiểm chứng trước khi phát hành và lưu vết trong repo.",
+    "lead": "Quy trình làm dự án phần mềm cùng AI: người quyết định làm gì và duyệt kết quả, AI làm phần còn lại theo từng wave có phạm vi chốt trước và có bằng chứng kiểm tra.",
     "entries": [
         ("Tìm hiểu mô hình", "Ba vai và cách phân việc", "#mo-hinh"),
         ("Bắt đầu dự án mới", "Khởi tạo dự án (W01)", "w01-khoi-tao.html"),
