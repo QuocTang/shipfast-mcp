@@ -35,7 +35,7 @@ PO, ORC, DEPT = "PO", "Orchestrator", "Bộ phận"
 PROCESSES = [
     # ---------------------------------------------------------------- Khởi tạo
     {
-        "slug": "w01-khoi-tao", "group": "khoi-tao", "code": "W01", "name": "Khởi tạo dự án",
+        "slug": "w01-khoi-tao", "brief": "Chốt sản phẩm, stack, bộ phận; dựng khung", "group": "khoi-tao", "code": "W01", "name": "Khởi tạo dự án",
         "goal": "Chốt sản phẩm, stack và tổ chức bộ phận; dựng khung tài liệu và khung code chạy được.",
         "roles": [PO, ORC, DEPT],
         "inputs": ["Mô tả sản phẩm của PO", "Repo trống hoặc gần trống"],
@@ -68,7 +68,7 @@ PROCESSES = [
     },
     # ---------------------------------------------------------------- Wave
     {
-        "slug": "intake", "group": "wave", "code": "1", "name": "Intake",
+        "slug": "intake", "brief": "Gom việc thành vấn đề cần chốt", "group": "wave", "code": "1", "name": "Intake",
         "goal": "Gom việc thành danh sách vấn đề cần chốt, mỗi vấn đề có phương án và đề xuất.",
         "roles": [ORC, DEPT],
         "inputs": ["Yêu cầu của PO", "BACKLOG.md", "Phản hồi người dùng, giới hạn đã biết"],
@@ -89,7 +89,7 @@ PROCESSES = [
         "tools": [("open_wave", "Tạo hồ sơ wave từ mẫu, thêm dòng vào bảng wave"), ("next_code", "Cấp mã Wxx-nn không trùng")],
     },
     {
-        "slug": "discussion", "group": "wave", "code": "2", "name": "Discussion",
+        "slug": "discussion", "brief": "Chốt từng vấn đề sau phản biện", "group": "wave", "code": "2", "name": "Discussion",
         "goal": "Mọi vấn đề của wave có kết luận Làm, Không làm hoặc Hoãn, sau khi đã được đề xuất và phản biện.",
         "roles": [PO, ORC, DEPT],
         "inputs": ["Wxx/1-discussion.md bản đầu", "Dữ kiện trong Wxx/research/"],
@@ -125,7 +125,7 @@ PROCESSES = [
         "related": ["debate"],
     },
     {
-        "slug": "scope-lock", "group": "wave", "code": "3", "name": "Scope lock",
+        "slug": "scope-lock", "brief": "Đóng băng phạm vi và tiêu chí", "group": "wave", "code": "3", "name": "Scope lock",
         "goal": "Đóng băng phạm vi: hạng mục, tiêu chí đo được, bộ phận phụ trách, quality gate.",
         "roles": [PO, ORC],
         "inputs": ["Kết luận của Discussion"],
@@ -147,7 +147,7 @@ PROCESSES = [
         "tools": [("new_decision", "Ghi quyết định đi kèm phạm vi")],
     },
     {
-        "slug": "build", "group": "wave", "code": "4", "name": "Build",
+        "slug": "build", "brief": "Bộ phận thi công tới khi gate xanh", "group": "wave", "code": "4", "name": "Build",
         "goal": "Các bộ phận thi công từng hạng mục tới khi quality gate của wave xanh.",
         "roles": [ORC, DEPT],
         "inputs": ["Wxx/2-scope.md đã chốt"],
@@ -177,7 +177,7 @@ PROCESSES = [
         "tools": [("status", "Xem hạng mục còn lại")],
     },
     {
-        "slug": "cleanup", "group": "wave", "code": "5", "name": "Cleanup",
+        "slug": "cleanup", "brief": "Dọn mã chết, tài liệu lệch", "group": "wave", "code": "5", "name": "Cleanup",
         "goal": "Dọn mã không còn được gọi, tài liệu lệch, file tạm, trong ranh giới an toàn.",
         "roles": [ORC, DEPT],
         "inputs": ["Mã sau Build", "Danh sách kiểm trong mẫu 4-cleanup.md"],
@@ -194,7 +194,7 @@ PROCESSES = [
         "tools": [("check", "Hồ sơ lệch, link gãy, trạng thái lệch")],
     },
     {
-        "slug": "acceptance", "group": "wave", "code": "6", "name": "Acceptance",
+        "slug": "acceptance", "brief": "Kiểm độc lập từng tiêu chí", "group": "wave", "code": "6", "name": "Acceptance",
         "goal": "Kiểm từng tiêu chí bằng bằng chứng, do người kiểm độc lập với bộ phận đã build.",
         "roles": [PO, ORC, DEPT],
         "inputs": ["Wxx/2-scope.md", "Mã đã dọn"],
@@ -210,7 +210,7 @@ PROCESSES = [
         "tools": [("check", "Kiểm hồ sơ trước khi trình")],
     },
     {
-        "slug": "release", "group": "wave", "code": "7", "name": "Release và đóng",
+        "slug": "release", "brief": "Phát hành, rút kinh nghiệm, đóng wave", "group": "wave", "code": "7", "name": "Release và đóng",
         "goal": "Phát hành, rút kinh nghiệm, trả việc dở về backlog và đóng wave.",
         "roles": [PO, ORC, DEPT],
         "inputs": ["Wxx/5-acceptance.md đã đạt"],
@@ -229,7 +229,7 @@ PROCESSES = [
     },
     # ---------------------------------------------------------------- Ngoài wave
     {
-        "slug": "hotfix", "group": "ngoai-wave", "code": "HOTFIX", "name": "Hotfix",
+        "slug": "hotfix", "brief": "Sửa ngay lỗi chặn người dùng", "group": "ngoai-wave", "code": "HOTFIX", "name": "Hotfix",
         "goal": "Sửa ngay lỗi làm người dùng không dùng được sản phẩm, không chờ wave.",
         "roles": [PO, ORC, DEPT],
         "inputs": ["Báo lỗi: không vào được, mất dữ liệu, lỗi lặp lại"],
@@ -245,7 +245,7 @@ PROCESSES = [
         "tools": [("next_code", "Cấp mã HOTFIX-nn")],
     },
     {
-        "slug": "viec-po-giao", "group": "ngoai-wave", "code": "PO-nn", "name": "Việc PO giao trực tiếp",
+        "slug": "viec-po-giao", "brief": "Việc nhỏ làm ngay, vẫn ghi hồ sơ", "group": "ngoai-wave", "code": "PO-nn", "name": "Việc PO giao trực tiếp",
         "goal": "Làm việc nhỏ PO yêu cầu ngay mà vẫn để lại dấu vết trong hồ sơ.",
         "roles": [PO, ORC],
         "inputs": ["Yêu cầu trực tiếp của PO"],
@@ -261,7 +261,7 @@ PROCESSES = [
     },
     # ---------------------------------------------------------------- Xuyên suốt
     {
-        "slug": "to-chuc", "group": "xuyen-suot", "code": "ORG", "name": "Tổ chức và vai trò",
+        "slug": "to-chuc", "brief": "Ai quyết, ai điều phối, ai làm", "group": "xuyen-suot", "code": "ORG", "name": "Tổ chức và vai trò",
         "goal": "Ai quyết, ai điều phối, ai làm; bộ phận lập theo dự án, Orchestrator chỉ điều phối.",
         "roles": [PO, ORC, DEPT],
         "inputs": [], "outputs": [("docs/ORGANIZATION.md", "Bộ phận, vùng sở hữu, build team, delegation, ranh giới an toàn"),
@@ -292,7 +292,7 @@ PROCESSES = [
         "tools": [("create_department", "Lập bộ phận"), ("refresh_departments", "Làm mới subagent theo mẫu mới")],
     },
     {
-        "slug": "debate", "group": "xuyen-suot", "code": "R1–R5", "name": "Debate và delegation",
+        "slug": "debate", "brief": "Phản biện nhiều phía trước khi chốt", "group": "xuyen-suot", "code": "R1–R5", "name": "Debate và delegation",
         "goal": "Nhìn một vấn đề từ nhiều phía trước khi chốt; khi PO giao quyền, các bộ phận tranh luận và Chủ toạ chốt.",
         "roles": [PO, ORC, DEPT],
         "inputs": ["Vấn đề Wxx-nn có nhiều phương án ngang nhau hoặc rủi ro cao"],
@@ -319,7 +319,7 @@ PROCESSES = [
         "tools": [],
     },
     {
-        "slug": "decision-log", "group": "xuyen-suot", "code": "SP · KT · QT", "name": "Decision log và hệ mã",
+        "slug": "decision-log", "brief": "Mỗi thông tin một chỗ, nơi khác dẫn mã", "group": "xuyen-suot", "code": "SP · KT · QT", "name": "Decision log và hệ mã",
         "goal": "Mỗi thông tin chỉ sống ở một chỗ; nơi khác dẫn mã.",
         "roles": [PO, ORC],
         "inputs": [], "outputs": [("docs/05_decisions/", "Mỗi quyết định một file, README là mục lục"),
@@ -345,7 +345,7 @@ PROCESSES = [
         "tools": [("new_decision", "Ghi quyết định, cập nhật mục lục"), ("next_code", "Cấp mã không trùng")],
     },
     {
-        "slug": "ngan-sach-ngu-canh", "group": "xuyen-suot", "code": "§5.1", "name": "Ngân sách ngữ cảnh",
+        "slug": "ngan-sach-ngu-canh", "brief": "Giữ phiên điều phối gọn, việc nặng giao đi", "group": "xuyen-suot", "code": "§5.1", "name": "Ngân sách ngữ cảnh",
         "goal": "Giữ chi phí token thấp: phiên điều phối gọn, việc nặng giao subagent.",
         "roles": [ORC, DEPT],
         "inputs": [], "outputs": [], "gate": "",
@@ -361,7 +361,7 @@ PROCESSES = [
         "tools": [("status", "Trả kèm gợi ý mở phiên mới khi chuyển bước")],
     },
     {
-        "slug": "nang-cap", "group": "xuyen-suot", "code": "UPGRADE", "name": "Nâng cấp khung",
+        "slug": "nang-cap", "brief": "Nhận luật mới, giữ phần dự án đã sửa", "group": "xuyen-suot", "code": "UPGRADE", "name": "Nâng cấp khung",
         "goal": "Đưa luật mới của khung vào dự án mà không mất phần dự án đã sửa.",
         "roles": [PO, ORC],
         "inputs": ["Phiên bản khung mới"],

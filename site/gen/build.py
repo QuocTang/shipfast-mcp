@@ -132,17 +132,17 @@ def section_head(eyebrow, title, desc=None, anchor=None):
 
 
 def process_card(p, numbered):
-    """Ô vuông gọn ở trang tổng quan: mã, tên, thanh người và AI; mục tiêu đặt ở title."""
+    """Ô vuông gọn ở trang tổng quan: mã, tên, mô tả ngắn, thanh người và AI; mục tiêu đặt ở title."""
     human, ai = ACTORS[p["slug"]]["share"]
     badge = (f'<span class="grid size-7 place-items-center rounded-full bg-primary text-xs font-semibold text-primary-foreground tabular-nums">{esc(p["code"])}</span>' if numbered
-             else f'<span class="inline-flex h-6 w-fit items-center rounded-lg bg-secondary px-2 font-mono text-xs font-medium text-foreground">{esc(p["code"])}</span>')
+             else f'<span class="inline-flex h-6 w-fit items-center whitespace-nowrap rounded-lg bg-secondary px-2 font-mono text-xs font-medium text-foreground">{esc(p["code"])}</span>')
     bar = (f'<div class="mt-auto flex flex-col gap-1"><div class="flex h-1.5 w-full overflow-hidden rounded-full bg-secondary" role="img" aria-label="Người {human}%, AI {ai}%">'
            f'<span class="h-full bg-foreground/60" style="width:{human}%"></span><span class="h-full bg-primary" style="width:{ai}%"></span></div>'
            f'<span class="text-xs text-muted tabular-nums">Người {human} · AI {ai}</span></div>')
     return (f'<a href="{p["slug"]}.html" title="{esc(p["goal"])}" class="group flex h-full min-h-32 flex-col gap-2 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-border-strong">'
             f'<div class="flex items-center justify-between gap-2">{badge}<span class="text-muted transition-colors group-hover:text-primary">{ARROW}</span></div>'
             f'<h3 class="text-sm font-semibold text-balance text-foreground">{esc(p["name"])}</h3>'
-            f'{bar}</a>')
+            f'<p class="text-xs text-pretty text-muted">{esc(p["brief"])}</p>{bar}</a>')
 
 
 def build_index():
@@ -234,7 +234,7 @@ def build_process(p, prev, nxt):
                + (f'<div class="flex flex-col gap-2 rounded-xl border border-border bg-surface p-4"><span class="text-xs font-medium text-muted">Cổng sang bước sau</span><p class="text-sm text-pretty text-foreground">{esc(p["gate"])}</p></div>' if p["gate"] else "")
                + "</div>")
     head = (f'<nav aria-label="Đường dẫn" class="flex flex-wrap items-center gap-1.5 text-sm text-muted"><a href="./#quy-trinh" class="inline-flex h-8 items-center hover:text-foreground">Tổng quan</a><span aria-hidden="true">/</span><span>{esc(GROUP_NAME[p["group"]])}</span><span aria-hidden="true">/</span><span class="text-foreground">{esc(p["name"])}</span></nav>'
-            f'<div class="flex flex-col gap-3"><span class="inline-flex h-6 w-fit items-center rounded-lg bg-secondary px-2 font-mono text-xs font-medium text-foreground">{esc(p["code"])}</span>'
+            f'<div class="flex flex-col gap-3"><span class="inline-flex h-6 w-fit items-center whitespace-nowrap rounded-lg bg-secondary px-2 font-mono text-xs font-medium text-foreground">{esc(p["code"])}</span>'
             f'<h1 class="text-xl font-semibold text-balance text-foreground">{esc(p["name"])}</h1><p class="max-w-2xl text-base text-pretty text-muted">{esc(p["goal"])}</p></div>{summary}')
     body = (HEADER + f'\n<main class="mx-auto max-w-6xl px-4 py-8 sm:px-6"><div class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_14rem]">'
             f'<article class="flex min-w-0 flex-col gap-8">{head}{"".join(blocks)}{nav}</article><aside class="hidden lg:block">{toc(entries)}</aside></div></main>' + footer())
