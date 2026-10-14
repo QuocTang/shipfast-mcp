@@ -12,7 +12,7 @@
 | D-008 | Không dùng Roots, Sampling, Logging của MCP | Hiệu lực | 2026-10-13 |
 | D-009 | License MIT | Hiệu lực | 2026-10-13 |
 | D-010 | Thuật ngữ chuyên ngành giữ tiếng Anh; vai chính gọi là Orchestrator | Hiệu lực | 2026-10-13 |
-| D-012 | Landing page HTML tĩnh trong `site/`, Tailwind biên dịch trước, đăng qua GitHub Pages | Hiệu lực | 2026-10-13 |
+| D-012 | Site tài liệu HTML tĩnh trong `site/`, Tailwind biên dịch trước, đăng qua GitHub Pages; trình bày mô hình, MCP là một công cụ | Hiệu lực | 2026-10-14 |
 | D-013 | Ngân sách ngữ cảnh là luật của quy trình; bộ phận chọn model theo việc | Hiệu lực | 2026-10-14 |
 | D-011 | Bộ phận lập theo dự án từ W01, nhận việc theo lĩnh vực; Orchestrator chỉ điều phối | Hiệu lực | 2026-10-13 |
 
@@ -62,7 +62,7 @@ Thuật ngữ chuyên ngành giữ tiếng Anh, câu văn tiếng Việt. Bảng
 
 ## D-012 — Landing page
 
-`site/src/index.html` là HTML tĩnh viết sẵn (không render phía trình duyệt), CSS biên dịch bằng Tailwind CLI, font Inter tự host, chuyển động chỉ bằng CSS và `IntersectionObserver` (không thư viện), tắt khi giảm chuyển động hoặc khi trình duyệt tự động (`navigator.webdriver`). Workflow `pages.yml` build và đăng khi `site/` đổi trên `main`. Nội dung landing viết riêng cho người xem lần đầu; tài liệu chi tiết vẫn ở `knowledge/guide/`.
+`site/src/index.html` là HTML tĩnh viết sẵn (không render phía trình duyệt), CSS biên dịch bằng Tailwind CLI, font Inter tự host, chuyển động chỉ bằng CSS và `IntersectionObserver` (không thư viện), tắt khi giảm chuyển động hoặc khi trình duyệt tự động (`navigator.webdriver`). Workflow `pages.yml` build và đăng khi `site/` đổi trên `main`. Site trình bày mô hình làm việc theo kiểu playbook: trang tổng quan liệt kê từng quy trình, mỗi quy trình một trang chi tiết; shipfast-mcp chỉ là một trong hai cách áp dụng (cách còn lại là áp thủ công). Trang sinh từ `site/gen/content.py` bằng `site/gen/build.py`.
 
 ## D-013 — Ngân sách ngữ cảnh
 

@@ -1,6 +1,6 @@
 /* Nguồn CSS của landing. Build: `npm run build` (Tailwind CLI) ra dist/assets/style.css. */
 @import "tailwindcss" source(none);
-@source "./index.html";
+@source "./*.html";
 @source "./app.js";
 
 @font-face { font-family: "Inter"; font-style: normal; font-display: swap; font-weight: 100 900;
