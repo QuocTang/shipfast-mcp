@@ -132,37 +132,37 @@ def section_head(eyebrow, title, desc=None, anchor=None):
 
 
 def process_card(p, numbered):
-    outs = ", ".join(o[0] for o in p["outputs"][:3])
-    meta = [share_bar(p["slug"], compact=True)]
-    meta.append(f'<div class="flex flex-wrap items-center gap-1.5">{role_badges(p["roles"])}</div>')
-    if outs:
-        meta.append(f'<p class="text-xs text-muted"><span class="font-medium text-foreground/80">Đầu ra:</span> <span class="font-mono">{esc(outs)}</span></p>')
-    if p["gate"]:
-        meta.append(f'<p class="text-xs text-pretty text-muted"><span class="font-medium text-foreground/80">Cổng:</span> {esc(p["gate"])}</p>')
-    badge = (f'<span class="grid size-8 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground tabular-nums">{esc(p["code"])}</span>' if numbered
+    """Ô vuông gọn ở trang tổng quan: mã, tên, thanh người và AI; mục tiêu đặt ở title."""
+    human, ai = ACTORS[p["slug"]]["share"]
+    badge = (f'<span class="grid size-7 place-items-center rounded-full bg-primary text-xs font-semibold text-primary-foreground tabular-nums">{esc(p["code"])}</span>' if numbered
              else f'<span class="inline-flex h-6 w-fit items-center rounded-lg bg-secondary px-2 font-mono text-xs font-medium text-foreground">{esc(p["code"])}</span>')
-    return (f'<a href="{p["slug"]}.html" class="group flex gap-4 rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-border-strong">'
-            f'{badge if numbered else ""}<div class="flex min-w-0 flex-1 flex-col gap-2">{"" if numbered else badge}'
-            f'<h3 class="text-base font-semibold text-balance text-foreground">{esc(p["name"])}</h3>'
-            f'<p class="text-sm text-pretty text-muted">{esc(p["goal"])}</p>{"".join(meta)}'
-            f'<span class="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-primary">Xem chi tiết {ARROW}</span></div></a>')
+    bar = (f'<div class="mt-auto flex flex-col gap-1"><div class="flex h-1.5 w-full overflow-hidden rounded-full bg-secondary" role="img" aria-label="Người {human}%, AI {ai}%">'
+           f'<span class="h-full bg-foreground/60" style="width:{human}%"></span><span class="h-full bg-primary" style="width:{ai}%"></span></div>'
+           f'<span class="text-xs text-muted tabular-nums">Người {human} · AI {ai}</span></div>')
+    return (f'<a href="{p["slug"]}.html" title="{esc(p["goal"])}" class="group flex h-full min-h-32 flex-col gap-2 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-border-strong">'
+            f'<div class="flex items-center justify-between gap-2">{badge}<span class="text-muted transition-colors group-hover:text-primary">{ARROW}</span></div>'
+            f'<h3 class="text-sm font-semibold text-balance text-foreground">{esc(p["name"])}</h3>'
+            f'{bar}</a>')
 
 
 def build_index():
     S = C.SITE
     roles = "".join(
-        f'<li class="flex flex-col gap-2 rounded-2xl border border-border bg-surface p-5"><span class="w-fit">{role_badges([n])}</span>'
-        f'<span class="text-xs text-muted">{esc(who)}</span><p class="text-sm text-pretty text-foreground">{esc(d)}</p></li>'
+        f'<li class="flex flex-col gap-2 rounded-2xl border border-border bg-surface p-4"><span class="w-fit">{role_badges([n])}</span>'
+        f'<span class="text-xs text-muted">{esc(who)}</span><p class="line-clamp-3 text-sm text-pretty text-foreground">{esc(d)}</p></li>'
         for n, who, d in C.ROLES)
     groups = []
+    CHEVRON = '<span class="hidden text-muted lg:flex lg:items-center" aria-hidden="true">›</span>'
     for gid, gname, gdesc in C.GROUPS:
         items = [p for p in C.PROCESSES if p["group"] == gid]
         if gid == "wave":
-            cards = f'<ol data-stagger class="flex flex-col gap-3">{"".join("<li>" + process_card(p, True) + "</li>" for p in items)}</ol>'
+            cells = []
+            for i, p in enumerate(items):
+                cells.append(f'<li class="min-w-0">{process_card(p, True)}</li>')
+            cards = (f'<ol data-stagger class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">{"".join(cells)}</ol>')
         else:
-            cols = "md:grid-cols-2" if len(items) > 1 else ""
-            cards = f'<div data-stagger class="grid grid-cols-1 gap-3 {cols}">{"".join(process_card(p, False) for p in items)}</div>'
-        groups.append(f'<div class="flex flex-col gap-3"><div class="flex flex-col gap-1"><h3 class="text-base font-semibold text-foreground">{esc(gname)}</h3><p class="text-sm text-muted">{esc(gdesc)}</p></div>{cards}</div>')
+            cards = f'<div data-stagger class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{"".join(process_card(p, False) for p in items)}</div>'
+        groups.append(f'<div class="flex flex-col gap-3 border-l-2 border-border-strong pl-4"><div class="flex flex-col gap-0.5"><h3 class="text-base font-semibold text-foreground">{esc(gname)}</h3><p class="text-xs text-muted">{esc(gdesc)}</p></div>{cards}</div>')
     apply_cards = (
         f'<div data-stagger class="grid grid-cols-1 gap-3 md:grid-cols-2">'
         f'<a href="ap-dung.html#thu-cong" class="flex flex-col gap-2 rounded-2xl border border-border bg-surface p-5 hover:border-border-strong"><h3 class="text-base font-semibold text-foreground">Áp thủ công</h3><p class="text-sm text-pretty text-muted">Chép bộ khung tài liệu vào dự án, làm theo từng trang quy trình. Dùng được với mọi công cụ AI.</p><span class="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-primary">Xem hướng dẫn {ARROW}</span></a>'
@@ -179,7 +179,7 @@ def build_index():
             f'<section data-reveal>{section_head("Mô hình", "Ba vai, mỗi vai một việc", "Người giữ quyền quyết định; AI điều phối và thực hiện; mọi trạng thái nằm trong file của repo.", "mo-hinh")}'
             f'<ol data-stagger class="grid grid-cols-1 gap-3 md:grid-cols-3">{roles}</ol>'
             f'<a href="to-chuc.html" class="mt-4 inline-flex h-8 items-center gap-1.5 text-sm font-medium text-primary">Tổ chức và vai trò {ARROW}</a></section>'
-            f'<section data-reveal>{section_head("Quy trình", "Từng quy trình, bấm vào để xem chi tiết", None, "quy-trinh")}<div class="flex flex-col gap-10">{"".join(groups)}</div></section>'
+            f'<section data-reveal>{section_head("Quy trình", "Từng quy trình, bấm vào để xem chi tiết", None, "quy-trinh")}<div class="flex flex-col gap-8">{"".join(groups)}</div></section>'
             f'<section data-reveal>{section_head("Áp dụng", "Hai cách đưa mô hình vào dự án", None, "ap-dung")}{apply_cards}</section>'
             f'</main>' + footer())
     (SRC / "index.html").write_text(page(f"{S['title']} · Mô hình làm việc theo wave giữa người và AI", body, S["headline"] + ". " + S["lead"]))
