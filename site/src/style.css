@@ -413,6 +413,33 @@ body {
 @keyframes rise { from { opacity: 0; translate: 0 12px; } to { opacity: 1; translate: 0 0; } }
 @keyframes step-on { 0%, 100% { border-color: var(--border); } 40% { border-color: var(--primary); } }
 
+/* Cá voi ở lớp sóng dưới: lưng trồi lên (0–14%), đuôi chữ V vẫy lên rồi chìm (12–28%), tóe nước khi đuôi chìm. */
+.hero-waves .whale { display: none; }
+@keyframes whale-back {
+  0% { opacity: 0; transform: translate(-20px, 34px); }
+  3% { opacity: 0.14; }
+  5% { transform: translate(-6px, 0); }
+  11% { opacity: 0.14; transform: translate(14px, 0); }
+  15%, 100% { opacity: 0; transform: translate(24px, 34px); }
+}
+@keyframes whale-tail {
+  0%, 12% { opacity: 0; transform: translate(10px, 48px) rotate(-8deg); }
+  14% { opacity: 0.16; }
+  17% { transform: translate(10px, 0) rotate(-4deg); }
+  21% { opacity: 0.16; transform: translate(12px, -4px) rotate(4deg); }
+  27% { opacity: 0.16; transform: translate(14px, 30px) rotate(0deg); }
+  29%, 100% { opacity: 0; transform: translate(14px, 48px) rotate(0deg); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-waves .whale { display: inline; }
+  .hero-waves .whale-back { opacity: 0; animation: whale-back var(--dur) ease-in-out var(--delay) infinite both; }
+  .hero-waves .whale-tail { opacity: 0; animation: whale-tail var(--dur) ease-in-out var(--delay) infinite both; }
+  .hero-waves .wdrop, .hero-waves .wripple { opacity: 0; transform-box: fill-box; transform-origin: center; }
+  .hero-waves .whale-splash { transform: translate(14px, 0); }
+  .hero-waves .wdrop { animation: drop-fly var(--dur) linear calc(var(--delay) + var(--dur) * 0.26) infinite both; }
+  .hero-waves .wripple { animation: ripple-out var(--dur) ease-out calc(var(--delay) + var(--dur) * 0.26) infinite both; }
+}
+
 /* Cá nhảy khỏi sóng và tóe nước ở nền đầu trang. Một chu kỳ: bật lên (0–6%), bay theo vòng cung, lao xuống (20–24%), nghỉ tới hết chu kỳ. */
 .hero-waves .jump { display: none; }
 @keyframes fish-jump {
