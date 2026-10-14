@@ -179,7 +179,7 @@ def build_index():
             f'<section data-reveal>{section_head("Mô hình", "Ba vai, mỗi vai một việc", "Người giữ quyền quyết định; AI điều phối và thực hiện; mọi trạng thái nằm trong file của repo.", "mo-hinh")}'
             f'<ol data-stagger class="grid grid-cols-1 gap-3 md:grid-cols-3">{roles}</ol>'
             f'<a href="to-chuc.html" class="mt-4 inline-flex h-8 items-center gap-1.5 text-sm font-medium text-primary">Tổ chức và vai trò {ARROW}</a></section>'
-            f'<section data-reveal>{section_head("Quy trình", "Từng quy trình, bấm vào để xem chi tiết", None, "quy-trinh")}<div class="flex flex-col gap-8">{"".join(groups)}</div></section>'
+            f'<section data-reveal>{section_head("Quy trình", "Từng quy trình", None, "quy-trinh")}<div class="flex flex-col gap-8">{"".join(groups)}</div></section>'
             f'<section data-reveal>{section_head("Áp dụng", "Hai cách đưa mô hình vào dự án", None, "ap-dung")}{apply_cards}</section>'
             f'</main>' + footer())
     (SRC / "index.html").write_text(page(f"{S['title']} · Mô hình làm việc theo wave", body, S["headline"] + ". " + S["lead"]))
