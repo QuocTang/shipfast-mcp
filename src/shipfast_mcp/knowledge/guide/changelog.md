@@ -1,5 +1,11 @@
 # Ghi chú phát hành
 
+## 0.2.2
+
+- Mẫu lời giao việc: không chép luật chung vào lời giao, vì subagent bộ phận đã có luật trong file của nó.
+- `docs/ORGANIZATION.md` §5.1 và subagent bộ phận: dự án có công cụ tìm code theo symbol (language server, MCP dạng Serena) thì dùng trước; `grep` cho tài liệu, cấu hình, log.
+- Tool mới `refresh_departments`: làm mới `.claude/agents/dept-*.md` theo mẫu hiện hành, giữ tên, mã, lĩnh vực, vùng sở hữu, model; skill `shipfast-upgrade` gọi tool này sau `upgrade`.
+
 ## 0.2.1
 
 Ngân sách ngữ cảnh, rút từ phân tích mức tiêu token của các dự án dùng quy trình:
@@ -10,7 +16,7 @@ Ngân sách ngữ cảnh, rút từ phân tích mức tiêu token của các d�
 - `status` trả thêm `session_hint`.
 - Thay khẩu ngữ bằng từ trung tính trong khung tài liệu và hướng dẫn.
 
-Subagent bộ phận đã lập bằng bản trước không tự cập nhật (file thuộc dự án); chép phần "Ngân sách ngữ cảnh" và "Báo cáo" từ subagent mới nếu muốn áp dụng.
+Subagent bộ phận đã lập bằng bản trước không tự cập nhật (file thuộc dự án); từ 0.2.2 dùng tool `refresh_departments`.
 
 ## 0.2.0
 

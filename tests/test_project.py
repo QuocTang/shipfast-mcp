@@ -95,3 +95,18 @@ def test_create_department(project):
         proj.create_department(str(project), "PLATFORM", "x", "y", "z")
     with pytest.raises(ValueError):
         proj.create_department(str(project), "x", "x", "y", "z")
+
+
+def test_refresh_departments(project):
+    proj.create_department(str(project), "PLATFORM", "Nền tảng", "Code, dữ liệu", "`src/`, `tests/`", model="sonnet")
+    agent = project / ".claude/agents/dept-platform.md"
+    old = agent.read_text()
+    agent.write_text(old.replace("## Ngân sách ngữ cảnh", "## Mục cũ"))
+    custom = project / ".claude/agents/dept-legacy.md"
+    custom.write_text("---\nname: dept-legacy\n---\nTự viết.\n")
+    r = proj.refresh_departments(str(project))
+    assert r["updated"] == [".claude/agents/dept-platform.md"] and "## Mục cũ" in agent.read_text()
+    assert r["skipped"] and "dept-legacy" in r["skipped"][0]
+    proj.refresh_departments(str(project), dry_run=False)
+    assert agent.read_text() == old
+    assert proj.refresh_departments(str(project))["unchanged"] == [".claude/agents/dept-platform.md"]

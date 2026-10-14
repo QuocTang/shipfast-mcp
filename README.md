@@ -84,7 +84,7 @@ Cấu hình dạng JSON cho client đọc `mcpServers`:
 }
 ```
 
-Ghim phiên bản: `uvx shipfast-mcp@0.2.1`.
+Ghim phiên bản: `uvx shipfast-mcp@0.2.2`.
 
 ## Features
 
@@ -117,6 +117,7 @@ Ghim phiên bản: `uvx shipfast-mcp@0.2.1`.
 | 🔧 Tool | `scaffold_project` | Dựng `CLAUDE.md`, `docs/` (wave, backlog, decision log, tổ chức) và skill `.claude/skills/shipfast-*`; dry run trước, không ghi đè |
 | 🔧 Tool | `upgrade` | Nâng khung lên phiên bản mới bằng three-way merge |
 | 🔧 Tool | `status`, `check` | Wave nào đang chạy, chờ PO điều gì; hồ sơ có lệch không |
+| 🔧 Tool | `refresh_departments` | Làm mới file subagent bộ phận theo mẫu mới sau khi nâng cấp |
 | 🔧 Tool | `create_department` | Lập bộ phận theo dự án: hồ sơ `docs/departments/<mã>/`, subagent `.claude/agents/dept-<mã>.md` |
 | 🔧 Tool | `open_wave`, `new_decision`, `next_code` | Mở wave, ghi quyết định, cấp mã không trùng |
 | 🔧 Tool | `read_guide` | Tài liệu hướng dẫn cho người |

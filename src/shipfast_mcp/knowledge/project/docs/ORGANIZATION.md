@@ -105,7 +105,8 @@ Mỗi lượt gọi mô hình gửi lại toàn bộ ngữ cảnh của phiên, 
 | Mỗi bước của wave một phiên | Chuyển bước (scope lock, build, cleanup, acceptance) thì cập nhật hồ sơ rồi mở phiên mới (hoặc xoá ngữ cảnh); phiên mới đọc file, gọi `status` để tiếp tục |
 | Giao theo lô | Giao một lượt nhiều việc độc lập, chờ cả lô xong rồi tổng hợp; không phản hồi lẻ từng thông báo hoàn thành |
 | Việc giao vừa một lượt làm | Mỗi việc giao cho subagent nên xong trong khoảng 60 lượt gọi tool; lớn hơn thì chia |
-| Lời giao việc đủ ngữ cảnh | Ghi sẵn mã việc, tiêu chí, vùng được sửa, file và đoạn cần đọc, để subagent không khảo sát lại repo |
+| Lời giao việc đủ ngữ cảnh | Ghi sẵn mã việc, tiêu chí, vùng được sửa, file và đoạn cần đọc, để subagent không khảo sát lại repo; không chép luật chung vào lời giao vì subagent bộ phận đã có |
+| Tìm code theo symbol | Dự án có công cụ tìm code theo symbol (language server, MCP dạng Serena) thì dùng trước để xem cấu trúc file, đọc đúng hàm, tìm chỗ gọi; `grep` dùng cho tài liệu, cấu hình, log |
 | Đọc và in gọn | Đọc file theo đoạn (`sed -n`, `grep -n`), output lệnh gọn (`tail`, `grep -c`, cờ im lặng); báo cáo của subagent tối đa khoảng 30 dòng, dẫn đường dẫn và số dòng |
 | Model theo việc | Bộ phận soạn tài liệu, rà soát, khảo sát dùng model nhẹ hơn; bộ phận build code phức tạp dùng model mạnh (tham số `model` của `create_department`) |
 

@@ -25,4 +25,5 @@ Dự án giữ `.shipfast/manifest.json` (phiên bản, biến) và `.shipfast/b
 4. Xung đột: mở `.shipfast/pending/<file>`, giữa `<<<<<<< du-an` và `>>>>>>> shipfast-moi` là hai phiên bản. Đề xuất bản hợp nhất cho từng chỗ (giữ phần riêng của dự án, lấy luật mới của khung), PO duyệt, ghi vào file thật, rồi gọi `upgrade` (`dry_run=false`) lần nữa tới khi không còn xung đột.
 5. Đọc ghi chú phát hành (tool `read_guide`, bài `changelog`) cho các bản nằm giữa bản cũ và bản mới. Bản mới đổi thuật ngữ hoặc nhãn thì liệt kê các file dữ liệu còn nhãn cũ (`WAVES.md`, `BACKLOG.md`, hồ sơ wave, decision log) và đề xuất PO đổi theo bảng trong ghi chú; tool vẫn đọc được nhãn cũ nên việc này không bắt buộc.
 6. Đọc phần khác biệt của skill trong `.claude/skills/shipfast-*` và `docs/04_waves/README.md` (`git diff`), tóm tắt cho PO luật mới nào có hiệu lực.
-7. Gọi `check`. Ghi một dòng `OPS-nn` vào `WAVES.md` §2: "Nâng shipfast từ <cũ> lên <mới>". Commit cả `.shipfast/` khi PO yêu cầu.
+7. Dự án đã lập bộ phận thì gọi `refresh_departments` (dry run trước) để file subagent `.claude/agents/dept-*.md` nhận luật mới; file bị sửa khác mẫu được báo để cập nhật tay.
+8. Gọi `check`. Ghi một dòng `OPS-nn` vào `WAVES.md` §2: "Nâng shipfast từ <cũ> lên <mới>". Commit cả `.shipfast/` khi PO yêu cầu.

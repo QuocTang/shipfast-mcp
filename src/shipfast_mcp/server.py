@@ -128,6 +128,18 @@ def create_department(
     return project.create_department(project_dir, code, name, domain, owns, decision, model)
 
 
+@mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True})
+def refresh_departments(
+    project_dir: ProjectDir,
+    dry_run: Annotated[bool, Field(description="true: chỉ báo file sẽ cập nhật, không ghi")] = True,
+) -> dict:
+    """Làm mới file subagent bộ phận (.claude/agents/dept-*.md) theo mẫu hiện hành, giữ tên, mã, lĩnh vực, vùng sở hữu, model.
+
+    Dùng sau upgrade để bộ phận đã lập nhận luật mới. File đã bị sửa khác mẫu thì bỏ qua và báo.
+    """
+    return project.refresh_departments(project_dir, dry_run)
+
+
 @mcp.tool(annotations={"readOnlyHint": True})
 def check(project_dir: ProjectDir) -> dict:
     """Kiểm hồ sơ: biến khung sót, link gãy, wave đóng thiếu rút kinh nghiệm hoặc còn vấn đề Chờ, bảng wave lệch, decision log lệch."""

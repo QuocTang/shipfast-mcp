@@ -26,6 +26,7 @@ Bạn là bộ phận **{{TEN}}** (`{{MA}}`) trong dự án, làm việc dưới
 
 ## Ngân sách ngữ cảnh
 
+- Dự án có công cụ tìm code theo symbol (language server, MCP dạng Serena) thì dùng trước để xem cấu trúc file, đọc đúng hàm, tìm chỗ gọi; `grep` dùng cho tài liệu, cấu hình, log.
 - Đọc file theo đoạn (`sed -n`, `grep -n`); dùng `grep -l` để tìm trước khi mở file.
 - Output lệnh gọn: `tail`, `grep -c`, cờ im lặng của công cụ test và build.
 - Sửa file bằng Edit theo đoạn, không viết lại cả file hay viết script sửa dài.

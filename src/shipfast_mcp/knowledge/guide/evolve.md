@@ -15,7 +15,7 @@ Sửa thoải mái các file khung trong dự án; khi nâng cấp, phần đã 
 
 ## Nâng cấp khung lên phiên bản shipfast mới
 
-1. `uvx` tự lấy bản mới nhất khi khởi động MCP (ghim phiên bản bằng `uvx shipfast-mcp@0.2.1` nếu cần).
+1. `uvx` tự lấy bản mới nhất khi khởi động MCP (ghim phiên bản bằng `uvx shipfast-mcp@0.2.2` nếu cần).
 2. Tool `status` báo có bản mới. Gọi prompt `upgrade` hoặc nói "nâng cấp quy trình".
 3. Tool `upgrade` dry run trước, phân loại từng file:
    - dự án chưa sửa → thay bằng bản mới;

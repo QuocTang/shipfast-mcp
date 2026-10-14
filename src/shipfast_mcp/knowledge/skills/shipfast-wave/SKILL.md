@@ -43,6 +43,8 @@ Sau khi chốt và ghi hồ sơ, đề nghị PO mở phiên mới cho bước B
    Báo cáo: tối đa 30 dòng gồm việc đã làm, file đã sửa, lệnh kiểm và kết quả, giả định, việc phát sinh
    ```
 
+   Không chép luật chung (đọc theo đoạn, báo cáo ngắn…) vào lời giao việc: subagent bộ phận đã có luật đó trong `.claude/agents/dept-<mã>.md`. Lời giao chỉ ghi phần riêng của việc.
+
    Mỗi lần giao gồm: mã hạng mục, tiêu chí, vùng được sửa, luật "không commit, không stash/checkout/reset, không cài phụ thuộc khi chạy song song".
 2. Kiểm subagent định kỳ; cập nhật §1 trạng thái, §3 lượt chạy.
 3. Việc mới → `BL-nnn`. Đổi phạm vi → `CR-Wxx-nn` chờ duyệt. Quyết định nhỏ → `Q-Wxx-nn`.

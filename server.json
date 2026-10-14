@@ -3,12 +3,12 @@
   "name": "io.github.QuocTang/shipfast-mcp",
   "description": "Quy trình làm việc theo wave giữa PO và AI: khung tài liệu, skill, tool scaffold, nâng cấp three-way merge.",
   "repository": { "url": "https://github.com/QuocTang/shipfast-mcp", "source": "github" },
-  "version": "0.2.1",
+  "version": "0.2.2",
   "packages": [
     {
       "registryType": "pypi",
       "identifier": "shipfast-mcp",
-      "version": "0.2.1",
+      "version": "0.2.2",
       "transport": { "type": "stdio" }
     }
   ]

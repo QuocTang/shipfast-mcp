@@ -448,3 +448,54 @@ def create_department(
         "created": created,
         "next": "Giao bộ phận viết 01_quy-che/01-dieu-le.md; ghi QT lập bộ phận nếu chưa có (new_decision).",
     }
+
+
+AGENT_FIELDS = {
+    "MA_THUONG": re.compile(r"^name: dept-([a-z0-9]+)$", re.M),
+    "MODEL": re.compile(r"^model: (.+)$", re.M),
+    "TEN": re.compile(r"^Bạn là bộ phận \*\*(.+?)\*\* \(`([A-Z0-9]+)`\)", re.M),
+    "LINH_VUC": re.compile(r"^- Lĩnh vực: (.+)\.$", re.M),
+    "VUNG": re.compile(r"^- Vùng thư mục được sửa: (.+?)\. Vùng khác", re.M),
+}
+
+
+def _agent_values(text: str) -> dict | None:
+    """Lấy các giá trị riêng của bộ phận từ file subagent; thiếu giá trị bắt buộc thì trả None."""
+    values = {}
+    for key, pattern in AGENT_FIELDS.items():
+        m = pattern.search(text)
+        if key == "MODEL":
+            values[key] = m.group(1).strip() if m else "inherit"
+            continue
+        if not m:
+            return None
+        values[key] = m.group(1).strip()
+        if key == "TEN":
+            values["MA"] = m.group(2)
+    return values
+
+
+def refresh_departments(project_dir: str, dry_run: bool = True) -> dict:
+    """Dựng lại `.claude/agents/dept-*.md` theo mẫu subagent hiện hành, giữ tên, mã, lĩnh vực, vùng sở hữu, model.
+
+    File không đọc ra đủ giá trị (đã bị sửa khác mẫu) thì bỏ qua và báo, không ghi đè.
+    Trả danh sách file sẽ cập nhật / đã cập nhật, không đổi, bỏ qua.
+    """
+    root = resolve_project(project_dir)
+    template = (DEPARTMENT / "agent.md").read_text(encoding="utf-8")
+    report: dict = {"dry_run": dry_run, "updated": [], "unchanged": [], "skipped": []}
+    for path in sorted((root / AGENTS_DIR).glob("dept-*.md")):
+        rel = path.relative_to(root).as_posix()
+        current = path.read_text(encoding="utf-8")
+        values = _agent_values(current)
+        if values is None:
+            report["skipped"].append(f"{rel} (không khớp mẫu, cập nhật tay)")
+            continue
+        new = render(template, values)
+        if new == current:
+            report["unchanged"].append(rel)
+            continue
+        report["updated"].append(rel)
+        if not dry_run:
+            path.write_text(new, encoding="utf-8")
+    return report

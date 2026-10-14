@@ -9,7 +9,7 @@ def test_server_exposes_tools_prompts_resources(tmp_path):
     async def run():
         async with Client(mcp) as client:
             tools = {t.name for t in await client.list_tools()}
-            assert {"scaffold_project", "upgrade", "status", "next_code", "open_wave", "new_decision", "create_department", "check", "read_guide"} <= tools
+            assert {"scaffold_project", "upgrade", "status", "next_code", "open_wave", "new_decision", "create_department", "refresh_departments", "check", "read_guide"} <= tools
             prompts = {p.name for p in await client.list_prompts()}
             assert {"init", "adopt", "upgrade"} <= prompts
             uris = {str(r.uri) for r in await client.list_resources()}

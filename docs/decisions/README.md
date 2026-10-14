@@ -66,4 +66,4 @@ Thuật ngữ chuyên ngành giữ tiếng Anh, câu văn tiếng Việt. Bảng
 
 ## D-013 — Ngân sách ngữ cảnh
 
-Phân tích transcript thật (transcora, vibe-ai-insights, 13–14/10/2026): chi phí chủ yếu là đọc lại ngữ cảnh mỗi lượt; phiên Orchestrator tự khảo sát và build làm ngữ cảnh trung bình 400–500k và kéo dài hàng nghìn lượt. Luật đặt ở `knowledge/project/docs/ORGANIZATION.md` §5.1; `create_department` nhận `model` để bộ phận soạn tài liệu, rà soát, khảo sát dùng model nhẹ.
+Phân tích transcript thật (transcora, vibe-ai-insights, 13–14/10/2026): chi phí chủ yếu là đọc lại ngữ cảnh mỗi lượt; phiên Orchestrator tự khảo sát và build làm ngữ cảnh trung bình 400–500k và kéo dài hàng nghìn lượt. Luật đặt ở `knowledge/project/docs/ORGANIZATION.md` §5.1; `create_department` nhận `model` để bộ phận soạn tài liệu, rà soát, khảo sát dùng model nhẹ. Luật chung của subagent nằm trong file `dept-<mã>.md` (Claude Code dùng làm lời dặn hệ thống), nên lời giao việc không chép lại; `refresh_departments` làm mới file này khi mẫu đổi.
