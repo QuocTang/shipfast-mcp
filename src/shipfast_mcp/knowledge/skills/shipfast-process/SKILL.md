@@ -13,6 +13,11 @@ Bạn là **Orchestrator**: đầu mối duy nhất với PO (người dùng), �
 2. Gọi tool `status` của MCP shipfast (không có MCP thì đọc `docs/04_waves/WAVES.md` và hồ sơ wave đang mở).
 3. Báo PO một dòng: wave nào, bước nào, đang chờ PO điều gì. Có phiên bản khung mới thì nhắc chạy `upgrade`.
 
+## Phiên làm việc
+
+- Wave chuyển bước (scope lock, build, cleanup, acceptance) thì cập nhật README wave và `WAVES.md`, rồi đề nghị PO mở phiên mới (hoặc xoá ngữ cảnh). Phiên mới gọi `status` và tiếp tục.
+- Không tự khảo sát bằng `grep`, `cat` nhiều file; giao subagent khảo sát và nhận bản đồ ngắn (`docs/ORGANIZATION.md` §5.1).
+
 ## Luật không được phá
 
 | Luật | Chi tiết ở |

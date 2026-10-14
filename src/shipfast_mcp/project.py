@@ -177,6 +177,7 @@ def status(project_dir: str) -> dict:
     result["backlog_open"] = len(backlog_open)
     assumed = [r[0] for r in _table_rows(_read(root, DECISIONS_INDEX), "| Mã") if len(r) > 2 and "Giả định" in r[2]]
     result["decisions_assumed"] = assumed
+    result["session_hint"] = "Wave chuyển bước thì cập nhật hồ sơ rồi mở phiên mới; không tự khảo sát hay build trong phiên Orchestrator (docs/ORGANIZATION.md §5.1)."
     pending = root / PENDING_DIR
     if pending.exists():
         result["upgrade_conflicts"] = sorted(p.relative_to(pending).as_posix() for p in pending.rglob("*") if p.is_file())
@@ -386,12 +387,14 @@ def create_department(
     domain: str,
     owns: str,
     decision: str = "",
+    model: str = "inherit",
 ) -> dict:
     """Lập một bộ phận: hồ sơ `docs/departments/<mã>/`, subagent `.claude/agents/dept-<mã>.md`,
     thêm dòng vào `docs/ORGANIZATION.md` §2 và §3. Không ghi đè file đã có.
 
     code: mã viết hoa (ví dụ PLATFORM). owns: vùng thư mục sở hữu, ví dụ "`src/`, `tests/`".
     decision: mã quyết định QT lập bộ phận nếu đã ghi.
+    model: model của subagent (`inherit`, `sonnet`, `opus`, `haiku` hoặc mã model đầy đủ).
     Trả danh sách file đã tạo. Ném ValueError khi mã sai định dạng hoặc bộ phận đã tồn tại.
     """
     root = resolve_project(project_dir)
@@ -412,6 +415,7 @@ def create_department(
         "NGAY": date.today().isoformat(),
         "QUYET_DINH": f" theo `{decision}`" if decision else "",
         "QUYET_DINH_MA": decision or "—",
+        "MODEL": model.strip() or "inherit",
     }
     created = []
     for src in sorted((DEPARTMENT / "docs").rglob("*.md")):

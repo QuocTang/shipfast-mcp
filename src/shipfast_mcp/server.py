@@ -119,12 +119,13 @@ def create_department(
     domain: Annotated[str, Field(description="Lĩnh vực phụ trách, một câu")],
     owns: Annotated[str, Field(description="Vùng thư mục sở hữu, ví dụ `src/`, `tests/`")],
     decision: Annotated[str, Field(description="Mã QT lập bộ phận nếu đã ghi")] = "",
+    model: Annotated[str, Field(description="Model của subagent: inherit, sonnet, opus, haiku hoặc mã model; việc soạn tài liệu, rà soát, khảo sát nên dùng model nhẹ")] = "inherit",
 ) -> dict:
     """Lập bộ phận theo dự án: hồ sơ docs/departments/<mã>/, subagent .claude/agents/dept-<mã>.md, thêm vào ORGANIZATION.md.
 
     Sau khi lập, mọi việc thuộc lĩnh vực của bộ phận được giao cho subagent này; Orchestrator chỉ điều phối.
     """
-    return project.create_department(project_dir, code, name, domain, owns, decision)
+    return project.create_department(project_dir, code, name, domain, owns, decision, model)
 
 
 @mcp.tool(annotations={"readOnlyHint": True})

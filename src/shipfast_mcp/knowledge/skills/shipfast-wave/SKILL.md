@@ -28,12 +28,27 @@ Quy trình gốc: `docs/04_waves/README.md` của dự án. Skill này là cách
 3. Quyết định mới: tool `new_decision`. Contract mới: `CONTRACTS.md` §3.
 4. Trình tóm tắt, chờ **"chốt"**. Ghi ngày vào README wave và `WAVES.md`, chuyển 🔨.
 
+Sau khi chốt và ghi hồ sơ, đề nghị PO mở phiên mới cho bước Build.
+
 ## 3. Build
 
-1. Chép `_template/3-build.md`. Giao từng hạng mục cho subagent `dept-<mã>` của bộ phận phụ trách; Orchestrator không tự build hạng mục. Mỗi lần giao gồm: mã hạng mục, tiêu chí, vùng được sửa, luật "không commit, không stash/checkout/reset, không cài phụ thuộc khi chạy song song".
+1. Chép `_template/3-build.md`. Giao từng hạng mục cho subagent `dept-<mã>` của bộ phận phụ trách; Orchestrator không tự build hạng mục. Giao các hạng mục độc lập trong cùng một lượt, chờ cả lô xong rồi tổng hợp. Hạng mục lớn hơn khoảng 60 lượt gọi tool thì chia nhỏ. Lời giao việc theo mẫu:
+
+   ```text
+   Việc: Wxx-Pnn <tên hạng mục>
+   Tiêu chí: <tiêu chí đo được, chép từ 2-scope.md>
+   Vùng được sửa: <thư mục, file>
+   Đọc trước: <file:đoạn cần đọc>; không khảo sát ngoài danh sách này trừ khi thiếu thông tin
+   Kiểm: <lệnh quality gate của hạng mục>
+   Báo cáo: tối đa 30 dòng gồm việc đã làm, file đã sửa, lệnh kiểm và kết quả, giả định, việc phát sinh
+   ```
+
+   Mỗi lần giao gồm: mã hạng mục, tiêu chí, vùng được sửa, luật "không commit, không stash/checkout/reset, không cài phụ thuộc khi chạy song song".
 2. Kiểm subagent định kỳ; cập nhật §1 trạng thái, §3 lượt chạy.
 3. Việc mới → `BL-nnn`. Đổi phạm vi → `CR-Wxx-nn` chờ duyệt. Quyết định nhỏ → `Q-Wxx-nn`.
 4. Cổng: chạy thật toàn bộ quality gate, xanh. Orchestrator commit checkpoint khi PO cho phép.
+
+Sau khi Build xong và hồ sơ đã cập nhật, đề nghị PO mở phiên mới cho bước Cleanup và Acceptance.
 
 ## 4. Cleanup
 

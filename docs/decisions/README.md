@@ -13,6 +13,7 @@
 | D-009 | License MIT | Hiệu lực | 2026-10-13 |
 | D-010 | Thuật ngữ chuyên ngành giữ tiếng Anh; vai chính gọi là Orchestrator | Hiệu lực | 2026-10-13 |
 | D-012 | Landing page HTML tĩnh trong `site/`, Tailwind biên dịch trước, đăng qua GitHub Pages | Hiệu lực | 2026-10-13 |
+| D-013 | Ngân sách ngữ cảnh là luật của quy trình; bộ phận chọn model theo việc | Hiệu lực | 2026-10-14 |
 | D-011 | Bộ phận lập theo dự án từ W01, nhận việc theo lĩnh vực; Orchestrator chỉ điều phối | Hiệu lực | 2026-10-13 |
 
 ## D-001 — Runtime
@@ -62,3 +63,7 @@ Thuật ngữ chuyên ngành giữ tiếng Anh, câu văn tiếng Việt. Bảng
 ## D-012 — Landing page
 
 `site/src/index.html` là HTML tĩnh viết sẵn (không render phía trình duyệt), CSS biên dịch bằng Tailwind CLI, font Inter tự host, chuyển động chỉ bằng CSS và `IntersectionObserver` (không thư viện), tắt khi giảm chuyển động hoặc khi trình duyệt tự động (`navigator.webdriver`). Workflow `pages.yml` build và đăng khi `site/` đổi trên `main`. Nội dung landing viết riêng cho người xem lần đầu; tài liệu chi tiết vẫn ở `knowledge/guide/`.
+
+## D-013 — Ngân sách ngữ cảnh
+
+Phân tích transcript thật (transcora, vibe-ai-insights, 13–14/10/2026): chi phí chủ yếu là đọc lại ngữ cảnh mỗi lượt; phiên Orchestrator tự khảo sát và build làm ngữ cảnh trung bình 400–500k và kéo dài hàng nghìn lượt. Luật đặt ở `knowledge/project/docs/ORGANIZATION.md` §5.1; `create_department` nhận `model` để bộ phận soạn tài liệu, rà soát, khảo sát dùng model nhẹ.

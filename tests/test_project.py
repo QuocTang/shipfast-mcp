@@ -81,12 +81,16 @@ def test_create_department(project):
     r = proj.create_department(str(project), "platform", "Nền tảng", "Code, dữ liệu, triển khai", "`src/`, `tests/`", "QT-002")
     assert r["department"] == "PLATFORM"
     agent = (project / ".claude/agents/dept-platform.md").read_text()
-    assert agent.startswith("---\nname: dept-platform\n") and "`src/`, `tests/`" in agent and "{{" not in agent
+    assert agent.startswith("---\nname: dept-platform\nmodel: inherit\n") and "`src/`, `tests/`" in agent and "{{" not in agent
+    assert "30 dòng" in agent
     readme = (project / "docs/departments/platform/README.md").read_text()
     assert "theo `QT-002`" in readme
     org = (project / "docs/ORGANIZATION.md").read_text()
     assert "| Nền tảng | PLATFORM |" in org and "| Nền tảng (PLATFORM) | `src/`, `tests/` |" in org
     assert proj.check(str(project))["ok"]
+    r2 = proj.create_department(str(project), "QA", "Kiểm định", "Kiểm thử", "`tests/e2e/`", model="sonnet")
+    assert "model: sonnet\n" in (project / ".claude/agents/dept-qa.md").read_text()
+    assert "session_hint" in proj.status(str(project))
     with pytest.raises(ValueError, match="đã có"):
         proj.create_department(str(project), "PLATFORM", "x", "y", "z")
     with pytest.raises(ValueError):

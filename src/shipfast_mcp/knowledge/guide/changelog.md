@@ -1,5 +1,17 @@
 # Ghi chú phát hành
 
+## 0.2.1
+
+Ngân sách ngữ cảnh, rút từ phân tích mức tiêu token của các dự án dùng quy trình:
+
+- `docs/ORGANIZATION.md` §5.1: Orchestrator không tự khảo sát hay build; mỗi bước của wave một phiên; giao subagent theo lô; việc giao vừa khoảng 60 lượt; lời giao việc ghi sẵn file cần đọc; đọc và in gọn; chọn model theo việc.
+- Skill `shipfast-wave` có mẫu lời giao việc; `shipfast-process` nhắc mở phiên mới khi wave chuyển bước.
+- `create_department` có tham số `model` (ghi vào frontmatter của subagent); subagent bộ phận có luật đọc theo đoạn, sửa bằng Edit, báo cáo tối đa khoảng 30 dòng.
+- `status` trả thêm `session_hint`.
+- Thay khẩu ngữ bằng từ trung tính trong khung tài liệu và hướng dẫn.
+
+Subagent bộ phận đã lập bằng bản trước không tự cập nhật (file thuộc dự án); chép phần "Ngân sách ngữ cảnh" và "Báo cáo" từ subagent mới nếu muốn áp dụng.
+
 ## 0.2.0
 
 Thuật ngữ chuyên ngành giữ tiếng Anh, câu văn vẫn tiếng Việt.

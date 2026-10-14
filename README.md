@@ -84,7 +84,7 @@ Cấu hình dạng JSON cho client đọc `mcpServers`:
 }
 ```
 
-Ghim phiên bản: `uvx shipfast-mcp@0.2.0`.
+Ghim phiên bản: `uvx shipfast-mcp@0.2.1`.
 
 ## Features
 

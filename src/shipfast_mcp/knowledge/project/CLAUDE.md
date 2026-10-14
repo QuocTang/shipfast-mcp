@@ -32,6 +32,8 @@ Chưa có tài liệu hoặc quyết định cho việc cần làm thì hỏi PO
 
 **Orchestrator điều phối, không thi công.** Việc phát sinh thuộc lĩnh vực của bộ phận nào thì giao subagent của bộ phận đó; Orchestrator chỉ tự làm việc nhỏ của vai điều phối (`docs/ORGANIZATION.md` §5). Lĩnh vực mới chưa có bộ phận thì đề xuất PO lập thêm.
 
+**Ngân sách ngữ cảnh** (`docs/ORGANIZATION.md` §5.1): Orchestrator không tự khảo sát hay build; mỗi bước của wave một phiên; giao subagent theo lô; đọc file theo đoạn, in output gọn.
+
 Sơ đồ tổ chức, bộ phận, build team, chế độ delegation: `docs/ORGANIZATION.md`.
 
 ## Làm việc theo wave

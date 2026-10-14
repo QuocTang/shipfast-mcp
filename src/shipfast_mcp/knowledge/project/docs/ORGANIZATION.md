@@ -94,6 +94,21 @@ Orchestrator **điều phối, không thi công**. Việc tốn công giao cho b
 | Đề xuất và phản biện | Mỗi vấn đề trình PO có phương án, đề xuất, rủi ro của đề xuất; lấy lập trường của bộ phận liên quan, gọi thêm vai phản biện (§7.4) khi cần |
 | Chạy việc | Mỗi bước build hoặc vòng duyệt là một lượt gồm subagent của các bộ phận, team liên quan. **Trạng thái nằm trong file**, không nằm trong agent |
 
+### 5.1. Ngân sách ngữ cảnh
+
+Mỗi lượt gọi mô hình gửi lại toàn bộ ngữ cảnh của phiên, nên chi phí xấp xỉ bằng độ dài ngữ cảnh nhân với số lượt. Ngữ cảnh của subagent bị bỏ khi xong việc; ngữ cảnh của phiên Orchestrator bị đọc lại ở mọi lượt về sau.
+
+| Luật | Nội dung |
+|---|---|
+| Orchestrator không khảo sát | Tìm file, đọc nhiều file, tra luồng dữ liệu: giao subagent khảo sát (bộ phận liên quan hoặc subagent chỉ đọc), nhận về bản đồ ngắn |
+| Orchestrator không build | Viết code, viết test, viết file lớn, sửa nhiều file: giao bộ phận phụ trách |
+| Mỗi bước của wave một phiên | Chuyển bước (scope lock, build, cleanup, acceptance) thì cập nhật hồ sơ rồi mở phiên mới (hoặc xoá ngữ cảnh); phiên mới đọc file, gọi `status` để tiếp tục |
+| Giao theo lô | Giao một lượt nhiều việc độc lập, chờ cả lô xong rồi tổng hợp; không phản hồi lẻ từng thông báo hoàn thành |
+| Việc giao vừa một lượt làm | Mỗi việc giao cho subagent nên xong trong khoảng 60 lượt gọi tool; lớn hơn thì chia |
+| Lời giao việc đủ ngữ cảnh | Ghi sẵn mã việc, tiêu chí, vùng được sửa, file và đoạn cần đọc, để subagent không khảo sát lại repo |
+| Đọc và in gọn | Đọc file theo đoạn (`sed -n`, `grep -n`), output lệnh gọn (`tail`, `grep -c`, cờ im lặng); báo cáo của subagent tối đa khoảng 30 dòng, dẫn đường dẫn và số dòng |
+| Model theo việc | Bộ phận soạn tài liệu, rà soát, khảo sát dùng model nhẹ hơn; bộ phận build code phức tạp dùng model mạnh (tham số `model` của `create_department`) |
+
 Không còn bộ phận nào làm được và việc gấp thì Orchestrator làm, ghi "Orchestrator (thay <mã>)" trong hồ sơ wave, và đề xuất lập bộ phận ở lần trình PO kế tiếp.
 
 ## 6. Khi lập một bộ phận mới
