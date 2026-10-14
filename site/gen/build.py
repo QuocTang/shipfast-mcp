@@ -7,6 +7,7 @@ from html import escape as esc
 from pathlib import Path
 
 import content as C
+from actors import ACTORS
 
 GEN = Path(__file__).parent
 SRC = GEN.parent / "src"
@@ -25,6 +26,29 @@ ROLE_STYLE = {
 }
 
 GROUP_NAME = {g[0]: g[1] for g in C.GROUPS}
+
+ACTOR_BADGE = {
+    "N": ("Người", "bg-secondary text-foreground"),
+    "A": ("AI", "bg-primary text-primary-foreground"),
+    "NA": ("Người và AI", "bg-surface text-foreground ring-1 ring-border-strong ring-inset"),
+}
+
+
+def actor_badge(code):
+    label, cls = ACTOR_BADGE[code]
+    return f'<span class="inline-flex h-6 shrink-0 items-center rounded-full px-2.5 text-xs font-medium whitespace-nowrap {cls}">{label}</span>'
+
+
+def share_bar(slug, compact=False):
+    """Thanh tỷ lệ đóng góp ước lượng giữa người và AI."""
+    human, ai = ACTORS[slug]["share"]
+    label = f'<span class="text-xs text-muted"><span class="font-medium text-foreground">Người {human}%</span> · <span class="font-medium text-primary">AI {ai}%</span></span>'
+    bar = (f'<div class="flex h-2 w-full overflow-hidden rounded-full bg-secondary" role="img" aria-label="Người {human}%, AI {ai}%">'
+           f'<span class="h-full bg-foreground/60" style="width:{human}%"></span><span class="h-full bg-primary" style="width:{ai}%"></span></div>')
+    if compact:
+        return f'<div class="flex w-full max-w-xs flex-col gap-1.5">{label}{bar}</div>'
+    return f'<div class="flex flex-col gap-2">{bar}<div class="flex items-center justify-between gap-3">{label}<span class="text-xs text-muted">Ước lượng theo khối lượng việc</span></div></div>'
+
 ORDER = [p for g in C.GROUPS for p in C.PROCESSES if p["group"] == g[0]]
 
 
@@ -109,7 +133,7 @@ def section_head(eyebrow, title, desc=None, anchor=None):
 
 def process_card(p, numbered):
     outs = ", ".join(o[0] for o in p["outputs"][:3])
-    meta = []
+    meta = [share_bar(p["slug"], compact=True)]
     meta.append(f'<div class="flex flex-wrap items-center gap-1.5">{role_badges(p["roles"])}</div>')
     if outs:
         meta.append(f'<p class="text-xs text-muted"><span class="font-medium text-foreground/80">Đầu ra:</span> <span class="font-mono">{esc(outs)}</span></p>')
@@ -176,11 +200,17 @@ def build_process(p, prev, nxt):
         n = len(entries)
         blocks.append(f'<section id="{anchor}" class="flex scroll-mt-20 flex-col gap-3"><h2 class="text-lg font-semibold text-foreground"><span class="mr-2 text-muted tabular-nums">{n:02d}</span>{esc(title)}</h2>{html}</section>')
 
+    act = ACTORS[p["slug"]]
+    col = lambda title, items, cls: (f'<div class="flex flex-col gap-2 rounded-xl border border-border bg-surface p-4"><span class="w-fit">{title}</span>'
+                                     '<ul class="flex list-disc flex-col gap-1.5 pl-5 text-sm text-pretty text-foreground marker:text-muted">' + "".join(f"<li>{esc(i)}</li>" for i in items) + "</ul></div>")
+    add("nguoi-va-ai", "Người và AI", share_bar(p["slug"]) + '<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">'
+        + col(actor_badge("N") + ' <span class="ml-1 text-sm font-medium text-foreground">làm</span>', act["human"], "")
+        + col(actor_badge("A") + ' <span class="ml-1 text-sm font-medium text-foreground">làm</span>', act["ai"], "") + "</div>")
     if p["inputs"]:
         add("dau-vao", "Đầu vào", "<ul class=\"flex list-disc flex-col gap-1.5 pl-5 text-sm text-foreground marker:text-muted\">" + "".join(f"<li>{esc(i)}</li>" for i in p["inputs"]) + "</ul>")
     add("cac-buoc", "Các bước", '<ol class="flex flex-col gap-2">' + "".join(
-        f'<li class="flex gap-3 rounded-xl border border-border bg-surface p-4"><span class="grid size-6 shrink-0 place-items-center rounded-full bg-secondary text-xs font-semibold text-foreground tabular-nums">{i}</span><p class="text-sm text-pretty text-foreground">{esc(s)}</p></li>'
-        for i, s in enumerate(p["steps"], 1)) + "</ol>")
+        f'<li class="flex flex-col gap-2 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-start sm:gap-3"><div class="flex items-center gap-2 sm:w-36 sm:shrink-0"><span class="grid size-6 shrink-0 place-items-center rounded-full bg-secondary text-xs font-semibold text-foreground tabular-nums">{i}</span>{actor_badge(a)}</div><p class="text-sm text-pretty text-foreground">{esc(s)}</p></li>'
+        for i, (s, a) in enumerate(zip(p["steps"], act["steps"]), 1)) + "</ol>")
     for title, kind, data in p.get("sections", []):
         anchor = "-".join(title.lower().split())[:40]
         html = table(data) if kind == "table" else f'<pre class="overflow-x-auto rounded-xl border border-border bg-surface p-4 font-mono text-xs leading-relaxed text-foreground sm:text-sm">{esc(data)}</pre>'
