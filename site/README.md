@@ -19,4 +19,4 @@ Trang tài liệu về mô hình làm việc shipfast, đăng tại https://quoc
 | `src/style.css` | Token màu, font, chuyển động; nguồn của Tailwind |
 | `src/app.js` | Hiện dần khi cuộn tới, nút chép lệnh |
 
-Mỗi quy trình trong `gen/content.py` có các khoá: `slug`, `brief`, `group`, `code`, `name`, `goal`, `roles`, `inputs`, `steps`, `outputs`, `gate`, `cases`, tuỳ chọn `sections`, `example`, `tools`. Mỗi `slug` cần một mục cùng tên trong `GUIDES` của `gen/guides.py`. Thêm quy trình thì thêm cả hai, chạy `npm run gen`.
+Mỗi quy trình trong `gen/content.py` có các khoá: `slug`, `brief`, `group`, `code`, `name`, `goal`, `outputs`, `gate`, `cases`, tuỳ chọn `sections`, `example`, `tools`. Mỗi `slug` cần một mục cùng tên trong `GUIDES` của `gen/guides.py`. Thêm quy trình thì thêm cả hai, chạy `npm run gen`.
