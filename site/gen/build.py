@@ -182,7 +182,7 @@ def build_index():
             f'<section data-reveal>{section_head("Quy trình", "Từng quy trình, bấm vào để xem chi tiết", None, "quy-trinh")}<div class="flex flex-col gap-8">{"".join(groups)}</div></section>'
             f'<section data-reveal>{section_head("Áp dụng", "Hai cách đưa mô hình vào dự án", None, "ap-dung")}{apply_cards}</section>'
             f'</main>' + footer())
-    (SRC / "index.html").write_text(page(f"{S['title']} · Mô hình làm việc theo wave giữa người và AI", body, S["headline"] + ". " + S["lead"]))
+    (SRC / "index.html").write_text(page(f"{S['title']} · Mô hình làm việc theo wave", body, S["headline"] + ". " + S["lead"]))
 
 
 def toc(entries):
