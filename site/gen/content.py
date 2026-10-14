@@ -5,7 +5,7 @@ Mỗi quy trình là một dict với các khoá cố định; build.py dựng t
 
 SITE = {
     "title": "shipfast",
-    "headline": "shipfast: mô hình làm việc theo wave giữa người và AI",
+    "headline": "Mô hình làm việc theo wave giữa người và AI",
     "lead": "PO quyết định, Orchestrator điều phối và phản biện, các bộ phận lập theo dự án thực hiện việc chuyên môn. Mọi trạng thái nằm trong repo, phiên làm việc nào cũng tiếp tục được.",
     "entries": [
         ("Tìm hiểu mô hình", "Ba vai và cách phân việc", "#mo-hinh"),
