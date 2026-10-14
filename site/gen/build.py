@@ -143,12 +143,14 @@ def build_index():
         f'<div data-stagger class="grid grid-cols-1 gap-3 md:grid-cols-2">'
         f'<a href="ap-dung.html#thu-cong" class="flex flex-col gap-2 rounded-2xl border border-border bg-surface p-5 hover:border-border-strong"><h3 class="text-base font-semibold text-foreground">Áp thủ công</h3><p class="text-sm text-pretty text-muted">Chép bộ khung tài liệu vào dự án, làm theo từng trang quy trình. Dùng được với mọi công cụ AI.</p><span class="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-primary">Xem hướng dẫn {ARROW}</span></a>'
         f'<a href="ap-dung.html#shipfast-mcp" class="flex flex-col gap-2 rounded-2xl border border-border bg-surface p-5 hover:border-border-strong"><h3 class="text-base font-semibold text-foreground">Dùng shipfast-mcp</h3><p class="text-sm text-pretty text-muted">MCP server tự dựng khung, cấp mã, kiểm hồ sơ và nâng cấp khung bằng three-way merge. Không bắt buộc.</p><span class="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-primary">Xem cách cài {ARROW}</span></a></div>')
+    entries = "".join(
+        f'<a href="{h}" class="flex min-w-0 flex-col gap-1 rounded-xl border border-border bg-surface p-4 hover:border-border-strong">'
+        f'<span class="inline-flex items-center gap-1.5 text-sm font-medium text-foreground">{esc(n)} {ARROW}</span><span class="text-xs text-pretty text-muted">{esc(d)}</span></a>'
+        for n, d, h in S["entries"])
     hero = (f'<section data-hero class="flex min-w-0 flex-col gap-5">'
-            f'<span class="inline-flex h-7 w-fit items-center rounded-full bg-secondary px-3 text-xs font-medium text-foreground">Mô hình làm việc theo wave giữa người và AI</span>'
             f'<h1 class="max-w-3xl text-2xl font-bold tracking-tight text-balance text-foreground sm:text-3xl">{esc(S["headline"])}</h1>'
             f'<p class="max-w-2xl text-base text-pretty text-muted">{esc(S["lead"])}</p>'
-            f'<div class="flex flex-wrap gap-3"><a href="#quy-trinh" class="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover">Xem quy trình</a>'
-            f'<a href="ap-dung.html" class="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-border-strong bg-surface px-4 py-2 text-sm font-medium text-foreground hover:bg-button-hover">Áp dụng vào dự án</a></div></section>')
+            f'<div class="grid max-w-4xl grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">{entries}</div></section>')
     body = (HEADER + "\n" + WAVES + f'\n<main class="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-10 sm:px-6">{hero}'
             f'<section data-reveal>{section_head("Mô hình", "Ba vai, mỗi vai một việc", "Người giữ quyền quyết định; AI điều phối và thực hiện; mọi trạng thái nằm trong file của repo.", "mo-hinh")}'
             f'<ol data-stagger class="grid grid-cols-1 gap-3 md:grid-cols-3">{roles}</ol>'
@@ -156,7 +158,7 @@ def build_index():
             f'<section data-reveal>{section_head("Quy trình", "Từng quy trình, bấm vào để xem chi tiết", None, "quy-trinh")}<div class="flex flex-col gap-10">{"".join(groups)}</div></section>'
             f'<section data-reveal>{section_head("Áp dụng", "Hai cách đưa mô hình vào dự án", None, "ap-dung")}{apply_cards}</section>'
             f'</main>' + footer())
-    (SRC / "index.html").write_text(page(f"{S['title']} · Mô hình làm việc theo wave giữa người và AI", body, S["lead"]))
+    (SRC / "index.html").write_text(page(f"{S['title']} · Mô hình làm việc theo wave giữa người và AI", body, S["headline"] + ". " + S["lead"]))
 
 
 def toc(entries):

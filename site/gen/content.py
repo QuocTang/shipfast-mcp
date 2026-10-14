@@ -5,8 +5,14 @@ Mỗi quy trình là một dict với các khoá cố định; build.py dựng t
 
 SITE = {
     "title": "shipfast",
-    "headline": "Đưa dự án từ yêu cầu tới phát hành cùng AI, mỗi bước đều được chốt và kiểm chứng",
-    "lead": "shipfast là mô hình làm việc theo wave giữa người và AI: PO quyết định, Orchestrator điều phối và phản biện, các bộ phận lập theo dự án thực hiện việc chuyên môn. Mọi trạng thái nằm trong repo, phiên làm việc nào cũng tiếp tục được.",
+    "headline": "shipfast: mô hình làm việc theo wave giữa người và AI",
+    "lead": "PO quyết định, Orchestrator điều phối và phản biện, các bộ phận lập theo dự án thực hiện việc chuyên môn. Mọi trạng thái nằm trong repo, phiên làm việc nào cũng tiếp tục được.",
+    "entries": [
+        ("Tìm hiểu mô hình", "Ba vai và cách phân việc", "#mo-hinh"),
+        ("Bắt đầu dự án mới", "Khởi tạo dự án (W01)", "w01-khoi-tao.html"),
+        ("Áp dụng cho dự án đang chạy", "Thủ công hoặc dùng shipfast-mcp", "ap-dung.html"),
+        ("Làm một wave", "7 bước từ Intake tới Release", "#quy-trinh"),
+    ],
     "repo": "https://github.com/QuocTang/shipfast-mcp",
     "pypi": "https://pypi.org/project/shipfast-mcp/",
 }
