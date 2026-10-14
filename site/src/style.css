@@ -413,27 +413,6 @@ body {
 @keyframes rise { from { opacity: 0; translate: 0 12px; } to { opacity: 1; translate: 0 0; } }
 @keyframes step-on { 0%, 100% { border-color: var(--border); } 40% { border-color: var(--primary); } }
 
-/* Cá voi nhảy nguyên con ở lớp sóng dưới: phóng lên (0–9%), qua đỉnh, xoay người rơi xuống (9–22%), tóe nước lớn khi rơi. */
-.hero-waves .whale { display: none; }
-@keyframes whale-breach {
-  0% { opacity: 0; transform: translate(0, 80px) rotate(-62deg); animation-timing-function: cubic-bezier(0.2, 0.7, 0.4, 1); }
-  2% { opacity: 0.16; }
-  9% { transform: translate(55px, -78px) rotate(-18deg); animation-timing-function: linear; }
-  13% { transform: translate(95px, -92px) rotate(8deg); animation-timing-function: cubic-bezier(0.5, 0, 0.8, 0.5); }
-  20% { opacity: 0.16; transform: translate(150px, 0) rotate(58deg); }
-  23% { opacity: 0.16; transform: translate(170px, 70px) rotate(72deg); }
-  24%, 100% { opacity: 0; transform: translate(170px, 90px) rotate(72deg); }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .hero-waves .whale { display: inline; }
-  .hero-waves .whale-body { opacity: 0; animation: whale-breach var(--dur) linear var(--delay) infinite both; }
-  .hero-waves .wdrop, .hero-waves .wripple, .hero-waves .wdrop-big, .hero-waves .wripple-big { opacity: 0; transform-box: fill-box; transform-origin: center; }
-  .hero-waves .wdrop { animation: drop-fly var(--dur) linear calc(var(--delay) + var(--dur) * 0.01) infinite both; }
-  .hero-waves .wripple { animation: ripple-out var(--dur) ease-out calc(var(--delay) + var(--dur) * 0.01) infinite both; }
-  .hero-waves .wdrop-big { animation: drop-fly var(--dur) linear calc(var(--delay) + var(--dur) * 0.205) infinite both; }
-  .hero-waves .wripple-big { animation: ripple-out var(--dur) ease-out calc(var(--delay) + var(--dur) * 0.205) infinite both; }
-}
-
 /* Cá nhảy khỏi sóng và tóe nước ở nền đầu trang. Một chu kỳ: bật lên (0–6%), bay theo vòng cung, lao xuống (20–24%), nghỉ tới hết chu kỳ. */
 .hero-waves .jump { display: none; }
 @keyframes fish-jump {
