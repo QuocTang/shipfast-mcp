@@ -7,7 +7,7 @@ from html import escape as esc
 from pathlib import Path
 
 import content as C
-from actors import ACTORS
+from guides import GUIDES
 
 GEN = Path(__file__).parent
 SRC = GEN.parent / "src"
@@ -26,28 +26,6 @@ ROLE_STYLE = {
 }
 
 GROUP_NAME = {g[0]: g[1] for g in C.GROUPS}
-
-ACTOR_BADGE = {
-    "N": ("Người", "bg-secondary text-foreground"),
-    "A": ("AI", "bg-primary text-primary-foreground"),
-    "NA": ("Người và AI", "bg-surface text-foreground ring-1 ring-border-strong ring-inset"),
-}
-
-
-def actor_badge(code):
-    label, cls = ACTOR_BADGE[code]
-    return f'<span class="inline-flex h-6 shrink-0 items-center rounded-full px-2.5 text-xs font-medium whitespace-nowrap {cls}">{label}</span>'
-
-
-def share_bar(slug, compact=False):
-    """Thanh tỷ lệ đóng góp ước lượng giữa người và AI."""
-    human, ai = ACTORS[slug]["share"]
-    label = f'<span class="text-xs text-muted"><span class="font-medium text-foreground">Người {human}%</span> · <span class="font-medium text-primary">AI {ai}%</span></span>'
-    bar = (f'<div class="flex h-2 w-full overflow-hidden rounded-full bg-secondary" role="img" aria-label="Người {human}%, AI {ai}%">'
-           f'<span class="h-full bg-foreground/60" style="width:{human}%"></span><span class="h-full bg-primary" style="width:{ai}%"></span></div>')
-    if compact:
-        return f'<div class="flex w-full max-w-xs flex-col gap-1.5">{label}{bar}</div>'
-    return f'<div class="flex flex-col gap-2">{bar}<div class="flex items-center justify-between gap-3">{label}<span class="text-xs text-muted">Ước lượng theo khối lượng việc</span></div></div>'
 
 ORDER = [p for g in C.GROUPS for p in C.PROCESSES if p["group"] == g[0]]
 
@@ -132,17 +110,13 @@ def section_head(eyebrow, title, desc=None, anchor=None):
 
 
 def process_card(p, numbered):
-    """Ô vuông gọn ở trang tổng quan: mã, tên, mô tả ngắn, thanh người và AI; mục tiêu đặt ở title."""
-    human, ai = ACTORS[p["slug"]]["share"]
+    """Ô vuông gọn ở trang tổng quan: mã, tên, mô tả ngắn; mục tiêu đặt ở title."""
     badge = (f'<span class="grid size-7 place-items-center rounded-full bg-primary text-xs font-semibold text-primary-foreground tabular-nums">{esc(p["code"])}</span>' if numbered
              else f'<span class="inline-flex h-6 w-fit items-center whitespace-nowrap rounded-lg bg-secondary px-2 font-mono text-xs font-medium text-foreground">{esc(p["code"])}</span>')
-    bar = (f'<div class="mt-auto flex flex-col gap-1"><div class="flex h-1.5 w-full overflow-hidden rounded-full bg-secondary" role="img" aria-label="Người {human}%, AI {ai}%">'
-           f'<span class="h-full bg-foreground/60" style="width:{human}%"></span><span class="h-full bg-primary" style="width:{ai}%"></span></div>'
-           f'<span class="text-xs text-muted tabular-nums">Người {human} · AI {ai}</span></div>')
-    return (f'<a href="{p["slug"]}.html" title="{esc(p["goal"])}" class="group flex h-full min-h-32 flex-col gap-2 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-border-strong">'
+    return (f'<a href="{p["slug"]}.html" title="{esc(p["goal"])}" class="group flex h-full flex-col gap-2 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-border-strong">'
             f'<div class="flex items-center justify-between gap-2">{badge}<span class="text-muted transition-colors group-hover:text-primary">{ARROW}</span></div>'
             f'<h3 class="text-sm font-semibold text-balance text-foreground">{esc(p["name"])}</h3>'
-            f'<p class="text-xs text-pretty text-muted">{esc(p["brief"])}</p>{bar}</a>')
+            f'<p class="text-xs text-pretty text-muted">{esc(p["brief"])}</p></a>')
 
 
 def build_index():
@@ -163,10 +137,12 @@ def build_index():
         else:
             cards = f'<div data-stagger class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{"".join(process_card(p, False) for p in items)}</div>'
         groups.append(f'<div class="flex flex-col gap-3 border-l-2 border-border-strong pl-4"><div class="flex flex-col gap-0.5"><h3 class="text-base font-semibold text-foreground">{esc(gname)}</h3><p class="text-xs text-muted">{esc(gdesc)}</p></div>{cards}</div>')
+    A = C.APPLY
     apply_cards = (
-        f'<div data-stagger class="grid grid-cols-1 gap-3 md:grid-cols-2">'
-        f'<a href="ap-dung.html#thu-cong" class="flex flex-col gap-2 rounded-2xl border border-border bg-surface p-5 hover:border-border-strong"><h3 class="text-base font-semibold text-foreground">Áp thủ công</h3><p class="text-sm text-pretty text-muted">Chép bộ khung tài liệu vào dự án, làm theo từng trang quy trình. Dùng được với mọi công cụ AI.</p><span class="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-primary">Xem hướng dẫn {ARROW}</span></a>'
-        f'<a href="ap-dung.html#shipfast-mcp" class="flex flex-col gap-2 rounded-2xl border border-border bg-surface p-5 hover:border-border-strong"><h3 class="text-base font-semibold text-foreground">Dùng shipfast-mcp</h3><p class="text-sm text-pretty text-muted">MCP server tự dựng khung, cấp mã, kiểm hồ sơ và nâng cấp khung bằng three-way merge. Không bắt buộc.</p><span class="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-primary">Xem cách cài {ARROW}</span></a></div>')
+        '<div data-stagger class="flex max-w-3xl flex-col gap-2">'
+        + "".join(f'<div class="grid min-w-0 grid-cols-1 items-center gap-2 sm:grid-cols-[11rem_minmax(0,1fr)]"><span class="text-sm font-medium text-foreground">{esc(n)}</span>{code_box(c)}</div>' for n, c in A["mcp"])
+        + f'</div><p class="mt-3 text-sm text-pretty text-muted">{esc(A["prompts"])}</p>'
+        f'<a href="ap-dung.html" class="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary">Xem prompt và tool {ARROW}</a>')
     entries = "".join(
         f'<a href="{h}" class="flex min-w-0 flex-col gap-1 rounded-xl border border-border bg-surface p-4 hover:border-border-strong">'
         f'<span class="inline-flex items-center gap-1.5 text-sm font-medium text-foreground">{esc(n)} {ARROW}</span><span class="text-xs text-pretty text-muted">{esc(d)}</span></a>'
@@ -180,7 +156,7 @@ def build_index():
             f'<ol data-stagger class="grid grid-cols-1 gap-3 md:grid-cols-3">{roles}</ol>'
             f'<a href="to-chuc.html" class="mt-4 inline-flex h-8 items-center gap-1.5 text-sm font-medium text-primary">Tổ chức và vai trò {ARROW}</a></section>'
             f'<section data-reveal>{section_head("Quy trình", "Từng quy trình", None, "quy-trinh")}<div class="flex flex-col gap-8">{"".join(groups)}</div></section>'
-            f'<section data-reveal>{section_head("Áp dụng", "Hai cách đưa mô hình vào dự án", None, "ap-dung")}{apply_cards}</section>'
+            f'<section data-reveal>{section_head("Áp dụng", "Dùng shipfast-mcp", None, "ap-dung")}{apply_cards}</section>'
             f'</main>' + footer())
     (SRC / "index.html").write_text(page(f"{S['title']} · Mô hình làm việc theo wave", body, S["headline"] + ". " + S["lead"]))
 
@@ -192,50 +168,56 @@ def toc(entries):
             + '</nav>')
 
 
+def guided_blocks(p, g, add):
+    """Bố cục trang chi tiết theo câu hỏi của người đọc: khi nào dùng, người làm gì, AI làm gì, xong khi nào.
+
+    p: một mục trong PROCESSES; g: GUIDES[slug] gồm when, human [(việc, câu mẫu)], ai [(việc, cần kiểm)], example.
+    """
+    box = 'flex flex-col gap-2 rounded-xl border border-border bg-surface p-4'
+    add("khi-nao", "Khi nào dùng", f'<p class="text-sm text-pretty text-foreground">{esc(g["when"])}</p>')
+    human = "".join(
+        f'<li class="{box}"><div class="flex items-start gap-3"><span class="grid size-6 shrink-0 place-items-center rounded-full bg-secondary text-xs font-semibold text-foreground tabular-nums">{i}</span><p class="text-sm text-pretty text-foreground">{esc(task)}</p></div>'
+        + (f'<div class="ml-9 flex flex-col gap-1"><span class="text-xs font-medium text-muted">Câu mẫu gửi AI</span><p class="rounded-lg bg-secondary px-3 py-2 font-mono text-xs text-foreground [overflow-wrap:anywhere] sm:text-sm"><span class="text-muted">&gt; </span>{esc(sample)}</p></div>' if sample else "")
+        + "</li>" for i, (task, sample) in enumerate(g["human"], 1))
+    add("viec-cua-nguoi", "Việc của người", f'<ol class="flex flex-col gap-2">{human}</ol>')
+    add("viec-cua-ai", "Việc của AI", table([("AI làm", "Người kiểm tra")] + [(a, c or "—") for a, c in g["ai"]]))
+    for title, kind, data in p.get("sections", []):
+        anchor = "-".join(title.lower().split())[:40]
+        add(anchor, title, table(data) if kind == "table" else f'<pre class="overflow-x-auto rounded-xl border border-border bg-surface p-4 font-mono text-xs leading-relaxed text-foreground sm:text-sm">{esc(data)}</pre>')
+    done = f'<div class="{box}"><span class="text-xs font-medium text-muted">Điều kiện chuyển sang bước sau</span><p class="text-sm text-pretty text-foreground">{esc(p["gate"])}</p></div>' if p["gate"] else ""
+    if p["outputs"]:
+        done += table([("File", "Nội dung")] + list(p["outputs"]))
+    if done:
+        add("xong-khi", "Xong khi", done)
+    example = g.get("example") or p.get("example")
+    if example:
+        add("vi-du", "Ví dụ", terminal(example))
+    if p["cases"]:
+        add("tinh-huong", "Tình huống thường gặp", table([("Tình huống", "Cách xử lý")] + list(p["cases"])))
+    if p["tools"]:
+        names = ", ".join(f'<code class="font-mono text-foreground">{esc(n)}</code>' for n, _ in p["tools"])
+        add("cong-cu", "Công cụ hỗ trợ", f'<p class="text-sm text-pretty text-muted">Nếu dùng shipfast-mcp: {names}. Không bắt buộc.</p>')
+
+
 def build_process(p, prev, nxt):
     entries, blocks = [], []
 
     def add(anchor, title, html):
         entries.append((anchor, title))
         n = len(entries)
-        blocks.append(f'<section id="{anchor}" class="flex scroll-mt-20 flex-col gap-3"><h2 class="text-lg font-semibold text-foreground"><span class="mr-2 text-muted tabular-nums">{n:02d}</span>{esc(title)}</h2>{html}</section>')
+        blocks.append(f'<section id="{anchor}" class="flex scroll-mt-20 flex-col gap-4 border-t border-border-strong pt-8">'
+                      f'<h2 class="flex items-center gap-3 text-lg font-semibold text-foreground"><span class="grid size-8 shrink-0 place-items-center rounded-lg bg-primary/10 text-sm font-semibold text-primary tabular-nums">{n:02d}</span>{esc(title)}</h2>{html}</section>')
 
-    act = ACTORS[p["slug"]]
-    col = lambda title, items, cls: (f'<div class="flex flex-col gap-2 rounded-xl border border-border bg-surface p-4"><span class="w-fit">{title}</span>'
-                                     '<ul class="flex list-disc flex-col gap-1.5 pl-5 text-sm text-pretty text-foreground marker:text-muted">' + "".join(f"<li>{esc(i)}</li>" for i in items) + "</ul></div>")
-    add("nguoi-va-ai", "Người và AI", share_bar(p["slug"]) + '<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">'
-        + col(actor_badge("N") + ' <span class="ml-1 text-sm font-medium text-foreground">làm</span>', act["human"], "")
-        + col(actor_badge("A") + ' <span class="ml-1 text-sm font-medium text-foreground">làm</span>', act["ai"], "") + "</div>")
-    if p["inputs"]:
-        add("dau-vao", "Đầu vào", "<ul class=\"flex list-disc flex-col gap-1.5 pl-5 text-sm text-foreground marker:text-muted\">" + "".join(f"<li>{esc(i)}</li>" for i in p["inputs"]) + "</ul>")
-    add("cac-buoc", "Các bước", '<ol class="flex flex-col gap-2">' + "".join(
-        f'<li class="flex flex-col gap-2 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:items-start sm:gap-3"><div class="flex items-center gap-2 sm:w-36 sm:shrink-0"><span class="grid size-6 shrink-0 place-items-center rounded-full bg-secondary text-xs font-semibold text-foreground tabular-nums">{i}</span>{actor_badge(a)}</div><p class="text-sm text-pretty text-foreground">{esc(s)}</p></li>'
-        for i, (s, a) in enumerate(zip(p["steps"], act["steps"]), 1)) + "</ol>")
-    for title, kind, data in p.get("sections", []):
-        anchor = "-".join(title.lower().split())[:40]
-        html = table(data) if kind == "table" else f'<pre class="overflow-x-auto rounded-xl border border-border bg-surface p-4 font-mono text-xs leading-relaxed text-foreground sm:text-sm">{esc(data)}</pre>'
-        add(anchor, title, html)
-    if p["outputs"]:
-        add("dau-ra", "Đầu ra", table([("File", "Nội dung")] + list(p["outputs"])))
-    if p["cases"]:
-        add("tinh-huong", "Tình huống thường gặp", table([("Tình huống", "Làm gì")] + list(p["cases"])))
-    if p.get("example"):
-        add("vi-du", "Ví dụ", terminal(p["example"]))
-    if p["tools"]:
-        add("cong-cu", "Công cụ hỗ trợ", '<p class="text-sm text-muted">Nếu dùng shipfast-mcp; không bắt buộc.</p>' + table([("Tool", "Việc")] + list(p["tools"])))
+    guided_blocks(p, GUIDES[p["slug"]], add)
 
     nav = '<div class="mt-4 grid grid-cols-1 gap-3 border-t border-border pt-6 sm:grid-cols-2">'
     nav += (f'<a href="{prev["slug"]}.html" class="flex flex-col gap-1 rounded-xl border border-border bg-surface p-4 hover:border-border-strong"><span class="inline-flex items-center gap-1.5 text-xs text-muted">{ARROW_L} Trước</span><span class="text-sm font-medium text-foreground">{esc(prev["name"])}</span></a>' if prev else "<span></span>")
     nav += (f'<a href="{nxt["slug"]}.html" class="flex flex-col items-end gap-1 rounded-xl border border-border bg-surface p-4 text-right hover:border-border-strong"><span class="inline-flex items-center gap-1.5 text-xs text-muted">Tiếp {ARROW}</span><span class="text-sm font-medium text-foreground">{esc(nxt["name"])}</span></a>' if nxt else "")
     nav += "</div>"
 
-    summary = (f'<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">'
-               f'<div class="flex flex-col gap-2 rounded-xl border border-border bg-surface p-4"><span class="text-xs font-medium text-muted">Ai làm</span><div class="flex flex-wrap gap-1.5">{role_badges(p["roles"])}</div></div>'
-               + (f'<div class="flex flex-col gap-2 rounded-xl border border-border bg-surface p-4"><span class="text-xs font-medium text-muted">Cổng sang bước sau</span><p class="text-sm text-pretty text-foreground">{esc(p["gate"])}</p></div>' if p["gate"] else "")
-               + "</div>")
     head = (f'<nav aria-label="Đường dẫn" class="flex flex-wrap items-center gap-1.5 text-sm text-muted"><a href="./#quy-trinh" class="inline-flex h-8 items-center hover:text-foreground">Tổng quan</a><span aria-hidden="true">/</span><span>{esc(GROUP_NAME[p["group"]])}</span><span aria-hidden="true">/</span><span class="text-foreground">{esc(p["name"])}</span></nav>'
             f'<div class="flex flex-col gap-3"><span class="inline-flex h-6 w-fit items-center whitespace-nowrap rounded-lg bg-secondary px-2 font-mono text-xs font-medium text-foreground">{esc(p["code"])}</span>'
-            f'<h1 class="text-xl font-semibold text-balance text-foreground">{esc(p["name"])}</h1><p class="max-w-2xl text-base text-pretty text-muted">{esc(p["goal"])}</p></div>{summary}')
+            f'<h1 class="text-xl font-semibold text-balance text-foreground">{esc(p["name"])}</h1><p class="max-w-2xl text-base text-pretty text-muted">{esc(p["goal"])}</p></div>')
     body = (HEADER + f'\n<main class="mx-auto max-w-6xl px-4 py-8 sm:px-6"><div class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_14rem]">'
             f'<article class="flex min-w-0 flex-col gap-8">{head}{"".join(blocks)}{nav}</article><aside class="hidden lg:block">{toc(entries)}</aside></div></main>' + footer())
     (SRC / f'{p["slug"]}.html').write_text(page(f'{p["name"]} · shipfast', body, p["goal"]))
@@ -243,13 +225,11 @@ def build_process(p, prev, nxt):
 
 def build_apply():
     A = C.APPLY
-    manual = '<ol class="flex flex-col gap-2">' + "".join(
-        f'<li class="flex gap-3 rounded-xl border border-border bg-surface p-4"><span class="grid size-6 shrink-0 place-items-center rounded-full bg-secondary text-xs font-semibold text-foreground">{i}</span><p class="text-sm text-pretty text-foreground">{esc(s)}</p></li>'
-        for i, s in enumerate(A["manual"], 1)) + "</ol>"
-    mcp = "".join(f'<div class="flex flex-col gap-2"><span class="text-sm font-medium text-foreground">{esc(n)}</span>{code_box(c)}</div>' for n, c in A["mcp"])
-    blocks = (f'<section id="thu-cong" class="flex scroll-mt-20 flex-col gap-3"><h2 class="text-lg font-semibold text-foreground"><span class="mr-2 text-muted">01</span>Áp thủ công</h2>{manual}</section>'
-              f'<section id="shipfast-mcp" class="flex scroll-mt-20 flex-col gap-3"><h2 class="text-lg font-semibold text-foreground"><span class="mr-2 text-muted">02</span>Dùng shipfast-mcp</h2><div class="flex flex-col gap-4">{mcp}</div>'
-              f'<p class="text-sm text-pretty text-muted">{esc(A["mcp_note"])}</p><p class="text-sm"><a href="{C.SITE["pypi"]}" class="font-medium text-primary">Gói trên PyPI</a> · <a href="{C.SITE["repo"]}" class="font-medium text-primary">Mã nguồn trên GitHub</a></p></section>')
+    install = "".join(f'<div class="flex flex-col gap-2"><span class="text-sm font-medium text-foreground">{esc(n)}</span>{code_box(c)}</div>' for n, c in A["mcp"])
+    blocks = (f'<section id="cai-dat" class="flex scroll-mt-20 flex-col gap-3"><h2 class="text-lg font-semibold text-foreground"><span class="mr-2 text-muted">01</span>Cài đặt</h2><div class="flex flex-col gap-4">{install}</div></section>'
+              f'<section id="prompt" class="flex scroll-mt-20 flex-col gap-3"><h2 class="text-lg font-semibold text-foreground"><span class="mr-2 text-muted">02</span>Prompt</h2>{table([("Prompt", "Khi nào dùng")] + list(A["prompt_table"]))}</section>'
+              f'<section id="tool" class="flex scroll-mt-20 flex-col gap-3"><h2 class="text-lg font-semibold text-foreground"><span class="mr-2 text-muted">03</span>Tool</h2>{table([("Tool", "Việc")] + list(A["tools"]))}'
+              f'<p class="text-sm"><a href="{C.SITE["pypi"]}" class="font-medium text-primary">Gói trên PyPI</a> · <a href="{C.SITE["repo"]}" class="font-medium text-primary">Mã nguồn trên GitHub</a></p></section>')
     head = (f'<nav aria-label="Đường dẫn" class="flex flex-wrap items-center gap-1.5 text-sm text-muted"><a href="./" class="inline-flex h-8 items-center hover:text-foreground">Tổng quan</a><span aria-hidden="true">/</span><span class="text-foreground">{esc(A["name"])}</span></nav>'
             f'<div class="flex flex-col gap-3"><h1 class="text-xl font-semibold text-foreground">{esc(A["name"])}</h1><p class="max-w-2xl text-base text-pretty text-muted">{esc(A["lead"])}</p></div>')
     body = HEADER + f'\n<main class="mx-auto max-w-3xl px-4 py-8 sm:px-6"><article class="flex flex-col gap-8">{head}{blocks}</article></main>' + footer()

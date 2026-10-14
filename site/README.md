@@ -12,11 +12,11 @@ Trang tài liệu về mô hình làm việc shipfast, đăng tại https://quoc
 | File | Nội dung |
 |---|---|
 | `gen/content.py` | Nội dung: tổng quan, từng quy trình, trang Áp dụng. Sửa nội dung ở đây |
-| `gen/actors.py` | Phân vai người và AI: tỷ lệ đóng góp ước lượng, việc của mỗi bên, người thực hiện từng bước |
+| `gen/guides.py` | Nội dung trang chi tiết theo câu hỏi của người đọc: khi nào dùng, việc của người kèm câu mẫu, việc của AI kèm điểm cần kiểm tra, ví dụ |
 | `gen/build.py` | Khung trang: tổng quan, trang chi tiết quy trình, trang Áp dụng |
 | `gen/header.html`, `gen/waves.html` | Header và dải sóng có cá ở đầu trang tổng quan |
 | `src/*.html` | Trang đã sinh (commit cùng repo); không sửa tay |
 | `src/style.css` | Token màu, font, chuyển động; nguồn của Tailwind |
 | `src/app.js` | Hiện dần khi cuộn tới, nút chép lệnh |
 
-Mỗi quy trình trong `gen/content.py` có các khoá: `slug`, `group`, `code`, `name`, `goal`, `roles`, `inputs`, `steps`, `outputs`, `gate`, `cases`, tuỳ chọn `sections`, `example`, `tools`. Thêm quy trình thì thêm một dict, chạy `npm run gen`.
+Mỗi quy trình trong `gen/content.py` có các khoá: `slug`, `brief`, `group`, `code`, `name`, `goal`, `roles`, `inputs`, `steps`, `outputs`, `gate`, `cases`, tuỳ chọn `sections`, `example`, `tools`. Mỗi `slug` cần một mục cùng tên trong `GUIDES` của `gen/guides.py`. Thêm quy trình thì thêm cả hai, chạy `npm run gen`.

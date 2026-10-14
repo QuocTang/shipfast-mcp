@@ -10,7 +10,7 @@ SITE = {
     "entries": [
         ("Tìm hiểu mô hình", "Ba vai và cách phân việc", "#mo-hinh"),
         ("Bắt đầu dự án mới", "Khởi tạo dự án (W01)", "w01-khoi-tao.html"),
-        ("Áp dụng cho dự án đang chạy", "Thủ công hoặc dùng shipfast-mcp", "ap-dung.html"),
+        ("Áp dụng cho dự án đang chạy", "Cài shipfast-mcp, gọi prompt adopt", "ap-dung.html"),
         ("Làm một wave", "7 bước từ Intake tới Release", "#quy-trinh"),
     ],
     "repo": "https://github.com/QuocTang/shipfast-mcp",
@@ -24,10 +24,10 @@ ROLES = [
 ]
 
 GROUPS = [
-    ("khoi-tao", "Khởi tạo", "Làm một lần cho mỗi dự án."),
-    ("wave", "Vòng đời một wave", "Mọi việc có code đi qua 7 bước theo thứ tự. Không viết code trước bước Scope lock."),
-    ("ngoai-wave", "Ngoài wave", "Hai trường hợp được làm ngay, vẫn ghi vào hồ sơ."),
-    ("xuyen-suot", "Xuyên suốt", "Cơ chế dùng ở mọi bước."),
+    ("khoi-tao", "Khởi tạo", "Thực hiện một lần khi bắt đầu dự án."),
+    ("wave", "Vòng đời một wave", "Mọi thay đổi code đi qua 7 bước theo thứ tự. Code chỉ được viết sau bước Scope lock."),
+    ("ngoai-wave", "Ngoài wave", "Việc xử lý ngay, không chờ wave, vẫn lưu vết trong hồ sơ."),
+    ("xuyen-suot", "Xuyên suốt", "Cơ chế áp dụng ở mọi bước."),
 ]
 
 PO, ORC, DEPT = "PO", "Orchestrator", "Bộ phận"
@@ -380,18 +380,30 @@ PROCESSES = [
 ]
 
 APPLY = {
-    "slug": "ap-dung", "name": "Áp dụng vào dự án",
-    "lead": "Mô hình không phụ thuộc công cụ. Có thể áp thủ công từ bộ khung tài liệu, hoặc dùng shipfast-mcp để tự dựng khung, cấp mã, kiểm hồ sơ và nâng cấp.",
-    "manual": [
-        "Chép thư mục khung src/shipfast_mcp/knowledge/project/ trong repo vào gốc dự án; thay các biến {{TEN_DU_AN}}, {{SLUG}}, {{NGAY}}… bằng giá trị của dự án.",
-        "Chép các skill trong src/shipfast_mcp/knowledge/skills/ vào .claude/skills/ nếu dùng Claude Code; công cụ khác thì đọc skill như hướng dẫn.",
-        "Mở W01 theo trang Khởi tạo dự án; các bước sau làm theo từng trang quy trình.",
-        "Cấp mã và cập nhật bảng wave, decision log bằng tay theo trang Decision log và hệ mã.",
-    ],
+    "slug": "ap-dung",
+    "name": "Dùng shipfast-mcp",
+    "lead": "shipfast-mcp là MCP server dựng bộ khung tài liệu vào dự án, cấp mã, kiểm hồ sơ và nâng cấp khung bằng three-way merge.",
     "mcp": [
         ("Claude Code (plugin)", "/plugin install shipfast --marketplace QuocTang/shipfast-mcp"),
         ("Claude Code (MCP)", "claude mcp add shipfast -- uvx shipfast-mcp"),
         ("Client MCP khác", "uvx shipfast-mcp"),
     ],
-    "mcp_note": "Repo mới gọi prompt init, dự án đang có code gọi adopt, có bản mới gọi upgrade. Tool: scaffold_project, upgrade, status, check, open_wave, new_decision, next_code, create_department, refresh_departments, read_guide.",
+    "prompts": "Sau khi cài: repo mới gọi prompt init, dự án đang có code gọi adopt, khung có bản mới gọi upgrade.",
+    "prompt_table": [
+        ("init", "Repo mới: dựng khung và chạy W01, AI đề xuất và phản biện stack, PO chốt"),
+        ("adopt", "Dự án đang có code: dựng khung, giữ tài liệu và quyết định sẵn có"),
+        ("upgrade", "Khung có bản mới: dry run, gộp ba phía, trình chỗ xung đột"),
+    ],
+    "tools": [
+        ("scaffold_project", "Dựng khung tài liệu, có dry run"),
+        ("upgrade", "Nâng cấp khung bằng three-way merge"),
+        ("status", "Trạng thái: bảng wave, wave đang mở, vấn đề chờ PO, backlog, quyết định giả định"),
+        ("check", "Kiểm hồ sơ: biến khung còn sót, liên kết hỏng, wave đóng thiếu rút kinh nghiệm, bảng wave lệch"),
+        ("open_wave", "Mở hồ sơ wave mới"),
+        ("new_decision", "Ghi quyết định mới theo mẫu"),
+        ("next_code", "Cấp mã không trùng"),
+        ("create_department", "Lập bộ phận và subagent"),
+        ("refresh_departments", "Làm mới subagent bộ phận theo mẫu mới"),
+        ("read_guide", "Đọc tài liệu hướng dẫn"),
+    ],
 }
