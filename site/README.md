@@ -12,6 +12,7 @@ Trang tài liệu về mô hình làm việc shipfast, đăng tại https://quoc
 | File | Nội dung |
 |---|---|
 | `gen/content.py` | Nội dung: tổng quan, từng quy trình, trang Áp dụng. Sửa nội dung ở đây |
+| `gen/actors.py` | Phân vai người và AI: tỷ lệ đóng góp ước lượng, việc của mỗi bên, người thực hiện từng bước |
 | `gen/build.py` | Khung trang: tổng quan, trang chi tiết quy trình, trang Áp dụng |
 | `gen/header.html`, `gen/waves.html` | Header và dải sóng có cá ở đầu trang tổng quan |
 | `src/*.html` | Trang đã sinh (commit cùng repo); không sửa tay |
