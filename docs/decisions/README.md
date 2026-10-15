@@ -7,7 +7,7 @@
 | D-003 | Tool ghi file trực tiếp vào dự án, có `dry_run`, không ghi đè | Hiệu lực | 2026-10-13 |
 | D-004 | Kho tri thức viết theo định dạng skill; MCP phục vụ qua `skill://` và chép vào `.claude/skills/` của dự án | Hiệu lực | 2026-10-13 |
 | D-005 | Nâng cấp bằng three-way merge dựa trên `.shipfast/base/` | Hiệu lực | 2026-10-13 |
-| D-006 | Release: GitHub public (kiêm marketplace Claude Code) và PyPI; MCP Registry sau | Hiệu lực | 2026-10-13 |
+| D-006 | Release: GitHub public (kiêm marketplace Claude Code), PyPI và MCP Registry | Hiệu lực | 2026-10-13 |
 | D-007 | Plugin Claude Code chỉ khai MCP server, không mang skill | Hiệu lực | 2026-10-13 |
 | D-008 | Không dùng Roots, Sampling, Logging của MCP | Hiệu lực | 2026-10-13 |
 | D-009 | License MIT | Hiệu lực | 2026-10-13 |
@@ -39,7 +39,7 @@ Dự án commit `.shipfast/manifest.json` (phiên bản, biến, loại file) v�
 
 ## D-006 — Release
 
-Repo GitHub public chứa mã và `.claude-plugin/marketplace.json`. Gói PyPI `shipfast-mcp`, đẩy bằng GitHub Actions trusted publishing khi gắn tag `vX.Y.Z`. MCP Registry (đang preview) đăng sau khi ổn định.
+Repo GitHub public chứa mã và `.claude-plugin/marketplace.json`. Gói PyPI `shipfast-mcp`, đẩy bằng GitHub Actions trusted publishing khi gắn tag `vX.Y.Z`. MCP Registry đăng bằng workflow `registry.yml` (xác thực GitHub OIDC) sau khi workflow release thành công; README giữ dòng `mcp-name` để Registry xác minh gói PyPI. Nguồn: https://github.com/modelcontextprotocol/registry/blob/main/docs/modelcontextprotocol-io/github-actions.mdx
 
 ## D-007 — Plugin
 

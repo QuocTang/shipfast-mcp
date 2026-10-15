@@ -20,7 +20,7 @@ SITE = {
 ROLES = [
     ("PO", "Người dùng", "Quyết định phạm vi, chốt từng vấn đề, duyệt và nghiệm thu."),
     ("Orchestrator", "Phiên AI chính", "Đề xuất, phản biện, giữ hồ sơ, giao việc cho bộ phận, tích hợp. Điều phối, không thi công."),
-    ("Bộ phận", "Subagent theo lĩnh vực", "Lập theo dự án từ W01. Nhận mọi việc thuộc lĩnh vực của mình: ý kiến chuyên môn, khảo sát, build, kiểm thử."),
+    ("Bộ phận", "Subagent theo lĩnh vực", "Lập theo dự án từ W01. Nhận mọi việc thuộc lĩnh vực của mình: ý kiến chuyên môn, khảo sát, build, kiểm thử. Có model, mức suy nghĩ mặc định và kỷ luật riêng."),
 ]
 
 GROUPS = [

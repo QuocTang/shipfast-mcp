@@ -192,6 +192,7 @@ GUIDES = {
         "ai": [
             ("Orchestrator giao khảo sát và build cho subagent, nhận báo cáo ngắn.", "Phiên điều phối không đọc nhiều file hay viết code dài."),
             ("Giao theo lô, chờ cả lô xong rồi tổng hợp.", ""),
+            ("Chọn model và mức suy nghĩ theo loại việc: khảo sát và soạn tài liệu dùng model nhẹ, thiết kế và lỗi khó dùng model mạnh.", "Mặc định lấy theo bộ phận; việc khác mặc định thì ghi đè khi giao."),
             ("Tìm code theo symbol, đọc file theo đoạn, in output gọn, sửa theo đoạn.", ""),
             ("Ghi hồ sơ khi chuyển bước rồi đề nghị mở phiên mới.", "Phiên mới đọc hồ sơ là tiếp tục được."),
         ],
