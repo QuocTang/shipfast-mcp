@@ -14,6 +14,7 @@
 | D-010 | Thuật ngữ chuyên ngành giữ tiếng Anh; vai chính gọi là Orchestrator | Hiệu lực | 2026-10-13 |
 | D-012 | Site tài liệu HTML tĩnh trong `site/`, Tailwind biên dịch trước, đăng qua GitHub Pages; trình bày mô hình, MCP là một công cụ | Hiệu lực | 2026-10-14 |
 | D-013 | Ngân sách ngữ cảnh là luật của quy trình; bộ phận chọn model theo việc | Hiệu lực | 2026-10-14 |
+| D-014 | Bộ phận tự mang model, mức suy nghĩ, kỷ luật riêng; quy trình không phụ thuộc profile bên ngoài | Hiệu lực | 2026-10-15 |
 | D-011 | Bộ phận lập theo dự án từ W01, nhận việc theo lĩnh vực; Orchestrator chỉ điều phối | Hiệu lực | 2026-10-13 |
 
 ## D-001 — Runtime
@@ -67,3 +68,7 @@ Thuật ngữ chuyên ngành giữ tiếng Anh, câu văn tiếng Việt. Bảng
 ## D-013 — Ngân sách ngữ cảnh
 
 Phân tích transcript thật (transcora, vibe-ai-insights, 13–14/10/2026): chi phí chủ yếu là đọc lại ngữ cảnh mỗi lượt; phiên Orchestrator tự khảo sát và build làm ngữ cảnh trung bình 400–500k và kéo dài hàng nghìn lượt. Luật đặt ở `knowledge/project/docs/ORGANIZATION.md` §5.1; `create_department` nhận `model` để bộ phận soạn tài liệu, rà soát, khảo sát dùng model nhẹ. Luật chung của subagent nằm trong file `dept-<mã>.md` (Claude Code dùng làm lời dặn hệ thống), nên lời giao việc không chép lại; `refresh_departments` làm mới file này khi mẫu đổi.
+
+## D-014 — Model, mức suy nghĩ, kỷ luật riêng của bộ phận
+
+Bộ phận quyết định cả ai làm lẫn làm thế nào, để quy trình dùng được độc lập, không cần profile agent bên ngoài. File `dept-<mã>.md` ghi `model`, `effort` (trường frontmatter của subagent Claude Code, giá trị `low`…`max`) và mục "Kỷ luật riêng của bộ phận"; `create_department` nhận `model`, `effort`, `discipline`; `refresh_departments` giữ ba giá trị này. Đây là mặc định của bộ phận; việc khác mặc định thì Orchestrator truyền `model`, `effort` khi gọi subagent theo bảng "Model và mức suy nghĩ theo việc" ở `knowledge/project/docs/ORGANIZATION.md` §5.1. Nguồn: https://code.claude.com/docs/en/sub-agents (mục Supported frontmatter fields).

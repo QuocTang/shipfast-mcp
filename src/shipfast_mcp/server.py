@@ -119,13 +119,16 @@ def create_department(
     domain: Annotated[str, Field(description="Lĩnh vực phụ trách, một câu")],
     owns: Annotated[str, Field(description="Vùng thư mục sở hữu, ví dụ `src/`, `tests/`")],
     decision: Annotated[str, Field(description="Mã QT lập bộ phận nếu đã ghi")] = "",
-    model: Annotated[str, Field(description="Model của subagent: inherit, sonnet, opus, haiku hoặc mã model; việc soạn tài liệu, rà soát, khảo sát nên dùng model nhẹ")] = "inherit",
+    model: Annotated[str, Field(description="Model mặc định của subagent: inherit, sonnet, opus, haiku hoặc mã model; việc soạn tài liệu, rà soát, khảo sát nên dùng model nhẹ")] = "inherit",
+    effort: Annotated[Literal["", "low", "medium", "high", "xhigh", "max"], Field(description="Mức suy nghĩ mặc định của subagent; để trống thì theo phiên gọi")] = "",
+    discipline: Annotated[str, Field(description="Kỷ luật riêng của bộ phận, mỗi dòng một luật, ví dụ chạy test nào trước khi báo xong")] = "",
 ) -> dict:
     """Lập bộ phận theo dự án: hồ sơ docs/departments/<mã>/, subagent .claude/agents/dept-<mã>.md, thêm vào ORGANIZATION.md.
 
     Sau khi lập, mọi việc thuộc lĩnh vực của bộ phận được giao cho subagent này; Orchestrator chỉ điều phối.
+    model và effort là mặc định của bộ phận; Orchestrator ghi đè theo từng việc khi giao (ORGANIZATION.md §5.1).
     """
-    return project.create_department(project_dir, code, name, domain, owns, decision, model)
+    return project.create_department(project_dir, code, name, domain, owns, decision, model, effort, discipline)
 
 
 @mcp.tool(annotations={"readOnlyHint": False, "destructiveHint": False, "idempotentHint": True})
@@ -133,7 +136,7 @@ def refresh_departments(
     project_dir: ProjectDir,
     dry_run: Annotated[bool, Field(description="true: chỉ báo file sẽ cập nhật, không ghi")] = True,
 ) -> dict:
-    """Làm mới file subagent bộ phận (.claude/agents/dept-*.md) theo mẫu hiện hành, giữ tên, mã, lĩnh vực, vùng sở hữu, model.
+    """Làm mới file subagent bộ phận (.claude/agents/dept-*.md) theo mẫu hiện hành, giữ tên, mã, lĩnh vực, vùng sở hữu, model, effort, kỷ luật riêng.
 
     Dùng sau upgrade để bộ phận đã lập nhận luật mới. File đã bị sửa khác mẫu thì bỏ qua và báo.
     """

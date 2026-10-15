@@ -110,3 +110,33 @@ def test_refresh_departments(project):
     proj.refresh_departments(str(project), dry_run=False)
     assert agent.read_text() == old
     assert proj.refresh_departments(str(project))["unchanged"] == [".claude/agents/dept-platform.md"]
+
+
+def test_department_effort_and_discipline(project):
+    proj.create_department(
+        str(project), "BUILD", "Thi công", "Code", "`src/`",
+        model="sonnet", effort="Medium", discipline="Chạy test của module trước khi báo xong\n- Không đổi API công khai",
+    )
+    agent = project / ".claude/agents/dept-build.md"
+    text = agent.read_text()
+    assert text.startswith("---\nname: dept-build\nmodel: sonnet\neffort: medium\ndescription:")
+    assert "- Chạy test của module trước khi báo xong\n- Không đổi API công khai\n\n## Ngân sách" in text
+    agent.write_text(text.replace("## Báo cáo", "## Mục cũ"))
+    proj.refresh_departments(str(project), dry_run=False)
+    assert agent.read_text() == text
+
+    proj.create_department(str(project), "DOCS", "Tài liệu", "Tài liệu", "`docs/`")
+    docs = (project / ".claude/agents/dept-docs.md").read_text()
+    assert "effort:" not in docs and proj.DEFAULT_DISCIPLINE in docs and "{{" not in docs
+    with pytest.raises(ValueError, match="effort"):
+        proj.create_department(str(project), "QA", "Kiểm định", "Kiểm thử", "`tests/`", effort="ultra")
+
+
+def test_refresh_department_from_older_template(project):
+    proj.create_department(str(project), "PLATFORM", "Nền tảng", "Code", "`src/`")
+    agent = project / ".claude/agents/dept-platform.md"
+    current = agent.read_text()
+    start = current.index("## Kỷ luật riêng của bộ phận")
+    agent.write_text(current[:start] + current[current.index("## Ngân sách ngữ cảnh"):])
+    proj.refresh_departments(str(project), dry_run=False)
+    assert agent.read_text() == current

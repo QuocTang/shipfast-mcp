@@ -388,6 +388,8 @@ def create_department(
     owns: str,
     decision: str = "",
     model: str = "inherit",
+    effort: str = "",
+    discipline: str = "",
 ) -> dict:
     """Lập một bộ phận: hồ sơ `docs/departments/<mã>/`, subagent `.claude/agents/dept-<mã>.md`,
     thêm dòng vào `docs/ORGANIZATION.md` §2 và §3. Không ghi đè file đã có.
@@ -395,12 +397,17 @@ def create_department(
     code: mã viết hoa (ví dụ PLATFORM). owns: vùng thư mục sở hữu, ví dụ "`src/`, `tests/`".
     decision: mã quyết định QT lập bộ phận nếu đã ghi.
     model: model của subagent (`inherit`, `sonnet`, `opus`, `haiku` hoặc mã model đầy đủ).
-    Trả danh sách file đã tạo. Ném ValueError khi mã sai định dạng hoặc bộ phận đã tồn tại.
+    effort: mức suy nghĩ mặc định (một trong EFFORTS); rỗng thì không ghi, subagent theo phiên gọi.
+    discipline: kỷ luật riêng của bộ phận, mỗi dòng một luật; rỗng thì dùng DEFAULT_DISCIPLINE.
+    Trả danh sách file đã tạo. Ném ValueError khi mã hoặc effort sai định dạng, hoặc bộ phận đã tồn tại.
     """
     root = resolve_project(project_dir)
     code = code.strip().upper()
     if not DEPT_CODE_RE.match(code):
         raise ValueError("code phải viết hoa, 2–12 ký tự chữ hoặc số, bắt đầu bằng chữ, ví dụ PLATFORM")
+    effort = effort.strip().lower()
+    if effort and effort not in EFFORTS:
+        raise ValueError(f"effort phải là một trong {', '.join(EFFORTS)} hoặc để trống")
     lower = code.lower()
     dept_dir = root / DEPARTMENTS_DIR / lower
     agent_file = root / AGENTS_DIR / f"dept-{lower}.md"
@@ -416,6 +423,8 @@ def create_department(
         "QUYET_DINH": f" theo `{decision}`" if decision else "",
         "QUYET_DINH_MA": decision or "—",
         "MODEL": model.strip() or "inherit",
+        "EFFORT_LINE": _effort_line(effort),
+        "KY_LUAT": _discipline_block(discipline),
     }
     created = []
     for src in sorted((DEPARTMENT / "docs").rglob("*.md")):
@@ -450,9 +459,28 @@ def create_department(
     }
 
 
+EFFORTS = ("low", "medium", "high", "xhigh", "max")
+DEFAULT_DISCIPLINE = "- Theo quy chế và chuẩn trong hồ sơ bộ phận; chưa có luật riêng ngoài các mục dưới."
+
+
+def _effort_line(effort: str) -> str:
+    """Dòng frontmatter `effort:` kèm xuống dòng; effort rỗng thì trả chuỗi rỗng."""
+    return f"effort: {effort}\n" if effort else ""
+
+
+def _discipline_block(discipline: str) -> str:
+    """Chuẩn hoá kỷ luật riêng thành danh sách gạch đầu dòng; rỗng thì trả DEFAULT_DISCIPLINE."""
+    lines = [line.strip() for line in discipline.strip().splitlines() if line.strip()]
+    if not lines:
+        return DEFAULT_DISCIPLINE
+    return "\n".join(line if line.startswith("- ") else f"- {line}" for line in lines)
+
+
 AGENT_FIELDS = {
     "MA_THUONG": re.compile(r"^name: dept-([a-z0-9]+)$", re.M),
     "MODEL": re.compile(r"^model: (.+)$", re.M),
+    "EFFORT_LINE": re.compile(r"^effort: (.+)$", re.M),
+    "KY_LUAT": re.compile(r"^## Kỷ luật riêng của bộ phận\n\n(.+?)\n\n## ", re.M | re.S),
     "TEN": re.compile(r"^Bạn là bộ phận \*\*(.+?)\*\* \(`([A-Z0-9]+)`\)", re.M),
     "LINH_VUC": re.compile(r"^- Lĩnh vực: (.+)\.$", re.M),
     "VUNG": re.compile(r"^- Vùng thư mục được sửa: (.+?)\. Vùng khác", re.M),
@@ -467,6 +495,12 @@ def _agent_values(text: str) -> dict | None:
         if key == "MODEL":
             values[key] = m.group(1).strip() if m else "inherit"
             continue
+        if key == "EFFORT_LINE":
+            values[key] = _effort_line(m.group(1).strip()) if m else ""
+            continue
+        if key == "KY_LUAT":
+            values[key] = m.group(1).strip() if m else DEFAULT_DISCIPLINE
+            continue
         if not m:
             return None
         values[key] = m.group(1).strip()
@@ -476,7 +510,7 @@ def _agent_values(text: str) -> dict | None:
 
 
 def refresh_departments(project_dir: str, dry_run: bool = True) -> dict:
-    """Dựng lại `.claude/agents/dept-*.md` theo mẫu subagent hiện hành, giữ tên, mã, lĩnh vực, vùng sở hữu, model.
+    """Dựng lại `.claude/agents/dept-*.md` theo mẫu subagent hiện hành, giữ tên, mã, lĩnh vực, vùng sở hữu, model, effort, kỷ luật riêng.
 
     File không đọc ra đủ giá trị (đã bị sửa khác mẫu) thì bỏ qua và báo, không ghi đè.
     Trả danh sách file sẽ cập nhật / đã cập nhật, không đổi, bỏ qua.

@@ -1,6 +1,6 @@
 [project]
 name = "shipfast-mcp"
-version = "0.2.2"
+version = "0.2.3"
 description = "MCP server phân phối quy trình làm việc theo wave giữa PO và AI (Orchestrator, subagent), dùng được cho mọi stack."
 readme = "README.md"
 license = "MIT"

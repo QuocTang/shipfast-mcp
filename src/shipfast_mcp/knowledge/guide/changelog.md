@@ -1,5 +1,11 @@
 # Ghi chú phát hành
 
+## 0.2.3
+
+- Subagent bộ phận có `effort` (mức suy nghĩ mặc định) trong frontmatter và mục "Kỷ luật riêng của bộ phận"; `create_department` nhận thêm `effort`, `discipline`; `refresh_departments` giữ model, effort, kỷ luật riêng.
+- `docs/ORGANIZATION.md` §5.1: bảng model và mức suy nghĩ theo loại việc; Orchestrator truyền `model`, `effort` khi gọi subagent cho việc khác mặc định của bộ phận.
+- Skill `shipfast-wave`: lời giao việc lấy model và mức suy nghĩ theo bảng §5.1.
+
 ## 0.2.2
 
 - Mẫu lời giao việc: không chép luật chung vào lời giao, vì subagent bộ phận đã có luật trong file của nó.

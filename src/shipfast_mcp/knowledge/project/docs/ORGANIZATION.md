@@ -108,7 +108,19 @@ Mỗi lượt gọi mô hình gửi lại toàn bộ ngữ cảnh của phiên, 
 | Lời giao việc đủ ngữ cảnh | Ghi sẵn mã việc, tiêu chí, vùng được sửa, file và đoạn cần đọc, để subagent không khảo sát lại repo; không chép luật chung vào lời giao vì subagent bộ phận đã có |
 | Tìm code theo symbol | Dự án có công cụ tìm code theo symbol (language server, MCP dạng Serena) thì dùng trước để xem cấu trúc file, đọc đúng hàm, tìm chỗ gọi; `grep` dùng cho tài liệu, cấu hình, log |
 | Đọc và in gọn | Đọc file theo đoạn (`sed -n`, `grep -n`), output lệnh gọn (`tail`, `grep -c`, cờ im lặng); báo cáo của subagent tối đa khoảng 30 dòng, dẫn đường dẫn và số dòng |
-| Model theo việc | Bộ phận soạn tài liệu, rà soát, khảo sát dùng model nhẹ hơn; bộ phận build code phức tạp dùng model mạnh (tham số `model` của `create_department`) |
+| Model theo việc | Mỗi bộ phận có model, mức suy nghĩ mặc định và kỷ luật riêng trong `.claude/agents/dept-<mã>.md` (tham số `model`, `effort`, `discipline` của `create_department`); việc khác mặc định thì Orchestrator truyền `model`, `effort` khi gọi subagent, theo bảng dưới |
+
+Model và mức suy nghĩ theo việc:
+
+| Loại việc | Model | Mức suy nghĩ |
+|---|---|---|
+| Khảo sát, tìm file, tóm tắt | `haiku` hoặc `sonnet` | `low` |
+| Soạn tài liệu, cập nhật hồ sơ | `sonnet` | `low` |
+| Build hạng mục đã có tiêu chí và thiết kế rõ | `sonnet` | `medium` |
+| Rà soát code, kiểm acceptance | `sonnet` | `high` |
+| Thiết kế, lập trường debate, sửa lỗi chưa rõ nguyên nhân | `opus` | `high` |
+
+Bảng là mặc định của quy trình; dự án đổi bảng thì ghi quyết định QT.
 
 Không còn bộ phận nào làm được và việc gấp thì Orchestrator làm, ghi "Orchestrator (thay <mã>)" trong hồ sơ wave, và đề xuất lập bộ phận ở lần trình PO kế tiếp.
 
